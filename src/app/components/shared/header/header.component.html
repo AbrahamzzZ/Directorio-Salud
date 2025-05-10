@@ -1,0 +1,14 @@
+<nav>
+    @if (miServicio.rol==='profesional') {
+        <ul routerLink="/profesional-dashboard">Home</ul>
+        <ul routerLink="/my-services">Mis Servicios</ul>
+        <ul routerLink="/service-register">Nuevo Servicio</ul>
+        <ul routerLink="/login">Cerrar Sesion</ul>
+    }@else {
+        <ul routerLink="">Home</ul>
+        <ul routerLink="">Persona</ul>
+        <ul routerLink="">Pacientes</ul>
+        <ul routerLink="/login">Cerrar Sesion</ul>
+    }
+</nav>
+
