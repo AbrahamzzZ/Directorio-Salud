@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 16px;
+}
+
+span {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+mat-form-field {
+  width: 250px;
+}
