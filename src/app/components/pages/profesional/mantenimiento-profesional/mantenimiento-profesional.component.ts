@@ -8,13 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { ServProfesionalesService } from '../../../../services/serv-profesionales.service';
 import { Profesional } from '../../../../models/Profesional';
-import { MatIcon } from '@angular/material/icon';
-import { DatePipe, NgFor } from '@angular/common';
+import { DatePipe} from '@angular/common';
 import { ServLoginService } from '../../../../services/serv-login.service';
 
 @Component({
   selector: 'app-mantenimiento-profesional',
-  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatIcon, DatePipe],
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, DatePipe],
   templateUrl: './mantenimiento-profesional.component.html',
   styleUrl: './mantenimiento-profesional.component.css'
 })
