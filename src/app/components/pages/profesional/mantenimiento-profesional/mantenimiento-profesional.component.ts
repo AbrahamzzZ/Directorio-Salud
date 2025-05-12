@@ -10,6 +10,7 @@ import { ServProfesionalesService } from '../../../../services/serv-profesionale
 import { Profesional } from '../../../../models/Profesional';
 import { MatIcon } from '@angular/material/icon';
 import { DatePipe, NgFor } from '@angular/common';
+import { ServLoginService } from '../../../../services/serv-login.service';
 
 @Component({
   selector: 'app-mantenimiento-profesional',
@@ -19,7 +20,7 @@ import { DatePipe, NgFor } from '@angular/common';
 })
 export class MantenimientoProfesionalComponent {
 
-  constructor(private servicio:ServProfesionalesService, private router:Router){}
+  constructor(private servicio:ServProfesionalesService, private servicioLogin: ServLoginService, private router:Router){}
   displayedColumns: string[] = ['nombre', 'especialidad', 'ubicacion', 'disponibilidad', 'sexo', 'telefono', 'accion'];
   dataSource = new MatTableDataSource<Profesional>();
 
@@ -50,13 +51,24 @@ export class MantenimientoProfesionalComponent {
     }
   }
 
-  eliminar(servicio:Profesional) {
-    const confirmado = confirm("Estas seguro de eliminar este profesional: "+servicio.nombre+" ?");
+  eliminar(profesional:Profesional) {
+    const confirmado = confirm("Estas seguro de eliminar este profesional: "+profesional.nombre+" ?");
     if(confirmado){
-      this.servicio.eliminarProfesional(servicio).subscribe(()=>{
-        alert("Profesional eliminado exitosamente");
-        this.cargarProfesionales();
-      })
+      // Paso 1: Eliminar al profesional
+      this.servicio.eliminarProfesional(profesional).subscribe(() => {
+        // Paso 2: Buscar la cuenta asociada y eliminarla
+        this.servicioLogin.obtenerCuentaPorProfesionalId(profesional.id).subscribe(cuenta => {
+          if (cuenta) {
+            this.servicioLogin.eliminarCuenta(cuenta.id).subscribe(() => {
+              alert("Profesional y su cuenta eliminados exitosamente");
+              this.cargarProfesionales();
+            });
+          } else {
+            alert("Profesional eliminado (no se encontró cuenta asociada)");
+            this.cargarProfesionales();
+          }
+        });
+      });
     }
   }
 }
