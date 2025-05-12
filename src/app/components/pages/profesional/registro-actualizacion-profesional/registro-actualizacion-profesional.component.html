@@ -96,6 +96,14 @@
               </mat-chip>
             }
           </mat-chip-listbox>
+
+
+          <!-- Foto profesional -->
+          <mat-label>Foto de perfil</mat-label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" formControlName="foto" required>
+
+
+          <img class="image" *ngIf="previewUrl" [src]="previewUrl" alt="Foto seleccionada">
           
           <!-- Solo visible cuando NO se está editando -->
           @if(!isEdit){

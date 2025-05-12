@@ -5,7 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Profesional } from '../../../../models/Profesional';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +21,7 @@ import { Cuenta } from '../../../../models/Cuenta';
 
 @Component({
   selector: 'app-registro-actualizacion-profesional',
-  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatDatepickerModule, MatCardModule, DatePipe, ReactiveFormsModule, FormsModule],
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatDatepickerModule, MatCardModule, DatePipe, ReactiveFormsModule, FormsModule, NgIf],
   templateUrl: './registro-actualizacion-profesional.component.html',
   styleUrl: './registro-actualizacion-profesional.component.css'
 })
@@ -31,15 +31,9 @@ export class RegistroActualizacionProfesionalComponent {
   public profesionalId: string | null = null;
   public profesionalOriginal: Profesional | null = null;
   public nuevaDisponibilidad: string = '';
-  public especialidades: string[] = [
-    'Pediatría',
-    'Cardiología',
-    'Dermatología',
-    'Ginecología',
-    'Neurología',
-    'Psicología',
-    'Odontología'
-  ];
+  public especialidades: string[] = ['Pediatría', 'Cardiología', 'Dermatología', 'Ginecología', 'Neurología', 'Psicología', 'Odontología'];
+  public selectedFile: File | null = null;
+  public previewUrl: string | null = null;
 
   constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router){
   this.form = this.fb.group({
@@ -51,7 +45,8 @@ export class RegistroActualizacionProfesionalComponent {
       sexo: ['', Validators.required],
       disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima]),
       correo: ['', [Validators.required, Validators.email]], 
-      clave: ['', [Validators.required, Validators.minLength(8)]]  
+      clave: ['', [Validators.required, Validators.minLength(8)]],
+      foto: ''
     });
   }
 
@@ -106,7 +101,7 @@ export class RegistroActualizacionProfesionalComponent {
         sexo: this.form.value.sexo,
         telefono: this.form.value.telefono,
         disponibilidad: this.form.value.disponibilidad,
-        foto: ''  
+        foto: this.form.value.foto  
       };
 
       this.service.agregarProfesional(nuevoProfesional).subscribe(() => {
@@ -119,6 +114,7 @@ export class RegistroActualizacionProfesionalComponent {
       };
 
       this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
+          console.log(nuevoProfesional);
           alert("¡Profesional registrado con éxito!");
           this.router.navigate(['/login'], { replaceUrl: true });
         });
@@ -137,6 +133,20 @@ export class RegistroActualizacionProfesionalComponent {
       this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
 
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+
+      // Vista previa de la imagen
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 
   agregarDisponibilidad() {
