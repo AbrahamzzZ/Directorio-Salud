@@ -167,20 +167,6 @@
       "sexo": "M",
       "telefono": "0977889900",
       "foto": "https://ejemplo.com/profesionales/andres_silva.jpg"
-    },
-    {
-      "id": "bf03",
-      "nombre": "fdbdfbdfbdfbdfbd",
-      "especialidad": "Odontología",
-      "ubicacion": "fgdf gdfgdfgd",
-      "edad": 29,
-      "telefono": "0987654321",
-      "sexo": "M",
-      "disponibilidad": [
-        "2025-05-22T02:03",
-        "2025-05-23T02:08"
-      ],
-      "profesionalId": "1"
     }
   ],
   "servicios": [
