@@ -1,0 +1,11 @@
+<div class="container">
+  <h1>Registrarse</h1>
+  <span>Crear cuenta como:</span>
+  <mat-form-field appearance="fill">
+    <mat-label>Selecciona tipo de cuenta</mat-label>
+    <mat-select (selectionChange)="redirigir($event.value)">
+      <mat-option value="profesional">Profesional</mat-option>
+      <mat-option value="paciente">Paciente</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

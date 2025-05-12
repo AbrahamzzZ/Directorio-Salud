@@ -6,9 +6,12 @@
       "especialidad": "Psicología",
       "ubicacion": "Guayaquil",
       "disponibilidad": [
-        "2024-05-10T10:00",
-        "2024-05-10T11:00"
+        "2024-05-10T11:00",
+        "2025-05-16T19:41"
       ],
+      "edad": 44,
+      "sexo": "F",
+      "telefono": "0991234567",
       "foto": "https://ejemplo.com/profesionales/maria_lopez.jpg"
     },
     {
@@ -20,7 +23,23 @@
         "2024-05-12T09:00",
         "2024-05-12T10:30"
       ],
+      "edad": 47,
+      "sexo": "M",
+      "telefono": "0988450473",
       "foto": "https://ejemplo.com/profesionales/carlos_gomez.jpg"
+    },
+    {
+      "id": "3",
+      "nombre": "sdsdsd",
+      "especialidad": "Cardiología",
+      "ubicacion": "erefef",
+      "edad": 67,
+      "sexo": "M",
+      "telefono": "0991234567",
+      "disponibilidad": [
+        "2025-05-12T02:20"
+      ],
+      "foto": "C:\\fakepath\\Captura de pantalla 2024-11-09 184254.png"
     }
   ],
   "servicios": [
@@ -82,6 +101,12 @@
       "nombre": "Luis Rivera",
       "genero": "M",
       "email": "luis@example.com"
+    },
+    {
+      "id": "3",
+      "nombre": "Roberto Perez",
+      "genero": "M",
+      "email": "roberto@example.com"
     }
   ],
   "cuentas": [
@@ -98,6 +123,20 @@
       "password": "abcd",
       "rol": "usuario",
       "usuarioId": "2"
+    },
+    {
+      "id": "a1",
+      "email": "roberto@example.com",
+      "password": "hola",
+      "rol": "administrador",
+      "usuarioId": "3"
+    },
+    {
+      "id": "p13",
+      "email": "ajgsgahs@gmail.com",
+      "password": "1234qwer/",
+      "rol": "profesional",
+      "profesionalId": "3"
     }
   ],
   "citas": [

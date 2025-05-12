@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { ServLoginService } from '../../../services/serv-login.service';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MatButtonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -31,7 +32,9 @@ export class LoginComponent {
             this.router.navigate(['/profesional-dashboard']);
           } else if (cuenta.rol === 'usuario') {
             this.router.navigate(['/patients-dashboard']);
-          } else {
+          } else if(cuenta.rol === 'administrador'){
+            this.router.navigate(['/admin-dashboard'])
+          }else {
             this.mensajeError = 'Rol desconocido';
           }
         } else {
@@ -41,4 +44,7 @@ export class LoginComponent {
     }
   }
 
+  registrar(){
+    this.router.navigate(['/registrar']);
+  }
 }

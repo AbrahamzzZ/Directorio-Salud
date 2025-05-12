@@ -1,0 +1,74 @@
+<app-header></app-header>
+
+    <h1>Lista de profesionales</h1>
+    <form class="example-form">
+        <mat-form-field appearance="outline" class="container__search__input">
+        <mat-label>Buscar:</mat-label>
+        <input matInput placeholder="Nombre/Especialidad/Ubicacion" type="search" (keyup)="buscar(searchInput)" #searchInput>
+        </mat-form-field>
+    </form>
+
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+
+        <!-- Columna nombre -->
+        <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+        </ng-container>
+
+        <!-- Columna especialidad -->
+        <ng-container matColumnDef="especialidad">
+            <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+            <td mat-cell *matCellDef="let element"> {{element.especialidad}} </td>
+        </ng-container>
+
+        <!-- Columna unicación -->
+        <ng-container matColumnDef="ubicacion">
+            <th mat-header-cell *matHeaderCellDef> Ubicación </th>
+            <td mat-cell *matCellDef="let element"> {{element.ubicacion}} </td>
+        </ng-container>
+
+        <!-- Columna disponibilidad -->
+        <ng-container matColumnDef="disponibilidad">
+        <th mat-header-cell *matHeaderCellDef> Disponibilidad </th>
+        <td mat-cell *matCellDef="let element">
+            <ul style="padding-left: 1rem; margin: 0">
+                @for (fecha of element.disponibilidad; track fecha) {
+                    <li>{{ fecha | date:'dd/MM/yyyy HH:mm' }}</li>
+                }
+            </ul>
+        </td>
+        </ng-container>
+
+        <!-- Columna sexo -->
+        <ng-container matColumnDef="sexo">
+            <th mat-header-cell *matHeaderCellDef> Sexo </th>
+            <td mat-cell *matCellDef="let element"> {{element.sexo}} </td>
+        </ng-container>
+
+        <!-- Columna telefono-->
+        <ng-container matColumnDef="telefono">
+            <th mat-header-cell *matHeaderCellDef> Telefono </th>
+            <td mat-cell *matCellDef="let element"> {{element.telefono}} </td>
+        </ng-container>
+
+        <!-- Columna acción -->
+        <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <td mat-cell *matCellDef="let element">
+            <button mat-raised-button color="accent" (click)="eliminar(element)">Eliminar</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 20]"
+                    showFirstLastButtons
+                    aria-label="Selecciona pagina de peliculas">
+        </mat-paginator>
+    </div>
+
+<app-footer></app-footer>
