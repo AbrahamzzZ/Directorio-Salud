@@ -46,7 +46,7 @@ export class RegistroActualizacionProfesionalComponent {
       disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima]),
       correo: ['', [Validators.required, Validators.email]], 
       clave: ['', [Validators.required, Validators.minLength(8)]],
-      foto: ''
+      foto: [null, Validators.required]
     });
   }
 
@@ -70,8 +70,12 @@ export class RegistroActualizacionProfesionalComponent {
       edad: profesional.edad,
       telefono: profesional.telefono,
       sexo: profesional.sexo,
-      disponibilidad: profesional.disponibilidad
+      disponibilidad: profesional.disponibilidad,
     });
+
+    if (this.isEdit && profesional.foto) {
+      this.previewUrl = profesional.foto; // Asegúrate de que `foto` sea una URL accesible
+    }
 
     if (this.isEdit) {
       this.form.get('correo')?.disable();
@@ -136,16 +140,18 @@ export class RegistroActualizacionProfesionalComponent {
   }
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+     const fileInput = event.target as HTMLInputElement;
 
-      // Vista previa de la imagen
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      this.selectedFile = file;
+
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.previewUrl = e.target.result;
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+        this.form.patchValue({ foto: this.previewUrl });
       };
-      reader.readAsDataURL(this.selectedFile);
+      reader.readAsDataURL(file);
     }
   }
 
