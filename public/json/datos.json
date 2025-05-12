@@ -30,143 +30,16 @@
     },
     {
       "id": "3",
-      "nombre": "Dra. Ana Morales",
-      "especialidad": "Pediatría",
-      "ubicacion": "Cuenca",
-      "disponibilidad": [
-        "2024-05-11T08:00",
-        "2024-05-11T09:00"
-      ],
-      "edad": 45,
-      "sexo": "F",
-      "telefono": "0931981702",
-      "foto": "https://ejemplo.com/profesionales/ana_morales.jpg"
-    },
-    {
-      "id": "4",
-      "nombre": "Dr. Luis Herrera",
-      "especialidad": "Dermatología",
-      "ubicacion": "Quito",
-      "disponibilidad": [
-        "2024-05-15T10:00",
-        "2024-05-15T11:30"
-      ],
-      "edad": 38,
-      "sexo": "M",
-      "telefono": "0987654321",
-      "foto": "https://ejemplo.com/profesionales/luis_herrera.jpg"
-    },
-    {
-      "id": "5",
-      "nombre": "Dra. Paula Viteri",
-      "especialidad": "Ginecología",
-      "ubicacion": "Guayaquil",
-      "disponibilidad": [
-        "2024-05-16T09:00",
-        "2024-05-16T10:00"
-      ],
-      "edad": 41,
-      "sexo": "F",
-      "telefono": "0967788990",
-      "foto": "https://ejemplo.com/profesionales/paula_viteri.jpg"
-    },
-    {
-      "id": "6",
-      "nombre": "Dr. Miguel Salazar",
+      "nombre": "sdsdsd",
       "especialidad": "Cardiología",
-      "ubicacion": "Loja",
-      "disponibilidad": [
-        "2024-05-18T14:00",
-        "2024-05-18T15:00"
-      ],
-      "edad": 50,
+      "ubicacion": "erefef",
+      "edad": 67,
       "sexo": "M",
-      "telefono": "0945566778",
-      "foto": "https://ejemplo.com/profesionales/miguel_salazar.jpg"
-    },
-    {
-      "id": "7",
-      "nombre": "Dra. Verónica Castillo",
-      "especialidad": "Neurología",
-      "ubicacion": "Ambato",
+      "telefono": "0991234567",
       "disponibilidad": [
-        "2024-05-19T13:00",
-        "2024-05-19T14:00"
+        "2025-05-12T02:20"
       ],
-      "edad": 47,
-      "sexo": "F",
-      "telefono": "0954433221",
-      "foto": "https://ejemplo.com/profesionales/veronica_castillo.jpg"
-    },
-    {
-      "id": "8",
-      "nombre": "Dr. Esteban Cevallos",
-      "especialidad": "Urología",
-      "ubicacion": "Machala",
-      "disponibilidad": [
-        "2024-05-20T08:30",
-        "2024-05-20T09:30"
-      ],
-      "edad": 42,
-      "sexo": "M",
-      "telefono": "0971122334",
-      "foto": "https://ejemplo.com/profesionales/esteban_cevallos.jpg"
-    },
-    {
-      "id": "9",
-      "nombre": "Dra. Mónica Pérez",
-      "especialidad": "Psiquiatría",
-      "ubicacion": "Quito",
-      "disponibilidad": [
-        "2024-05-21T16:00",
-        "2024-05-21T17:00"
-      ],
-      "edad": 39,
-      "sexo": "F",
-      "telefono": "0933344556",
-      "foto": "https://ejemplo.com/profesionales/monica_perez.jpg"
-    },
-    {
-      "id": "10",
-      "nombre": "Dr. Javier Romero",
-      "especialidad": "Traumatología",
-      "ubicacion": "Guayaquil",
-      "disponibilidad": [
-        "2024-05-22T11:00",
-        "2024-05-22T12:00"
-      ],
-      "edad": 46,
-      "sexo": "M",
-      "telefono": "0911223344",
-      "foto": "https://ejemplo.com/profesionales/javier_romero.jpg"
-    },
-    {
-      "id": "11",
-      "nombre": "Dra. Carolina Torres",
-      "especialidad": "Endocrinología",
-      "ubicacion": "Riobamba",
-      "disponibilidad": [
-        "2024-05-23T10:00",
-        "2024-05-23T11:00"
-      ],
-      "edad": 44,
-      "sexo": "F",
-      "telefono": "0988112233",
-      "foto": "https://ejemplo.com/profesionales/carolina_torres.jpg"
-    },
-    {
-      "id": "12",
-      "nombre": "Dr. Andrés Silva",
-      "especialidad": "Oftalmología",
-      "ubicacion": "Manta",
-      "disponibilidad": [
-        "2024-05-24T15:00",
-        "2024-05-24T16:00"
-      ],
-      "edad": 36,
-      "sexo": "M",
-      "telefono": "0977889900",
-      "foto": "https://ejemplo.com/profesionales/andres_silva.jpg"
+      "foto": "C:\\fakepath\\Captura de pantalla 2024-11-09 184254.png"
     }
   ],
   "servicios": [
@@ -257,6 +130,13 @@
       "password": "hola",
       "rol": "administrador",
       "usuarioId": "3"
+    },
+    {
+      "id": "p13",
+      "email": "ajgsgahs@gmail.com",
+      "password": "1234qwer/",
+      "rol": "profesional",
+      "profesionalId": "3"
     }
   ],
   "citas": [

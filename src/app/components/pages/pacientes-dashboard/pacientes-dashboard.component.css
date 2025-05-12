@@ -1,0 +1,25 @@
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+}
+
+.profesional-card {
+  width: 300px;
+}
+
+.example-form {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.container__search__input {
+  width: 100%;
+  max-width: 500px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
