@@ -13,3 +13,5 @@ import { RegistroActualizacionServicioComponent } from './components/pages/regis
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login'}
 ];
+
+
