@@ -17,6 +17,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
+import { Cuenta } from '../../../../models/Cuenta';
 
 @Component({
   selector: 'app-registro-actualizacion-profesional',
@@ -27,8 +28,9 @@ import {MatCardModule} from '@angular/material/card';
 export class RegistroActualizacionProfesionalComponent {
   public form: FormGroup;
   public isEdit = false;
-  profesionalId: string | null = null;
-  profesionalOriginal: Profesional | null = null;
+  public profesionalId: string | null = null;
+  public profesionalOriginal: Profesional | null = null;
+  public nuevaDisponibilidad: string = '';
   public especialidades: string[] = [
     'Pediatría',
     'Cardiología',
@@ -47,32 +49,10 @@ export class RegistroActualizacionProfesionalComponent {
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100)]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       sexo: ['', Validators.required],
-      disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima])
+      disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima]),
+      correo: ['', [Validators.required, Validators.email]], 
+      clave: ['', [Validators.required, Validators.minLength(8)]]  
     });
-  }
-
-  validarDisponibilidadMinima(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    return value && value.length > 0 ? null : { required: true };
-  }
-
-  public nuevaDisponibilidad: string = '';
-
-  agregarDisponibilidad() {
-    if (this.nuevaDisponibilidad) {
-      const lista = this.form.get('disponibilidad')?.value || [];
-      if (!lista.includes(this.nuevaDisponibilidad)) {
-        lista.push(this.nuevaDisponibilidad);
-        this.form.get('disponibilidad')?.setValue(lista);
-      }
-      this.nuevaDisponibilidad = '';
-    }
-  }
-
-  eliminarDisponibilidad(index: number) {
-    const lista = this.form.get('disponibilidad')?.value || [];
-    lista.splice(index, 1);
-    this.form.get('disponibilidad')?.setValue(lista);
   }
 
   ngOnInit(): void {
@@ -97,6 +77,11 @@ export class RegistroActualizacionProfesionalComponent {
       sexo: profesional.sexo,
       disponibilidad: profesional.disponibilidad
     });
+
+    if (this.isEdit) {
+      this.form.get('correo')?.disable();
+      this.form.get('clave')?.disable();
+    }
   }
 
   onSubmit(): void {
@@ -108,15 +93,36 @@ export class RegistroActualizacionProfesionalComponent {
   }
 
   registrar(): void {
-    const profesionalId = this.servicioLogin.getIdentificador();
-    const newServicio: Profesional = {
-      ...this.form.value,
-      profesionalId: profesionalId ?? '', // agrega el ID del profesional
-  };
+    this.service.getProfesionales().subscribe(profesionales => {
+      const maxId = Math.max(...profesionales.map(p => +p.id || 0));
+      const nuevoId = (maxId + 1).toString();
 
-    this.service.agregarProfesional(newServicio).subscribe(() => {
-      alert("Servicio almacenado con exito!");
-      this.router.navigate(['/profesional-dashboard'], { replaceUrl: true }); // Redirige a la lista
+      const nuevoProfesional: Profesional = {
+        id: nuevoId,
+        nombre: this.form.value.nombre,
+        especialidad: this.form.value.especialidad,
+        ubicacion: this.form.value.ubicacion,
+        edad: this.form.value.edad,
+        sexo: this.form.value.sexo,
+        telefono: this.form.value.telefono,
+        disponibilidad: this.form.value.disponibilidad,
+        foto: ''  
+      };
+
+      this.service.agregarProfesional(nuevoProfesional).subscribe(() => {
+        const nuevaCuenta: Cuenta = {
+          id: 'p' + nuevoId,
+          email: this.form.value.correo,
+          password: this.form.value.clave,
+          rol: 'profesional',
+          profesionalId: nuevoId
+      };
+
+      this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
+          alert("¡Profesional registrado con éxito!");
+          this.router.navigate(['/login'], { replaceUrl: true });
+        });
+      });
     });
   }
 
@@ -133,12 +139,38 @@ export class RegistroActualizacionProfesionalComponent {
     });
   }
 
+  agregarDisponibilidad() {
+    if (this.nuevaDisponibilidad) {
+      const lista = this.form.get('disponibilidad')?.value || [];
+      if (!lista.includes(this.nuevaDisponibilidad)) {
+        lista.push(this.nuevaDisponibilidad);
+        this.form.get('disponibilidad')?.setValue(lista);
+      }
+      this.nuevaDisponibilidad = '';
+    }
+  }
+
+  validarDisponibilidadMinima(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    return value && value.length > 0 ? null : { required: true };
+  }
+
+  eliminarDisponibilidad(index: number) {
+    const lista = this.form.get('disponibilidad')?.value || [];
+    lista.splice(index, 1);
+    this.form.get('disponibilidad')?.setValue(lista);
+  }
+
   isNoChanges(): boolean {
     // Verificar si no hubo cambios en el formulario
     return JSON.stringify(this.profesionalOriginal) === JSON.stringify(this.form.value);
   }
 
   onCancel(): void {
-    this.router.navigate(['/registrar']); // Redirigir al listado de servicios
+    if (this.isEdit) {
+      this.router.navigate(['/profesional-dashboard']); // Redirigir a la pagina de inicio del profesional
+    } else {
+      this.router.navigate(['/registrar']); // Redirigir a la pagina para seleccionar el tipo de usuario
+    }
   }
 }
