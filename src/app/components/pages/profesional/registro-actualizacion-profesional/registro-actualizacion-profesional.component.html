@@ -9,7 +9,7 @@
           <mat-form-field>
             <mat-label for="nombreCompleto">Nombre completo:</mat-label>
             <input matInput id="nombreCompleto" formControlName="nombre" maxlength="50" minlength="5">
-            @if(form.get('nombre')?.touched && form.get('nombre')?.hasError('required')){
+            @if(form.get('nombre')?.touched &&form.get('nombre')?.hasError('required')){
               <mat-error class="error">Este campo es obligatorio.</mat-error>
             }@else if (form.get('nombre')?.hasError('pattern')) {
               <mat-error class="error">Solo se permiten letras.</mat-error>
@@ -48,12 +48,12 @@
           <!-- Edad -->
           <mat-form-field>
             <mat-label for="edad">Edad:</mat-label>
-            <input matInput id="edad" formControlName="edad" type="number" maxlength="100" minlength="18">
-            @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')){
+            <input matInput id="edad" formControlName="edad" type="number">
+            @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')) {
               <mat-error class="error">Este campo es obligatorio.</mat-error>
-            }@else if(form.get('edad')?.hasError('minlength')){
-              <mat-error class="error">Edad demasiada corta.</mat-error>
-            }@else if(form.get('edad')?.hasError('maxlength')){
+            } @else if(form.get('edad')?.hasError('min')) {
+              <mat-error class="error">Debe tener al menos 18 años.</mat-error>
+            } @else if(form.get('edad')?.hasError('max')) {
               <mat-error class="error">Edad demasiada alta.</mat-error>
             }
           </mat-form-field>
@@ -84,6 +84,9 @@
             <input type="datetime-local" id="nuevaFecha" [(ngModel)]="nuevaDisponibilidad" name="nuevaFecha" [ngModelOptions]="{standalone: true}">
           </div>
           <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar Fecha</button>
+          @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')){
+            <mat-error>Debe agregar al menos una fecha.</mat-error>
+          }
 
           <mat-chip-listbox aria-label="Fechas seleccionadas">
             @for (fecha of form.get('disponibilidad')?.value; track fecha) {
@@ -93,6 +96,31 @@
               </mat-chip>
             }
           </mat-chip-listbox>
+          
+          <!-- Solo visible cuando NO se está editando -->
+          @if(!isEdit){
+            <!-- Correo -->
+            <mat-form-field>
+              <mat-label for="correo">Correo electrónico: </mat-label>
+              <input matInput id="correo" formControlName="correo" type="email">
+              @if(form.get('correo')?.touched && form.get('correo')?.hasError('required')) {
+                <mat-error class="error">Este campo es obligatorio.</mat-error>
+              } @else if(form.get('correo')?.hasError('email')) {
+                <mat-error class="error">Debe ser un correo válido.</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Clave -->
+            <mat-form-field>
+              <mat-label for="clave">Clave: </mat-label>
+              <input matInput id="clave" formControlName="clave" type="password">
+              @if(form.get('clave')?.touched && form.get('clave')?.hasError('required')) {
+                <mat-error class="error">Este campo es obligatorio.</mat-error>
+              } @else if(form.get('clave')?.hasError('minlength')) {
+                <mat-error class="error">Debe tener al menos 6 caracteres.</mat-error>
+              }
+            </mat-form-field>
+          }
 
           <!-- Botones -->
           <button mat-stroked-button type="submit" [disabled]="form.invalid || isNoChanges()">
