@@ -10,6 +10,9 @@ import { ServLoginService } from '../../../services/serv-login.service';
 })
 export class HeaderComponent {
 
-  constructor(public miServicio:ServLoginService){}
+  idProfesional: string | null | undefined = null;
 
+  constructor(public miServicio: ServLoginService) {
+    this.idProfesional = this.miServicio.getIdentificador();
+  }
 }
