@@ -1,4 +1,7 @@
-<app-header></app-header>
+@if(isEdit){
+  <app-header></app-header>
+}
+
 <div class="container">
   <mat-card>
     <mat-card-title class="card-title">{{ isEdit ? 'Editar Perfil' : 'Registrar Profesional' }}</mat-card-title>
@@ -146,4 +149,6 @@
     </mat-card-content>
   </mat-card>
 </div>
-<app-footer></app-footer>
+@if(isEdit){
+  <app-footer></app-footer>
+}
