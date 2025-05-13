@@ -4,7 +4,7 @@ import { ProfesionalDashboardComponent } from './components/pages/profesional-da
 import { MantenimientoServicioComponent } from './components/pages/mantenimiento-servicio/mantenimiento-servicio.component';
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
 import { RegistroActualizacionServicioComponent } from './components/pages/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
-
+export const routes: Routes = [
     { path: 'my-services', component: MantenimientoServicioComponent },
     { path: 'service-register', component: RegistroActualizacionServicioComponent },
     { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent },
