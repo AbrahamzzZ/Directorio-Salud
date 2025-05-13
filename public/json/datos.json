@@ -88,6 +88,15 @@
       "fechaDisponible": "2025-05-18",
       "requiereChequeo": true,
       "profesionalId": "1"
+    },
+    {
+      "id": "40be",
+      "nombre": "dsds",
+      "descripcion": "asasa",
+      "precio": 23,
+      "fechaDisponible": "2025-05-08",
+      "requiereChequeo": true,
+      "profesionalId": "4"
     }
   ],
   "usuarios": [
