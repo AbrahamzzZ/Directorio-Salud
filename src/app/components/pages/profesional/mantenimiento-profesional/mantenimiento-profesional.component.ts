@@ -6,7 +6,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { ServProfesionalesService } from '../../../../services/serv-profesionales.service';
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 import { Profesional } from '../../../../models/Profesional';
 import { DatePipe} from '@angular/common';
 import { ServLoginService } from '../../../../services/serv-login.service';
