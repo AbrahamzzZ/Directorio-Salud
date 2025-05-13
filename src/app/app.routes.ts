@@ -11,7 +11,7 @@ import { RegistrarseComponent } from './components/pages/registrarse/registrarse
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: 'registrar', component: RegistrarseComponent},
+    { path: 'registrar', component: RegistrarseComponent, title: 'Formulario de registro'},
     { path: 'profesional-dashboard', component: ProfesionalDashboardComponent, title: 'Profesional' },
     { path: 'profesional-register', component:  RegistroActualizacionProfesionalComponent, title: 'Formulario de registro'},
     { path: 'profesional-edit/:id', component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
