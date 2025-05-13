@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/pages/login/login.component';
 import { ProfesionalDashboardComponent } from './components/pages/profesional-dashboard/profesional-dashboard.component';
-import { MantenimientoServicioComponent } from './components/pages/mantenimiento-servicio/mantenimiento-servicio.component';
+import { MantenimientoServicioComponent } from './components/pages/servicio-medico/mantenimiento-servicio/mantenimiento-servicio.component';
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
-import { RegistroActualizacionServicioComponent } from './components/pages/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
+import { RegistroActualizacionServicioComponent } from './components/pages/servicio-medico/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
 import { RegistrarseComponent } from './components/pages/registrarse/registrarse.component';
 import { RegistroActualizacionProfesionalComponent } from './components/pages/profesional/registro-actualizacion-profesional/registro-actualizacion-profesional.component';
 import { MantenimientoProfesionalComponent } from './components/pages/profesional/mantenimiento-profesional/mantenimiento-profesional.component';
