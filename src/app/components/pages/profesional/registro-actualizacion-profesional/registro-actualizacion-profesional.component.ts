@@ -9,7 +9,7 @@ import { DatePipe, NgIf } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Profesional } from '../../../../models/Profesional';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServProfesionalesService } from '../../../../services/serv-profesionales.service';
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { MatChipsModule} from '@angular/material/chips';
 import { MatIcon} from '@angular/material/icon';

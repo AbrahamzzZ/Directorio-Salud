@@ -4,7 +4,7 @@ import { FooterComponent } from "../../shared/footer/footer.component";
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { Profesional } from '../../../models/Profesional';
-import { ServProfesionalesService } from '../../../services/serv-profesionales.service';
+import { ServProfesionalesService } from '../../../services/servicio-profesional/serv-profesionales.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 

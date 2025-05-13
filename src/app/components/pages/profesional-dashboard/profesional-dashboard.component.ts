@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../../shared/header/header.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { ServLoginService } from '../../../services/serv-login.service';
-import { ServProfesionalesService } from '../../../services/serv-profesionales.service';
-import { ServServiciosjsonService } from '../../../services/serv-serviciosjson.service';
+import { ServProfesionalesService } from '../../../services/servicio-profesional/serv-profesionales.service';
 import { Profesional } from '../../../models/Profesional';
 
 @Component({
