@@ -210,5 +210,103 @@
       "comentario": "Buena atención pero la consulta empezó tarde.",
       "calificacion": 4
     }
+  ],
+  "pacientes": [
+    {
+      "id": "1",
+      "nombre": "Franchesco Totti",
+      "correo": "frantotti@gmail.com",
+      "telefono": "0978956433",
+      "Edad": "35",
+      "diagnostico": "Gripe",
+      "contacto": "email",
+      "tipoSangre": "A+",
+      "fechaRegistro": "2025-05-09",
+      "estado": true
+    },
+    {
+      "id": "2",
+      "nombre": "Luis Morante",
+      "correo": "l_morante@gmail.com",
+      "telefono": "0989745261",
+      "Edad": "40",
+      "diagnostico": "Tos",
+      "contacto": "mensaje de texto",
+      "tipoSangre": "A+",
+      "fechaRegistro": "2025-02-09",
+      "estado": false
+    },
+    {
+      "id": "pmalp1wpa97syx",
+      "nombre": "Alejandro Larrea",
+      "correo": "alejandro@gmail.com",
+      "telefono": "0978972716",
+      "Edad": 22,
+      "diagnostico": "Gripe",
+      "contacto": "llamada telefónica",
+      "tipoSangre": "B-",
+      "fechaRegistro": "2025-05-04T05:00:00.000Z",
+      "estado": true
+    },
+    {
+      "id": "pmalpaqv77mpcg",
+      "nombre": "Omar Riera",
+      "correo": "riera123@ug.edu.ec",
+      "telefono": "0987895643",
+      "Edad": 21,
+      "diagnostico": "Tos seca",
+      "contacto": "SMS",
+      "tipoSangre": "B+",
+      "fechaRegistro": "2025-05-09T05:00:00.000Z",
+      "estado": false
+    },
+    {
+      "id": "pmalpdn6nrwe97",
+      "nombre": "Eunice Lourdes",
+      "correo": "louerdes@hotmail.com",
+      "telefono": "0989233334",
+      "Edad": 52,
+      "diagnostico": "Embarazo",
+      "contacto": "email",
+      "tipoSangre": "AB+",
+      "fechaRegistro": "2025-05-06T05:00:00.000Z",
+      "estado": false
+    },
+    {
+      "id": "pmalpp02pndlwx",
+      "nombre": "Miguel Salazar",
+      "correo": "MigueSala3@outlook.com",
+      "telefono": "1234567891",
+      "Edad": 18,
+      "diagnostico": "Lesión Muscular",
+      "contacto": "email",
+      "tipoSangre": "O+",
+      "fechaRegistro": "2025-05-12T05:00:00.000Z",
+      "estado": true
+    },
+    {
+      "id": "pmalsj313dz1lq",
+      "nombre": "Johan Noriega",
+      "correo": "Noriega23@gmail.com",
+      "telefono": "0978973451",
+      "Edad": 31,
+      "diagnostico": "aaaaaaa",
+      "contacto": "llamada telefónica",
+      "tipoSangre": "O-",
+      "fechaRegistro": "2025-05-13",
+      "estado": true
+    },
+    {
+      "id": "pmalxtwnfwk5to",
+      "nombre": "Jose Lara",
+      "correo": "lara@gmail.com",
+      "telefono": "1234555334",
+      "Edad": 10,
+      "diagnostico": "gripe y tos ",
+      "contacto": "SMS",
+      "tipoSangre": "B+",
+      "fechaRegistro": "2025-05-13T05:00:00.000Z",
+      "estado": true
+    }
   ]
 }
