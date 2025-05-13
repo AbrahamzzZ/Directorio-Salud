@@ -69,6 +69,12 @@
                     showFirstLastButtons
                     aria-label="Selecciona pagina de peliculas">
         </mat-paginator>
+
+        @if(dataSource.data.length === 0){
+            <div class="no-result">
+                No hay ningún profesional con esas características.
+            </div>
+        }
     </div>
 
 <app-footer></app-footer>

@@ -25,3 +25,11 @@
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   border-width: 2px;
 }
+
+.no-result {
+  text-align: center;
+  margin-top: 1rem;
+  font-style: italic;
+  color: #999;
+  margin: 20px;
+}
