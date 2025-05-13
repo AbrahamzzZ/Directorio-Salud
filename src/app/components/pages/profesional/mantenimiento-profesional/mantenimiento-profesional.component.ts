@@ -10,16 +10,17 @@ import { ServProfesionalesService } from '../../../../services/serv-profesionale
 import { Profesional } from '../../../../models/Profesional';
 import { DatePipe} from '@angular/common';
 import { ServLoginService } from '../../../../services/serv-login.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-mantenimiento-profesional',
-  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, DatePipe],
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatSnackBarModule, DatePipe],
   templateUrl: './mantenimiento-profesional.component.html',
   styleUrl: './mantenimiento-profesional.component.css'
 })
 export class MantenimientoProfesionalComponent {
 
-  constructor(private servicio:ServProfesionalesService, private servicioLogin: ServLoginService, private router:Router){}
+  constructor(private servicio:ServProfesionalesService, private servicioLogin: ServLoginService, private router:Router, private snackBar: MatSnackBar){}
   displayedColumns: string[] = ['nombre', 'especialidad', 'ubicacion', 'disponibilidad', 'sexo', 'telefono', 'accion'];
   dataSource = new MatTableDataSource<Profesional>();
 
@@ -59,7 +60,7 @@ export class MantenimientoProfesionalComponent {
         this.servicioLogin.obtenerCuentaPorProfesionalId(profesional.id).subscribe(cuenta => {
           if (cuenta) {
             this.servicioLogin.eliminarCuenta(cuenta.id).subscribe(() => {
-              alert("Profesional y su cuenta eliminados exitosamente");
+              this.mostrarMensaje('¡Profesional y su cuenta eliminados exitosamente!', 'success');
               this.cargarProfesionales();
             });
           } else {
@@ -69,5 +70,16 @@ export class MantenimientoProfesionalComponent {
         });
       });
     }
+  }
+
+  mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
+    const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
+    
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'bottom',
+      panelClass: [className]
+    });
   }
 }

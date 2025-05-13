@@ -154,7 +154,7 @@
       "id": "1",
       "profesionalId": "1",
       "usuarioId": "2",
-      "servicioId":"1",
+      "servicioId": "1",
       "direccion": "Consultorio Medico Health - Av.Victor Manuel Rendon",
       "metodoPago": "Transferencia",
       "prioridad": "alta",
@@ -165,14 +165,13 @@
       "id": "2",
       "profesionalId": "2",
       "usuarioId": "1",
-      "servicioId":"2",
+      "servicioId": "2",
       "direccion": "Consultorio Medico Salud - Av.General Cordoba",
       "metodoPago": "Efectivo",
       "prioridad": "media",
       "fechaHora": "2024-05-12T09:00",
       "estado": "agendada"
     }
-
   ],
   "resenas": [
     {

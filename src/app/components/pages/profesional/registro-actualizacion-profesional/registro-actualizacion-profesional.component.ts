@@ -17,11 +17,12 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Cuenta } from '../../../../models/Cuenta';
 
 @Component({
   selector: 'app-registro-actualizacion-profesional',
-  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatDatepickerModule, MatCardModule, DatePipe, ReactiveFormsModule, FormsModule, NgIf],
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatDatepickerModule, MatCardModule, MatSnackBarModule, DatePipe, ReactiveFormsModule, FormsModule, NgIf],
   templateUrl: './registro-actualizacion-profesional.component.html',
   styleUrl: './registro-actualizacion-profesional.component.css'
 })
@@ -35,10 +36,10 @@ export class RegistroActualizacionProfesionalComponent {
   public fotoSeleccionada: File | null = null;
   public fotoPrevia: string | null = null;
 
-  constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router){
+  constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar){
   this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(5), Validators.max(50)]],
-      especialidad: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/)]],
+      especialidad: ['', Validators.required],
       ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(3), Validators.max(50)]],
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100)]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
@@ -119,7 +120,7 @@ export class RegistroActualizacionProfesionalComponent {
 
       this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
           console.log(nuevoProfesional);
-          alert("¡Profesional registrado con éxito!");
+          this.mostrarMensaje('¡Personal registrado exitosamente!', 'success');
           this.router.navigate(['/login'], { replaceUrl: true });
         });
       });
@@ -132,8 +133,7 @@ export class RegistroActualizacionProfesionalComponent {
       ...this.form.value
     };
     this.service.editarInformacionProfesional(updatedServicio).subscribe(() => {
-      alert("Personal editado exisotasamente!");
-    
+      this.mostrarMensaje('¡Personal editado exitosamente!', 'success');
       this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
 
     });
@@ -149,7 +149,7 @@ export class RegistroActualizacionProfesionalComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.fotoPrevia = reader.result as string;
-        this.form.patchValue({ foto: this.fotoPrevia });
+        this.form.get('foto')?.setValue(this.fotoPrevia);
       };
       reader.readAsDataURL(file);
     }
@@ -188,5 +188,16 @@ export class RegistroActualizacionProfesionalComponent {
     } else {
       this.router.navigate(['/registrar']); // Redirigir a la pagina para seleccionar el tipo de usuario
     }
+  }
+
+  mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
+    const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
+    
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'bottom',
+      panelClass: [className]
+    });
   }
 }
