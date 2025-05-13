@@ -30,8 +30,8 @@
       "nombre": "Sesión de terapia de pareja",
       "descripcion": "Terapia psicológica para resolver conflictos de pareja.",
       "precio": 40,
-      "fechaDisponible": "2024-03-15",
-      "requiereChequeo": false
+      "fechaDisponible": "2025-06-28",
+      "requiereChequeo": true
     },
     {
       "id": "2",
@@ -39,7 +39,7 @@
       "nombre": "Sesión radiologica",
       "descripcion": "Terapia de radio del brazito",
       "precio": 30,
-      "fechaDisponible": "2024-03-15",
+      "fechaDisponible": "2025-07-22",
       "requiereChequeo": true
     },
     {
@@ -48,7 +48,7 @@
       "nombre": "Medicina General",
       "descripcion": "Revision general del cuerpo",
       "precio": 30,
-      "fechaDisponible": "2024-02-10",
+      "fechaDisponible": "2025-05-18",
       "requiereChequeo": false
     },
     {
@@ -62,9 +62,9 @@
     },
     {
       "id": "f2a9",
-      "nombre": "ANGELITO",
+      "nombre": "Angelito",
       "descripcion": "Vivanco",
-      "precio": 1,
+      "precio": 20,
       "fechaDisponible": "2025-05-18",
       "requiereChequeo": true,
       "profesionalId": "1"

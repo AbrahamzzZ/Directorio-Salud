@@ -1,4 +1,4 @@
-<nav>
+<!-- <nav>
     @if (miServicio.rol==='profesional') {
         <ul routerLink="/profesional-dashboard">Home</ul>
         <ul routerLink="/my-services">Mis Servicios</ul>
@@ -10,5 +10,73 @@
         <ul routerLink="">Pacientes</ul>
         <ul routerLink="/login">Cerrar Sesion</ul>
     }
-</nav>
+</nav> -->
 
+<!-- <mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="over">
+    <mat-nav-list>
+      @if (miServicio.rol === 'profesional') {
+        <a mat-list-item routerLink="/profesional-dashboard">Home</a>
+        <a mat-list-item routerLink="/my-services">Mis Servicios</a>
+        <a mat-list-item routerLink="/service-register">Nuevo Servicio</a>
+      } @else {
+        <a mat-list-item routerLink="/">Home</a>
+        <a mat-list-item routerLink="">Persona</a>
+        <a mat-list-item routerLink="">Pacientes</a>
+      }
+      <a mat-list-item routerLink="/login">Cerrar Sesión</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="toggleDrawer()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Mi App</span>
+    </mat-toolbar>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+
+
+<mat-toolbar class="main-toolbar">
+  <span class="app-title" routerLink="/profesional-dashboard">VitaCare</span>
+
+  <button mat-icon-button class="hamburger" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <nav class="nav-links">
+    @if (miServicio.rol === 'profesional') {
+      <a mat-button routerLink="/profesional-dashboard">Home</a>
+      <a mat-button routerLink="/my-services">Mis Servicios</a>
+      <a mat-button routerLink="/service-register">Nuevo Servicio</a>
+    } @else {
+      <a mat-button routerLink="/">Home</a>
+      <a mat-button routerLink="#">Persona</a>
+      <a mat-button routerLink="#">Pacientes</a>
+    }
+    <a mat-button routerLink="/login">Cerrar Sesión</a>
+  </nav>
+</mat-toolbar>
+
+@if (menuAbierto) {
+  <div class="mobile-menu">
+    @if (miServicio.rol === 'profesional') {
+      <a mat-button routerLink="/profesional-dashboard" (click)="toggleMenu()">Home</a>
+      <a mat-button routerLink="/my-services" (click)="toggleMenu()">Mis Servicios</a>
+      <a mat-button routerLink="/service-register" (click)="toggleMenu()">Nuevo Servicio</a>
+    } @else {
+      <a mat-button routerLink="/" (click)="toggleMenu()">Home</a>
+      <a mat-button routerLink="#" (click)="toggleMenu()">Persona</a>
+      <a mat-button routerLink="#" (click)="toggleMenu()">Pacientes</a>
+    }
+    <a mat-button routerLink="/login" (click)="toggleMenu()">Cerrar Sesión</a>
+  </div>
+}
+
+<router-outlet></router-outlet>
