@@ -1,0 +1,35 @@
+.example-form {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.container__search__input {
+  width: 100%;
+  max-width: 500px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-input-element {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #3f51b5; 
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-width: 2px;
+}
+
+.no-result {
+  text-align: center;
+  margin-top: 1rem;
+  font-style: italic;
+  color: #999;
+  margin: 20px;
+}

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
-import { ServicioMedico } from '../models/ServicioMedico';
-import { ServLoginService } from './serv-login.service';
-import { Profesional } from '../models/Profesional';
+import { ServicioMedico } from '../../models/ServicioMedico';
+import { ServLoginService } from '.././serv-login.service';
+import { Profesional } from '../../models/Profesional';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,10 @@ export class ServServiciosjsonService {
     const id = String(this.servicioLogin.getIdentificador()); // forzamos a string
     console.log("ID Profesional:", id);
     return this.http.get<ServicioMedico[]>(`${this.jsonUrl}?profesionalId=${id}`);
+  }
+
+   getAllServices(): Observable<ServicioMedico[]> {//getAllServices para obtener todos los servi
+    return this.http.get<ServicioMedico[]>(this.jsonUrl);
   }
 
   getServicesSearch(termino: string): Observable<ServicioMedico[]> {

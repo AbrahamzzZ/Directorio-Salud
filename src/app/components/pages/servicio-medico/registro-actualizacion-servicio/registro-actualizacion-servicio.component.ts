@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
-import { ServicioMedico } from '../../../models/ServicioMedico';
+import { ServicioMedico } from '../../../../models/ServicioMedico';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ServServiciosjsonService } from '../../../services/serv-serviciosjson.service';
+import { ServServiciosjsonService } from '../../../../services/servicio-servicios/serv-serviciosjson.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServLoginService } from '../../../services/serv-login.service';
-import { HeaderComponent } from "../../shared/header/header.component";
-import { FooterComponent } from "../../shared/footer/footer.component";
+import { ServLoginService } from '../../../../services/serv-login.service';
+import { HeaderComponent } from "../../../shared/header/header.component";
+import { FooterComponent } from "../../../shared/footer/footer.component";
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-registro-actualizacion-servicio',
-  imports: [ReactiveFormsModule, HeaderComponent, FooterComponent],
+  imports: [ReactiveFormsModule, HeaderComponent, FooterComponent, MatInputModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatIconModule, MatButtonModule],
   templateUrl: './registro-actualizacion-servicio.component.html',
   styleUrl: './registro-actualizacion-servicio.component.css'
 })

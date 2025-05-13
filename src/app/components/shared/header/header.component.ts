@@ -1,15 +1,30 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, Renderer2 } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { ServLoginService } from '../../../services/serv-login.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule, RouterOutlet, MatToolbarModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  menuAbierto = false;
+  idProfesional: string | null | undefined = null;
 
-  constructor(public miServicio:ServLoginService){}
+  constructor(public miServicio: ServLoginService, private renderer: Renderer2) {
+    this.idProfesional = this.miServicio.getIdentificador();
+  }
 
+  toggleMenu() {
+    this.menuAbierto = !this.menuAbierto;
+    const body = document.body; // Obtén una referencia al body
+    if (this.menuAbierto) {
+      this.renderer.addClass(body, 'menu-abierto'); // Agrega la clase al body
+    } else {
+      this.renderer.removeClass(body, 'menu-abierto'); // Remueve la clase del body
+    }
+  }
 }

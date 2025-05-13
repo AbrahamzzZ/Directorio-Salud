@@ -40,5 +40,22 @@ export class ServLoginService {
         })
         );
     } 
+
+    // Metodo para registrar un nuevo usuario
+    registrarCuenta(cuenta: Cuenta): Observable<Cuenta> {
+        return this.http.post<Cuenta>(this.jsonUrl, cuenta);
+    }
+
+    // Metodo para obtener el ID del profesional asociado a la cuenta
+    obtenerCuentaPorProfesionalId(profesionalId: string): Observable<Cuenta | undefined> {
+        return this.http.get<Cuenta[]>(this.jsonUrl).pipe(
+            map(cuentas => cuentas.find(c => c.profesionalId === profesionalId))
+        );
+    }
+
+    // Eliminar cuenta por su ID
+    eliminarCuenta(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.jsonUrl}/${id}`);
+    }
 }
 

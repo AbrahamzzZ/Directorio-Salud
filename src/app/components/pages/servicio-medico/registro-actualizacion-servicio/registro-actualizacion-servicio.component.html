@@ -1,0 +1,86 @@
+<app-header></app-header>
+<h1>{{ isEdit ? 'Editar Servicio' : 'Registrar Servicio' }}</h1>
+<form class="example-form-grid" [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label for="nombre">Nombre del servicio</mat-label>
+        <input matInput placeholder="El nombre aqui" formControlName="nombre">
+        @if (serviceForm.get('nombre')?.hasError('required')) {
+        <mat-error>
+            El nombre del servicio es requerido.
+        </mat-error>
+        }
+        @if (serviceForm.get('nombre')?.hasError('pattern')) {
+        <mat-error>
+            El nombre solo puede contener letras y espacios.
+        </mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label for="descripcion">Descripción</mat-label>
+        <textarea matInput placeholder="Descripcion aqui" id="descripcion" formControlName="descripcion"></textarea>
+        @if (serviceForm.get('descripcion')?.hasError('required')) {
+        <mat-error>
+            La descripción del servicio es requerida.
+        </mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label for="precio">Precio</mat-label>
+        <input matInput id="precio" formControlName="precio" type="number">
+        @if (serviceForm.get('precio')?.hasError('required')) {
+        <mat-error>
+            El precio del servicio es requerido.
+        </mat-error>
+        }
+        @if (serviceForm.get('precio')?.hasError('min')) {
+        <mat-error>
+            El precio debe ser como mínimo 5.
+        </mat-error>
+        }
+        @if (serviceForm.get('precio')?.hasError('pattern')) {
+        <mat-error>
+            Ingrese un precio válido (ej: 10 o 10.50).
+        </mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label for="fechaDisponible">Fecha disponible</mat-label>
+        <input matInput [matDatepicker]="picker" id="fechaDisponible" formControlName="fechaDisponible">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (serviceForm.get('fechaDisponible')?.hasError('required')) {
+        <mat-error>
+            La fecha de disponibilidad es requerida.
+        </mat-error>
+        }
+        @if (serviceForm.get('fechaDisponible')?.hasError('dateInPast')) {
+        <mat-error>
+            La fecha debe ser igual o posterior a hoy.
+        </mat-error>
+        }
+    </mat-form-field>
+
+    <section class="example-section">
+        <mat-checkbox class="example-margin" id="requiereChequeo" formControlName="requiereChequeo">Requiere chequeo</mat-checkbox>
+    </section>
+
+    <section class="buttons-container">
+        <div class="example-button-container">
+        <button mat-fab extended type="submit" [disabled]="serviceForm.invalid || isNoChanges()">
+            <mat-icon>{{ isEdit ? 'edit' : 'add' }}</mat-icon>
+            {{ isEdit ? 'Actualizar' : 'Agregar' }}
+        </button>
+        </div>
+
+        <div class="example-button-container">
+        <button mat-fab extended color="warn" type="button" (click)="onCancel()" class="btnCancel">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+        </div>
+    </section>
+</form>
+<app-footer></app-footer>

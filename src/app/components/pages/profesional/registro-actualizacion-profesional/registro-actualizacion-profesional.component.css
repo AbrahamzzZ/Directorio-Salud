@@ -1,0 +1,103 @@
+.container {
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+mat-card {
+  padding: 16px;
+}
+
+.card-title{
+  text-align: center;
+  margin: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+}
+
+.custom-form-field {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 0;
+}
+
+.custom-form-field label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 4px;
+}
+
+.custom-form-field input[type="datetime-local"] {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid rgba(0,0,0,0.38);
+  border-radius: 4px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+
+.custom-form-field input[type="datetime-local"]:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+}
+
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px;
+}
+
+.file-upload-button {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-weight: 500;
+}
+
+.file-upload-button:hover {
+  background-color: rgba(var(--primary-rgb), 0.08);
+}
+
+.label-and-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column; 
+  align-items: stretch; 
+  margin: 10px 0;
+  gap: 8px;
+}
+.image-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.image{
+  width: 200px;
+  height: 200px;
+}
+
+.fecha-chip {
+  background-color: #e8f5e9; /* verde claro */
+  color: #2e7d32;
+  font-weight: 500;
+  border-radius: 16px;
+  padding: 4px 10px;
+  margin: 4px;
+}
+
+.fecha-chip mat-icon {
+  color: red;
+  text-align: center;
+}
