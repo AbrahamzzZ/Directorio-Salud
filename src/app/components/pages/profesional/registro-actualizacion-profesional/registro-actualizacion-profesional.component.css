@@ -16,7 +16,7 @@ mat-card {
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* Espacio entre los inputs */
+  gap: 16px; 
 }
 
 .custom-form-field {
@@ -41,7 +41,7 @@ mat-card {
 }
 
 .custom-form-field input[type="datetime-local"]:focus {
-  border-color: #3f51b5; /* Angular Material primary color */
+  border-color: #3f51b5;
   box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
 }
 
@@ -52,7 +52,52 @@ mat-card {
   display: block;
 }
 
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px;
+}
+
+.file-upload-button {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-weight: 500;
+}
+
+.file-upload-button:hover {
+  background-color: rgba(var(--primary-rgb), 0.08);
+}
+
+.label-and-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column; 
+  align-items: stretch; 
+  margin: 10px 0;
+  gap: 8px;
+}
+.image-preview-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .image{
   width: 200px;
   height: 200px;
+}
+
+.fecha-chip {
+  background-color: #e8f5e9; /* verde claro */
+  color: #2e7d32;
+  font-weight: 500;
+  border-radius: 16px;
+  padding: 4px 10px;
+  margin: 4px;
+}
+
+.fecha-chip mat-icon {
+  color: red;
+  text-align: center;
 }

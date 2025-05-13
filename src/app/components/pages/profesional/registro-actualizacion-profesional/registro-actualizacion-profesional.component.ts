@@ -32,8 +32,8 @@ export class RegistroActualizacionProfesionalComponent {
   public profesionalOriginal: Profesional | null = null;
   public nuevaDisponibilidad: string = '';
   public especialidades: string[] = ['Pediatría', 'Cardiología', 'Dermatología', 'Ginecología', 'Neurología', 'Psicología', 'Odontología'];
-  public selectedFile: File | null = null;
-  public previewUrl: string | null = null;
+  public fotoSeleccionada: File | null = null;
+  public fotoPrevia: string | null = null;
 
   constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router){
   this.form = this.fb.group({
@@ -74,7 +74,7 @@ export class RegistroActualizacionProfesionalComponent {
     });
 
     if (this.isEdit && profesional.foto) {
-      this.previewUrl = profesional.foto; // Asegúrate de que `foto` sea una URL accesible
+      this.fotoPrevia = profesional.foto; // Asegúrate de que `foto` sea una URL accesible
     }
 
     if (this.isEdit) {
@@ -139,17 +139,17 @@ export class RegistroActualizacionProfesionalComponent {
     });
   }
 
-  onFileSelected(event: Event): void {
-     const fileInput = event.target as HTMLInputElement;
+  archivoSeleccionado(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
 
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
-      this.selectedFile = file;
+      this.fotoSeleccionada = file;
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.previewUrl = reader.result as string;
-        this.form.patchValue({ foto: this.previewUrl });
+        this.fotoPrevia = reader.result as string;
+        this.form.patchValue({ foto: this.fotoPrevia });
       };
       reader.readAsDataURL(file);
     }

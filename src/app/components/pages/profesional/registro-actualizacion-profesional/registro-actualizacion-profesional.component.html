@@ -90,19 +90,27 @@
 
           <mat-chip-listbox aria-label="Fechas seleccionadas">
             @for (fecha of form.get('disponibilidad')?.value; track fecha) {
-              <mat-chip [removable]="true" (removed)="eliminarDisponibilidad(fecha)">
+              <mat-chip class="fecha-chip" [removable]="true" (removed)="eliminarDisponibilidad(fecha)">
                 {{ fecha | date:'dd/MM/yyyy HH:mm' }}
-                <mat-icon matChipRemove>cancel</mat-icon>
+                <mat-icon matChipRemove>X</mat-icon>
               </mat-chip>
             }
           </mat-chip-listbox>
 
-
           <!-- Foto profesional -->
-          <mat-label>Foto de perfil</mat-label>
-          <input type="file" (change)="onFileSelected($event)" accept="image/*" required>
-          <img class="image" *ngIf="previewUrl" [src]="previewUrl" alt="Foto seleccionada">
-          
+          <div class="file-upload-group">
+            <div class="label-and-button">
+              <button mat-stroked-button type="button" (click)="fileInput.click()" class="file-upload-button">
+                Seleccionar foto
+              </button>
+              <input type="file" #fileInput hidden (change)="archivoSeleccionado($event)" accept="image/*">
+            </div>
+
+            <div class="image-preview-wrapper" *ngIf="fotoPrevia">
+              <img class="image" [src]="fotoPrevia" alt="Foto seleccionada">
+            </div>
+          </div>
+
           <!-- Solo visible cuando NO se está editando -->
           @if(!isEdit){
             <!-- Correo -->

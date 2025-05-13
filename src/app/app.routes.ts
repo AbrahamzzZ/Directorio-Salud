@@ -5,6 +5,13 @@ import { MantenimientoServicioComponent } from './components/pages/mantenimiento
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
 import { RegistroActualizacionServicioComponent } from './components/pages/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
 
+export const routes: Routes = [
+    { path: 'login', component: LoginComponent },
+    { path: 'registrar', component: RegistrarseComponent, title: 'Formulario de registro'},
+    { path: 'profesional-dashboard', component: ProfesionalDashboardComponent, title: 'Profesional' },
+    { path: 'profesional-register', component:  RegistroActualizacionProfesionalComponent, title: 'Formulario de registro'},
+    { path: 'profesional-edit/:id', component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
+    { path: 'list-profesional', component: MantenimientoProfesionalComponent, title: 'Listado de profesionales'},
     { path: 'my-services', component: MantenimientoServicioComponent },
     { path: 'service-register', component: RegistroActualizacionServicioComponent },
     { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent },
