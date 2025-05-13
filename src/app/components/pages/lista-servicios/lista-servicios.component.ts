@@ -3,7 +3,7 @@ import { HeaderComponent } from "../../shared/header/header.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { ServicioMedico } from '../../../models/ServicioMedico';
 
-import { ServServiciosjsonService } from '../../../services/serv-serviciosjson.service';
+import { ServServiciosjsonService } from '../../../services/servicio-servicios/serv-serviciosjson.service';
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule, MatIconButton} from '@angular/material/button';
 import { CurrencyPipe, DatePipe, UpperCasePipe } from '@angular/common';
