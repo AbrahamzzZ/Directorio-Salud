@@ -15,7 +15,7 @@ export class RegistrarseComponent {
     if (tipo === 'profesional') {
       this.router.navigate(['/profesional-register']);
     } else if (tipo === 'paciente') {
-      this.router.navigate(['/registro-paciente']);
+      this.router.navigate(['/pacientes-registro']);
     }
   }
 }

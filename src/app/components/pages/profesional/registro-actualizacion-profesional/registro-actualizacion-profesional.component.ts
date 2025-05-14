@@ -120,7 +120,7 @@ export class RegistroActualizacionProfesionalComponent {
 
       this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
           console.log(nuevoProfesional);
-          this.mostrarMensaje('¡Personal registrado exitosamente!', 'success');
+          //this.mostrarMensaje('¡Personal registrado exitosamente!', 'success');
           this.router.navigate(['/login'], { replaceUrl: true });
         });
       });
@@ -133,7 +133,7 @@ export class RegistroActualizacionProfesionalComponent {
       ...this.form.value
     };
     this.service.editarInformacionProfesional(updatedServicio).subscribe(() => {
-      this.mostrarMensaje('¡Personal editado exitosamente!', 'success');
+      //this.mostrarMensaje('¡Personal editado exitosamente!', 'success');
       this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
 
     });
@@ -190,7 +190,7 @@ export class RegistroActualizacionProfesionalComponent {
     }
   }
 
-  mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
+  /*mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
     const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
     
     this.snackBar.open(mensaje, 'Cerrar', {
@@ -199,5 +199,5 @@ export class RegistroActualizacionProfesionalComponent {
       verticalPosition: 'bottom',
       panelClass: [className]
     });
-  }
+  }*/
 }
