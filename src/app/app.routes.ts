@@ -3,7 +3,6 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { ProfesionalDashboardComponent } from './components/pages/profesional-dashboard/profesional-dashboard.component';
 import { MantenimientoServicioComponent } from './components/pages/servicio-medico/mantenimiento-servicio/mantenimiento-servicio.component';
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
-
 import { MantenimientoPacienteComponent } from './components/pages/mantenimiento-paciente/mantenimiento-paciente.component';
 import { RegistroActualizacionPacienteComponent } from './components/pages/registro-actualizacion-paciente/registro-actualizacion-paciente.component';
 
