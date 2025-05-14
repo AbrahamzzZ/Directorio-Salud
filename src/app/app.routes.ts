@@ -8,6 +8,9 @@ import { RegistrarseComponent } from './components/pages/registrarse/registrarse
 import { RegistroActualizacionProfesionalComponent } from './components/pages/profesional/registro-actualizacion-profesional/registro-actualizacion-profesional.component';
 import { MantenimientoProfesionalComponent } from './components/pages/profesional/mantenimiento-profesional/mantenimiento-profesional.component';
 import { AdministradorDashboardComponent } from './components/pages/administrador-dashboard/administrador-dashboard.component';
+import { RegistroActualizacionResenaComponent } from './components/pages/resena/registro-actualizacion-resena/registro-actualizacion-resena.component';
+import { MantenimientoResenaComponent } from './components/pages/resena/mantenimiento-resena/mantenimiento-resena.component';
+
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -21,6 +24,8 @@ export const routes: Routes = [
     { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent },
     { path: 'patients-dashboard', component: PacientesDashboardComponent },
     { path: 'admin-dashboard', component: AdministradorDashboardComponent, title: 'Administrador'},
+    { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
+    { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login'}

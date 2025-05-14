@@ -7,6 +7,8 @@ import { Profesional } from '../../../models/Profesional';
 import { ServProfesionalesService } from '../../../services/serv-profesionales.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-pacientes-dashboard',
@@ -18,7 +20,7 @@ export class PacientesDashboardComponent {
   public profesionales: Profesional[] = [];
   public terminoBusqueda: string = '';
 
-  constructor(private servicio: ServProfesionalesService) {
+  constructor(private servicio: ServProfesionalesService, private router: Router) {
     this.cargarTodos();
   }
 
@@ -37,5 +39,9 @@ export class PacientesDashboardComponent {
     } else {
       this.cargarTodos();
     }
+  }
+
+    irAResena(profesionalId: string): void {
+    this.router.navigate(['/resena-register', profesionalId]);
   }
 }
