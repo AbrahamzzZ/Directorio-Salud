@@ -1,0 +1,15 @@
+<app-header></app-header>
+    <h1>Detalles de Servicios</h1>
+    <form class="example-form">
+            <mat-form-field class="example-full-width">
+            <mat-label>Buscar:</mat-label>
+            <input matInput placeholder="Nombre/Descripcion" type="search" (keyup)="search(searchInput)" #searchInput>
+            </mat-form-field>
+    </form>
+    <app-tabla-reutilizable
+        [columnas]="columnasKeys"
+        [data]="dataSource.data"
+        [acciones]="acciones"
+        (accion)="gestionarAccion($event)">
+    </app-tabla-reutilizable>
+<app-footer></app-footer>

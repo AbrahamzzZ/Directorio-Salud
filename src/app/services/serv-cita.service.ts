@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ServServiciosjsonService } from './serv-serviciosjson.service';
-import { ServProfesionalesService } from './serv-profesionales.service';
+import { ServServiciosjsonService } from './servicio-servicios/serv-serviciosjson.service';
+import { ServProfesionalesService } from './servicio-profesional/serv-profesionales.service';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { Cita } from '../models/Citas';
 
