@@ -1,22 +1,18 @@
-.container {
+.example-form-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Una sola columna para apilar los campos */
+  gap: 15px; /* Espacio entre las filas (campos) */
+  max-width: 400px; /* Un ancho máximo razonable para pantallas grandes */
+  width: 90%; /* Ocupa un porcentaje mayor en pantallas pequeñas */
+  margin: 20px auto; /* Centra el formulario HORIZONTALMENTE */
   padding: 20px;
-  max-width: 700px;
-  margin: auto;
+  border: 1px solid #ccc; /* Opcional: borde */
+  border-radius: 5px; /* Opcional: bordes redondeados */
 }
 
-mat-card {
-  padding: 16px;
-}
-
-.card-title{
-  text-align: center;
-  margin: 15px;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; 
+.example-form-grid h1 {
+  text-align: center; /* Centra el título */
+  margin-bottom: 20px;
 }
 
 .custom-form-field {
@@ -38,11 +34,6 @@ mat-card {
   border-radius: 4px;
   transition: border-color 0.3s, box-shadow 0.3s;
   outline: none;
-}
-
-.custom-form-field input[type="datetime-local"]:focus {
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
 }
 
 .error {
@@ -77,6 +68,7 @@ mat-card {
   margin: 10px 0;
   gap: 8px;
 }
+
 .image-preview-wrapper {
   display: flex;
   justify-content: center;
@@ -86,6 +78,8 @@ mat-card {
 .image{
   width: 200px;
   height: 200px;
+  border-radius: 10px;
+  margin: 10px;
 }
 
 .fecha-chip {
@@ -100,4 +94,21 @@ mat-card {
 .fecha-chip mat-icon {
   color: red;
   text-align: center;
+}
+
+
+.buttons-container {
+  display: flex;
+  justify-content: center; /* Alinea los botones al final (derecha) */
+  gap: 10px;
+  width: 100%; /* Asegura que los botones estén en la misma línea y ocupen el ancho del formulario */
+}
+
+.btnCancel{
+  background-color: rgb(189, 203, 214);
+}
+
+/* Asegúrate de que los mat-form-field ocupen el ancho completo de su celda en la grid */
+.example-form-grid mat-form-field {
+  width: 100%;
 }

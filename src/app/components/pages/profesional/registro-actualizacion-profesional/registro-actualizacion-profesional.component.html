@@ -1,154 +1,153 @@
 @if(isEdit){
   <app-header></app-header>
 }
+<h1>{{ isEdit ? 'Editar Perfil' : 'Registrar Profesional' }}</h1>
+<form class="example-form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Nombre completo -->
+  <mat-form-field>
+    <mat-label for="nombreCompleto">Nombre completo:</mat-label>
+    <input matInput id="nombreCompleto" formControlName="nombre" maxlength="50" minlength="5">
+      @if(form.get('nombre')?.touched &&form.get('nombre')?.hasError('required')){
+        <mat-error class="error">Este campo es obligatorio.</mat-error>
+      }@else if (form.get('nombre')?.hasError('pattern')) {
+        <mat-error class="error">Solo se permiten letras.</mat-error>
+      }@else if(form.get('nombre')?.hasError('minlength')){
+        <mat-error class="error">Nombre demasiado corto.</mat-error>
+      }
+  </mat-form-field>
 
-<div class="container">
-  <mat-card>
-    <mat-card-title class="card-title">{{ isEdit ? 'Editar Perfil' : 'Registrar Profesional' }}</mat-card-title>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="input-group">
-          <!-- Nombre completo -->
-          <mat-form-field>
-            <mat-label for="nombreCompleto">Nombre completo:</mat-label>
-            <input matInput id="nombreCompleto" formControlName="nombre" maxlength="50" minlength="5">
-            @if(form.get('nombre')?.touched &&form.get('nombre')?.hasError('required')){
-              <mat-error class="error">Este campo es obligatorio.</mat-error>
-            }@else if (form.get('nombre')?.hasError('pattern')) {
-              <mat-error class="error">Solo se permiten letras.</mat-error>
-            }@else if(form.get('nombre')?.hasError('minlength')){
-              <mat-error class="error">Nombre demasiado corto.</mat-error>
-            }
-          </mat-form-field>
+  <!-- Especialidad -->
+  <mat-form-field>
+    <mat-label for="especialidad">Especialidad:</mat-label>
+      <mat-select id="especialidad" formControlName="especialidad">
+      <mat-option value="">Seleccione una especialidad</mat-option>
+      @for (esp of especialidades; track esp) {
+        <mat-option [value]="esp">{{ esp }}</mat-option>
+      }
+    </mat-select>
+    @if(form.get('especialidad')?.touched && form.get('especialidad')?.hasError('required')){
+      <mat-error class="error">Debe seleccionar una especialidad.</mat-error>
+    }
+  </mat-form-field>
 
-          <!-- Especialidad -->
-          <mat-form-field>
-            <mat-label for="especialidad">Especialidad:</mat-label>
-            <mat-select id="especialidad" formControlName="especialidad">
-              <mat-option value="">Seleccione una especialidad</mat-option>
-              @for (esp of especialidades; track esp) {
-                <mat-option [value]="esp">{{ esp }}</mat-option>
-              }
-            </mat-select>
-            @if(form.get('especialidad')?.touched && form.get('especialidad')?.hasError('required')){
-              <mat-error class="error">Debe seleccionar una especialidad.</mat-error>
-            }
-          </mat-form-field>
+  <!-- Ubicación -->
+  <mat-form-field>
+    <mat-label for="ubicacion">Ubicación:</mat-label>
+    <input matInput id="ubicacion" formControlName="ubicacion" maxlength="50" minlength="3">
+    @if(form.get('ubicacion')?.touched && form.get('ubicacion')?.hasError('required')){
+      <mat-error class="error">Este campo es obligatorio.</mat-error>
+    }@else if (form.get('ubicacion')?.hasError('pattern')) {
+      <mat-error class="error">Solo se permiten letras.</mat-error>
+    }@else if(form.get('ubicacion')?.hasError('minlength')){
+      <mat-error class="error">Ubicación demasiada corta.</mat-error>
+    }
+  </mat-form-field>
 
-          <!-- Ubicación -->
-          <mat-form-field>
-            <mat-label for="ubicacion">Ubicación:</mat-label>
-            <input matInput id="ubicacion" formControlName="ubicacion" maxlength="50" minlength="3">
-              @if(form.get('ubicacion')?.touched && form.get('ubicacion')?.hasError('required')){
-                <mat-error class="error">Este campo es obligatorio.</mat-error>
-              }@else if (form.get('ubicacion')?.hasError('pattern')) {
-                <mat-error class="error">Solo se permiten letras.</mat-error>
-              }@else if(form.get('ubicacion')?.hasError('minlength')){
-                <mat-error class="error">Ubicación demasiada corta.</mat-error>
-              }
-          </mat-form-field>
+  <!-- Edad -->
+  <mat-form-field>
+    <mat-label for="edad">Edad:</mat-label>
+    <input matInput id="edad" formControlName="edad" type="number">
+    @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')) {
+      <mat-error class="error">Este campo es obligatorio.</mat-error>
+    } @else if(form.get('edad')?.hasError('min')) {
+      <mat-error class="error">Debe tener al menos 18 años.</mat-error>
+    } @else if(form.get('edad')?.hasError('max')) {
+      <mat-error class="error">Edad demasiada alta.</mat-error>
+    }
+  </mat-form-field>
 
-          <!-- Edad -->
-          <mat-form-field>
-            <mat-label for="edad">Edad:</mat-label>
-            <input matInput id="edad" formControlName="edad" type="number">
-            @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')) {
-              <mat-error class="error">Este campo es obligatorio.</mat-error>
-            } @else if(form.get('edad')?.hasError('min')) {
-              <mat-error class="error">Debe tener al menos 18 años.</mat-error>
-            } @else if(form.get('edad')?.hasError('max')) {
-              <mat-error class="error">Edad demasiada alta.</mat-error>
-            }
-          </mat-form-field>
+  <!-- Teléfono -->
+  <mat-form-field>
+    <mat-label for="telefono">Teléfono:</mat-label>
+    <input matInput id="telefono" formControlName="telefono" required>
+    @if(form.get('telefono')?.touched && form.get('telefono')?.hasError('required')){
+      <mat-error class="error">Este campo es obligatorio.</mat-error>
+    }@else if (form.get('telefono')?.hasError('pattern')) {
+      <mat-error class="error">Debe tener exactamente 10 dígitos numéricos.</mat-error>
+    }
+  </mat-form-field>
 
-          <!-- Teléfono -->
-          <mat-form-field>
-            <mat-label for="telefono">Teléfono:</mat-label>
-            <input matInput id="telefono" formControlName="telefono" required>
-            @if(form.get('telefono')?.touched && form.get('telefono')?.hasError('required')){
-              <mat-error class="error">Este campo es obligatorio.</mat-error>
-            }@else if (form.get('telefono')?.hasError('pattern')) {
-              <mat-error class="error">Debe tener exactamente 10 dígitos numéricos.</mat-error>
-            }
-          </mat-form-field>
+  <!-- Sexo -->
+  <mat-radio-group formControlName="sexo">
+    <mat-radio-button value="F">Femenino</mat-radio-button>
+    <mat-radio-button value="M">Masculino</mat-radio-button>
+    @if(form.get('sexo')?.touched && form.get('sexo')?.hasError('required')){
+      <mat-error class="error">Debe seleccionar un sexo.</mat-error>
+    }
+  </mat-radio-group>
 
-          <!-- Sexo -->
-          <mat-radio-group formControlName="sexo">
-            <mat-radio-button value="F">Femenino</mat-radio-button>
-            <mat-radio-button value="M">Masculino</mat-radio-button>
-            @if(form.get('sexo')?.touched && form.get('sexo')?.hasError('required')){
-              <mat-error class="error">Debe seleccionar un sexo.</mat-error>
-            }
-          </mat-radio-group>
+  <!-- Disponibilidad -->
+  <div class="custom-form-field">
+    <label for="nuevaFecha">Selecciona una fecha y hora:</label>
+    <input type="datetime-local" id="nuevaFecha" [(ngModel)]="nuevaDisponibilidad" name="nuevaFecha" [ngModelOptions]="{standalone: true}">
+  </div>
+    <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar Fecha</button>
+    @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')){
+      <mat-error>Debe agregar al menos una fecha.</mat-error>
+    }
 
-          <!-- Disponibilidad -->
-          <div class="custom-form-field">
-            <label for="nuevaFecha">Selecciona una fecha y hora:</label>
-            <input type="datetime-local" id="nuevaFecha" [(ngModel)]="nuevaDisponibilidad" name="nuevaFecha" [ngModelOptions]="{standalone: true}">
-          </div>
-          <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar Fecha</button>
-          @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')){
-            <mat-error>Debe agregar al menos una fecha.</mat-error>
-          }
+  <mat-chip-listbox aria-label="Fechas seleccionadas">
+    @for (fecha of form.get('disponibilidad')?.value; track fecha) {
+      <mat-chip class="fecha-chip" [removable]="true" (removed)="eliminarDisponibilidad(fecha)">{{ fecha | date:'dd/MM/yyyy HH:mm' }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    }
+  </mat-chip-listbox>
 
-          <mat-chip-listbox aria-label="Fechas seleccionadas">
-            @for (fecha of form.get('disponibilidad')?.value; track fecha) {
-              <mat-chip class="fecha-chip" [removable]="true" (removed)="eliminarDisponibilidad(fecha)">
-                {{ fecha | date:'dd/MM/yyyy HH:mm' }}
-                <mat-icon matChipRemove>X</mat-icon>
-              </mat-chip>
-            }
-          </mat-chip-listbox>
+  <!-- Foto profesional -->
+  <div class="file-upload-group">
+    <div class="label-and-button">
+      <button mat-stroked-button type="button" (click)="fileInput.click()" class="file-upload-button">Seleccionar foto</button>
+      <input type="file" #fileInput hidden (change)="archivoSeleccionado($event)" accept="image/*">
+    </div>
 
-          <!-- Foto profesional -->
-          <div class="file-upload-group">
-            <div class="label-and-button">
-              <button mat-stroked-button type="button" (click)="fileInput.click()" class="file-upload-button">
-                Seleccionar foto
-              </button>
-              <input type="file" #fileInput hidden (change)="archivoSeleccionado($event)" accept="image/*">
-            </div>
+    <div class="image-preview-wrapper" *ngIf="fotoPrevia">
+      <img class="image" [src]="fotoPrevia" alt="Foto seleccionada">
+    </div>
+  </div>
 
-            <div class="image-preview-wrapper" *ngIf="fotoPrevia">
-              <img class="image" [src]="fotoPrevia" alt="Foto seleccionada">
-            </div>
-          </div>
+    <!-- Solo visible cuando NO se está editando -->
+    @if(!isEdit){
+      <!-- Correo -->
+      <mat-form-field>
+        <mat-label for="correo">Correo electrónico: </mat-label>
+        <input matInput id="correo" formControlName="correo" type="email">
+        @if(form.get('correo')?.touched && form.get('correo')?.hasError('required')) {
+          <mat-error class="error">Este campo es obligatorio.</mat-error>
+        } @else if(form.get('correo')?.hasError('email')) {
+          <mat-error class="error">Debe ser un correo válido.</mat-error>
+        }
+      </mat-form-field>
 
-          <!-- Solo visible cuando NO se está editando -->
-          @if(!isEdit){
-            <!-- Correo -->
-            <mat-form-field>
-              <mat-label for="correo">Correo electrónico: </mat-label>
-              <input matInput id="correo" formControlName="correo" type="email">
-              @if(form.get('correo')?.touched && form.get('correo')?.hasError('required')) {
-                <mat-error class="error">Este campo es obligatorio.</mat-error>
-              } @else if(form.get('correo')?.hasError('email')) {
-                <mat-error class="error">Debe ser un correo válido.</mat-error>
-              }
-            </mat-form-field>
+      <!-- Clave -->
+      <mat-form-field>
+        <mat-label for="clave">Clave: </mat-label>
+        <input matInput id="clave" formControlName="clave" type="password">
+        @if(form.get('clave')?.touched && form.get('clave')?.hasError('required')) {
+          <mat-error class="error">Este campo es obligatorio.</mat-error>
+        } @else if(form.get('clave')?.hasError('minlength')) {
+          <mat-error class="error">Debe tener al menos 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+    }
 
-            <!-- Clave -->
-            <mat-form-field>
-              <mat-label for="clave">Clave: </mat-label>
-              <input matInput id="clave" formControlName="clave" type="password">
-              @if(form.get('clave')?.touched && form.get('clave')?.hasError('required')) {
-                <mat-error class="error">Este campo es obligatorio.</mat-error>
-              } @else if(form.get('clave')?.hasError('minlength')) {
-                <mat-error class="error">Debe tener al menos 6 caracteres.</mat-error>
-              }
-            </mat-form-field>
-          }
+  <!-- Botones -->
+  <section class="buttons-container">
+    <div class="example-button-container">
+      <button mat-stroked-button type="submit" [disabled]="form.invalid || isNoChanges()">
+        <mat-icon>{{ isEdit ? 'edit' : 'add' }}</mat-icon>
+          {{ isEdit ? 'Actualizar' : 'Agregar' }}
+      </button>
+    </div>
 
-          <!-- Botones -->
-          <button mat-stroked-button type="submit" [disabled]="form.invalid || isNoChanges()">
-            {{ isEdit ? 'Actualizar' : 'Agregar' }}
-          </button>
-          <button mat-stroked-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
-</div>
+    <div class="example-button-container">
+      <button mat-stroked-button color="warn" type="button" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>Cancelar
+      </button>
+    </div>
+  </section>
+</form>
+
 @if(isEdit){
   <app-footer></app-footer>
 }
