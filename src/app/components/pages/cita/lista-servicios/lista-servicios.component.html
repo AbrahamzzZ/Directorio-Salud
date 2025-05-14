@@ -1,0 +1,25 @@
+<app-header></app-header>
+
+<h1>Servicios Disponibles</h1>
+   <form class="example-form">
+        <mat-form-field class="example-full-width">
+        <mat-label>Buscar:</mat-label>
+        <input matInput placeholder="Nombre/Descripcion" type="search" (keyup)="buscar(searchInput)" #searchInput>
+        </mat-form-field>
+    </form>
+<div class="cards-contenedor">
+  @for (servicio of listaDeServicios; track servicio.id) {
+    <mat-card class="card-listaServ">
+      <mat-card-header>
+        <mat-card-title>{{ servicio.nombre |uppercase }}</mat-card-title>
+        <mat-card-subtitle>{{ servicio.descripcion }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content >
+       <p><strong>Fecha: </strong>{{servicio.fechaDisponible|date:"dd-MMMM-yyyy"}}</p>
+        <p><strong>Precio: </strong>{{servicio.precio|currency:"USD"}}</p>
+      </mat-card-content>
+        <button mat-stroked-button (click)="agendarCita(servicio)">Agendar Cita</button>
+    </mat-card>
+  }
+</div>
+<app-footer></app-footer>

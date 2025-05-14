@@ -15,6 +15,9 @@ import { AdministradorDashboardComponent } from './components/pages/administrado
 
 import { RegistroActualizacionResenaComponent } from './components/pages/resena/registro-actualizacion-resena/registro-actualizacion-resena.component';
 import { MantenimientoResenaComponent } from './components/pages/resena/mantenimiento-resena/mantenimiento-resena.component';
+import { MantenimientoPacienteCitaComponent } from './components/pages/cita/mantenimiento-paciente-cita/mantenimiento-paciente-cita.component';
+import { RegistroActualizacionCitaComponent } from './components/pages/cita/registro-actualizacion-cita/registro-actualizacion-cita.component';
+import { ListaServiciosComponent } from './components/pages/cita/lista-servicios/lista-servicios.component';
 
 
 
@@ -29,18 +32,18 @@ export const routes: Routes = [
     { path: 'service-register', component: RegistroActualizacionServicioComponent },
     { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent },
     { path: 'patients-dashboard', component: PacientesDashboardComponent },
-
-
     { path: 'mis-pacientes', component: MantenimientoPacienteComponent},//y
     { path: 'pacientes-registro', component: RegistroActualizacionPacienteComponent},//y
     { path: 'editar-pacientes/:id', component: RegistroActualizacionPacienteComponent},//y
-
     { path: 'admin-dashboard', component: AdministradorDashboardComponent, title: 'Administrador'},
     { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
     { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
     { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
-
-
+    {path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, title: 'Paciente'},
+    {path: 'registro-actualizacion-cita', component: RegistroActualizacionCitaComponent, title: 'Paciente'},
+    { path: 'registro-actualizacion-cita/:id', component: RegistroActualizacionCitaComponent, title: 'Paciente' },
+    {path: 'lista-servicios', component: ListaServiciosComponent, title: 'Paciente'},
+    {path: 'pacientes-dashboard', component: PacientesDashboardComponent, title: 'Home Paciente'},
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login'}
