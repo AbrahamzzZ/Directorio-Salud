@@ -11,6 +11,9 @@ import { Profesional } from '../../../../models/Profesional';
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/tabla-reutilizable.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
+import { DialogData } from '../../../../models/Dialog-data';
 
 @Component({
   selector: 'app-mantenimiento-profesional',
@@ -20,7 +23,7 @@ import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/t
 })
 export class MantenimientoProfesionalComponent {
 
-  constructor(private servicio:ServProfesionalesService, private servicioLogin: ServLoginService, private router:Router, private snackBar: MatSnackBar){}
+  constructor(private servicio:ServProfesionalesService, /*private servicioLogin: ServLoginService,*/ private router:Router, private dialog: MatDialog){}
   //displayedColumns: string[] = ['nombre', 'especialidad', 'ubicacion', 'disponibilidad', 'sexo', 'telefono', 'accion'];
   dataSource = new MatTableDataSource<Profesional>();
   columnasKeys: string[] = [];
@@ -43,7 +46,7 @@ export class MantenimientoProfesionalComponent {
 
   gestionarAccion(event: { tipo: string, fila: Profesional }) {
     if (event.tipo === 'eliminar') {
-      this.eliminar(event.fila);
+      this.abrirDialogo(event.fila);
     }
   }
   ngAfterViewInit() {
@@ -73,35 +76,33 @@ export class MantenimientoProfesionalComponent {
     }
   }
 
-  eliminar(profesional:Profesional) {
-    const confirmado = confirm("Estas seguro de eliminar este profesional: "+profesional.nombre+" ?");
-    if(confirmado){
-      // Paso 1: Eliminar al profesional
-      this.servicio.eliminarProfesional(profesional).subscribe(() => {
-        // Paso 2: Buscar la cuenta asociada y eliminarla
-        this.servicioLogin.obtenerCuentaPorProfesionalId(profesional.id).subscribe(cuenta => {
-          if (cuenta) {
-            this.servicioLogin.eliminarCuenta(cuenta.id).subscribe(() => {
-              //this.mostrarMensaje('¡Profesional y su cuenta eliminados exitosamente!', 'success');
-              this.cargarProfesionales();
-            });
-          } else {
-            alert("Profesional eliminado (no se encontró cuenta asociada)");
-            this.cargarProfesionales();
-          }
-        });
-      });
-    }
+  abrirDialogo(profesional:Profesional) {
+    this.dialogo(profesional);
   }
 
-  /*mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
-    const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
-    
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      horizontalPosition: 'end',
-      verticalPosition: 'bottom',
-      panelClass: [className]
+  dialogo(servicio:Profesional): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+          width: '400px',
+          data: <DialogData>{
+            title: 'Confirmar Eliminación',
+            message: '¿Estás seguro de que deseas eliminar este profesional?',
+            confirmText: 'Sí, eliminar',
+            cancelText: 'Cancelar',
+            isConfirmation: true
+          }
+        });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.eliminar(servicio); // Confirmado
+        }
+      });
+  }
+
+  eliminar(servicio:Profesional): void {
+    this.servicio.eliminarProfesional(servicio).subscribe(() => {
+      this.cargarProfesionales();
+      this.router.navigate(['/profesional-list'], { replaceUrl: true });
     });
-  }*/
+  }
 }
