@@ -11,8 +11,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Profesional } from '../../../../models/Profesional';
-import { ServProfesionalesService } from '../../../../services/serv-profesionales.service';
+
 import { forkJoin, map } from 'rxjs';
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 
 interface ResenaConNombre extends Resena {
   nombreProfesional?: string;
