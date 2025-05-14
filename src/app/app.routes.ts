@@ -13,6 +13,11 @@ import { MantenimientoProfesionalComponent } from './components/pages/profesiona
 import { AdministradorDashboardComponent } from './components/pages/administrador-dashboard/administrador-dashboard.component';
 
 
+import { RegistroActualizacionResenaComponent } from './components/pages/resena/registro-actualizacion-resena/registro-actualizacion-resena.component';
+import { MantenimientoResenaComponent } from './components/pages/resena/mantenimiento-resena/mantenimiento-resena.component';
+
+
+
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'registrar', component: RegistrarseComponent, title: 'Formulario de registro'},
@@ -31,6 +36,10 @@ export const routes: Routes = [
     { path: 'editar-pacientes/:id', component: RegistroActualizacionPacienteComponent},//y
 
     { path: 'admin-dashboard', component: AdministradorDashboardComponent, title: 'Administrador'},
+    { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
+    { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
+    { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
+
 
 
     { path: '', redirectTo: '/login', pathMatch: 'full' },

@@ -1,0 +1,32 @@
+<app-header></app-header>
+<div class="container">
+  <h2>{{ isEdit ? 'Editar Reseña' : 'Registrar Reseña' }}</h2>
+
+  <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">   
+    <div>
+      <label for="motivoVisita">Motivo de la visita</label>
+      <input id="motivoVisita" formControlName="motivoVisita" required />
+    </div>
+
+    <div>
+      <label for="comentario">Comentario</label>
+      <textarea id="comentario" formControlName="comentario" required rows="3"></textarea>
+    </div>
+
+    <div>
+      <label for="calificacion">Calificación (1 a 5)</label>
+      <input id="calificacion" formControlName="calificacion" type="number" min="1" max="5" required />
+    </div>
+
+    <div>
+      <label for="recomienda">¿Recomienda este profesional?</label>
+      <input id="recomienda" formControlName="recomienda" type="checkbox" />
+    </div>
+
+    <button type="submit" [disabled]="resenaForm.invalid || (isEdit && isNoChanges())">
+      {{ isEdit ? 'Actualizar' : 'Guardar' }} Reseña
+    </button>
+    <button type="button" (click)="onCancel()">Cancelar</button>
+  </form>
+</div>
+<app-footer></app-footer>

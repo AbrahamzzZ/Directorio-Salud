@@ -22,7 +22,7 @@
         <p><strong>Teléfono:</strong> {{ profesional.telefono }}</p>
         <p><strong>Disponibilidad:</strong> {{ profesional.disponibilidad }}</p>
       </mat-card-content>
-        <button mat-stroked-button>Reseña</button>
+        <button mat-stroked-button (click)="irAResena(profesional.id)">Reseña</button>
         <button mat-stroked-button>Ver reseña</button>
     </mat-card>
   }
