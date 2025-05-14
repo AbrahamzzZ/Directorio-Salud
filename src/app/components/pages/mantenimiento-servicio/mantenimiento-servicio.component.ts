@@ -47,7 +47,7 @@ export class MantenimientoServicioComponent {
         this.dataSource.data = datos;
       });
     } else {
-      this.cargarServicios(); // recarga todos los datos si no hay texto
+      this.cargarServicios(); 
     }
   }
 

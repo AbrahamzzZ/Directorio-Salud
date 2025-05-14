@@ -21,7 +21,7 @@ export class ServServiciosjsonService {
     return this.http.get<ServicioMedico[]>(`${this.jsonUrl}?profesionalId=${id}`);
   }
 
-   getAllServices(): Observable<ServicioMedico[]> {//getAllServices para obtener todos los servi
+   getAllServices(): Observable<ServicioMedico[]> {//getAllServices para obtener todos los servicios
     return this.http.get<ServicioMedico[]>(this.jsonUrl);
   }
 

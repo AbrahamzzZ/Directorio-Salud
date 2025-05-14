@@ -1,53 +1,54 @@
 <app-header></app-header>
+<h2>{{ esEdicion ? 'Editar Cita' : 'Registrar Nueva Cita' }}</h2>
 
-<div class="container">
-  <h2>Registro de Cita</h2>
+<mat-card *ngIf="detallesServicio">
+  <mat-card-header>
+    <mat-card-title>Detalles del Servicio Seleccionado</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p><strong>Nombre:</strong> {{ detallesServicio.nombre }}</p>
+    <p><strong>Descripción:</strong> {{ detallesServicio.descripcion }}</p>
+    <p><strong>Fecha Disponible:</strong> {{ detallesServicio.fechaDisponible| date }}</p>
+    <p><strong>Precio:</strong> {{ detallesServicio.precio | currency:"USD" }}</p>
+  </mat-card-content>
+</mat-card>
 
-  <form [formGroup]="citaForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label>Nombre del Servicio</label>
-      <input class="form-control" formControlName="nombre"  />
+<form [formGroup]="formularioCita" (ngSubmit)="enviarFormulario()" class="cita-form">
+
+  <div class="form-field">
+    <label for="direccion">Dirección</label>
+    <select id="direccion" formControlName="direccion" required>
+      <option value="" disabled>Seleccionar Dirección</option>
+      <option *ngFor="let direccion of direccionesUnicas" [value]="direccion">{{ direccion }}</option>
+    </select>
+    <div *ngIf="formularioCita.get('direccion')?.hasError('required')">
+      <small class="error-message">La dirección es requerida.</small>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label>Descripción</label>
-      <textarea class="form-control" formControlName="descripcion" rows="2" ></textarea>
+  <div class="form-field">
+    <label for="prioridad">Prioridad</label>
+    <input type="text" id="prioridad" formControlName="prioridad" placeholder="Ej: alta, media, baja">
+  </div>
+
+  <div class="radio-group">
+    <label>Método de Pago</label>
+    <div>
+      <input type="radio" id="efectivo" value="efectivo" formControlName="metodoPago">
+      <label for="efectivo">Efectivo</label>
     </div>
-
-    <div class="form-group">
-      <label>Precio</label>
-      <input type="number" class="form-control" formControlName="precio"  />
+    <div>
+      <input type="radio" id="transferencia" value="transferencia" formControlName="metodoPago">
+      <label for="transferencia">Transferencia</label>
     </div>
-
-    <div class="form-group">
-      <label>Fecha Disponible</label>
-      <input type="date" class="form-control" formControlName="fechaDisponible"  />
+    <div *ngIf="formularioCita.get('metodoPago')?.hasError('required')">
+      <small class="error-message">El método de pago es requerido.</small>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label>Dirección</label>
-      <select class="form-control" formControlName="direccion" required>
-        <option value="" disabled selected>Seleccione una dirección</option>
-        <option *ngIf="direccionUnica" [value]="direccionUnica">{{ direccionUnica }}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Método de Pago</label>
-      <div *ngFor="let metodo of metodosPago">
-        <input type="radio" [value]="metodo" formControlName="metodoPago" id="{{metodo}}" />
-        <label [for]="metodo">{{ metodo }}</label>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Prioridad (alta, media o baja)</label>
-      <input type="text" class="form-control" formControlName="prioridad" placeholder="Ej. alta" />
-    </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="citaForm.invalid">Guardar</button>
-    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
-  </form>
-</div>
-
+  <button type="submit" [disabled]="formularioCita.invalid || !detallesServicio?.id">
+    {{ esEdicion ? 'Guardar Cambios' : 'Registrar Cita' }}
+  </button>
+  <button type="button" (click)="onCancelar()">Cancelar</button>
+</form>
 <app-footer></app-footer>

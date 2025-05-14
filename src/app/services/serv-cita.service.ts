@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ServServiciosjsonService } from './serv-serviciosjson.service';
 import { ServProfesionalesService } from './serv-profesionales.service';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import {  Observable } from 'rxjs';
 import { Cita } from '../models/Citas';
 
 
@@ -12,7 +12,7 @@ import { Cita } from '../models/Citas';
 export class ServCitaService {
 private jsonUrl:string = "http://localhost:3000/citas";
 
-  constructor(private http:HttpClient, private serviceServiciosMedicos:ServServiciosjsonService, private serviceServicioProfesionales: ServProfesionalesService) { }
+  constructor(private http:HttpClient, private servServiciosMedicos:ServServiciosjsonService, private servProf:ServProfesionalesService) { }
 
 // Obtener todas las citas
   getCitas(): Observable<Cita[]> {

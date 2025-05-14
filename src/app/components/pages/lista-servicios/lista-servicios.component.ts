@@ -1,44 +1,67 @@
-import { Component } from '@angular/core';
-import { HeaderComponent } from "../../shared/header/header.component";
-import { FooterComponent } from "../../shared/footer/footer.component";
-import { ServicioMedico } from '../../../models/ServicioMedico';
+import { Component, OnInit } from '@angular/core';
 
-import { ServServiciosjsonService } from '../../../services/serv-serviciosjson.service';
-import { MatCardModule } from '@angular/material/card';
-import {MatButtonModule, MatIconButton} from '@angular/material/button';
-import { CurrencyPipe, DatePipe, UpperCasePipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-
+import { UpperCasePipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatLabel, MatFormField, MatInputModule } from '@angular/material/input';
+import { FooterComponent } from '../../shared/footer/footer.component';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { ServicioMedico } from '../../../models/ServicioMedico';
+import { ServServiciosjsonService } from '../../../services/serv-serviciosjson.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-lista-servicios',
-  imports: [HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, UpperCasePipe, CurrencyPipe, DatePipe,
-     MatCardModule, MatButtonModule, MatIconModule],
+  imports:[HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, UpperCasePipe, CurrencyPipe, DatePipe,
+     MatCardModule, MatButtonModule, MatIconModule, MatLabel, MatFormField, MatFormFieldModule, MatInputModule],
   templateUrl: './lista-servicios.component.html',
-  styleUrl: './lista-servicios.component.css'
+  styleUrls: ['./lista-servicios.component.css']
 })
-export class ListaServiciosComponent {
-titulo:string="Servicios Disponibles"
-servicios: ServicioMedico[] = [];
+export class ListaServiciosComponent implements OnInit {
+  listaDeServicios: ServicioMedico[] = [];
+  listaDeServiciosOriginal: ServicioMedico[] = [];
+  public termSearch: string = '';
 
-  constructor(private servicioService: ServServiciosjsonService,
-  private router: Router) {}
+  constructor(
+    private servicioDeServicios: ServServiciosjsonService,
+    private navegador: Router,
+  ) { }
 
   ngOnInit(): void {
-    this.getServiciosAll();
-    console.log(this.servicios[0]);
-    
+    this.cargarServicios();
   }
-  getServiciosAll(): void {
-    this.servicioService.getAllServices().subscribe((data) => {
-      this.servicios = data;
+
+  cargarServicios(): void {
+    this.servicioDeServicios.getAllServices().subscribe(servicios => {
+      this.listaDeServicios = servicios;
+      this.listaDeServiciosOriginal = [...servicios];
     });
   }
- agendarCita(servicio: ServicioMedico): void {
-  this.router.navigate(['/registro-actualizacion-cita'], {
-    state: { servicio }
+
+  buscar(searchInput: HTMLInputElement) {
+    const termino = searchInput.value.trim().toLowerCase();
+    if (termino) {
+      this.listaDeServicios = this.listaDeServiciosOriginal.filter(servicio =>
+        servicio.nombre.toLowerCase().includes(termino) ||
+        servicio.descripcion.toLowerCase().includes(termino)
+      );
+    } else {
+      this.listaDeServicios = [...this.listaDeServiciosOriginal];
+    }
+  }
+
+  agendarCita(servicio: ServicioMedico): void {
+  this.navegador.navigate(['/registro-actualizacion-cita'], {
+    queryParams: {
+      id: servicio.id,
+      nombre: servicio.nombre,
+      descripcion: servicio.descripcion,
+      fechaDisponible: servicio.fechaDisponible,
+      precio: servicio.precio,
+      profesionalId: servicio.profesionalId // ← AGREGAR ESTO
+    }
   });
 }
-
 }
