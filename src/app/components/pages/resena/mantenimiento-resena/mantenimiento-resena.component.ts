@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Resena } from '../../../../models/Resena';
-import { ServResenasService } from '../../../../services/serv-resenas.service';
+import { ServResenasService } from '../../../../services/servicio-resena/serv-resenas.service';
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { FooterComponent } from '../../../shared/footer/footer.component';

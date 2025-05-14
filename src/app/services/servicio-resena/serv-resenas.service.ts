@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Resena } from '../models/Resena';
-import { ServLoginService } from './serv-login.service';
+import { Resena } from '../../models/Resena';
+import { ServLoginService } from '../serv-login.service';
 
 
 @Injectable({
