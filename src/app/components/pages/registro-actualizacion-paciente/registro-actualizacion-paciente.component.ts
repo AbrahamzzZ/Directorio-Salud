@@ -116,6 +116,10 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
   } 
 
   onCancel(): void {
-    this.router.navigate(['/mis-pacientes']);
+    if (this.isEdit) {
+      this.router.navigate(['/mis-pacientes']); // Redirigir a la tabla donde estan todos lo pacientes
+    } else {
+      this.router.navigate(['/registrar']); // Redirigir a la pagina para seleccionar el tipo de usuario
+    }
   }
 }
