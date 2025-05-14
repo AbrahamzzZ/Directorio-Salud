@@ -1,8 +1,13 @@
 <app-header></app-header>
 <div class="container">
-  <h2>Registrar Reseña</h2>
+  <h2>{{ isEdit ? 'Editar Reseña' : 'Registrar Reseña' }}</h2>
 
-  <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">   
+    <div>
+      <label for="motivoVisita">Motivo de la visita</label>
+      <input id="motivoVisita" formControlName="motivoVisita" required />
+    </div>
+
     <div>
       <label for="comentario">Comentario</label>
       <textarea id="comentario" formControlName="comentario" required rows="3"></textarea>
@@ -18,14 +23,10 @@
       <input id="recomienda" formControlName="recomienda" type="checkbox" />
     </div>
 
-    <div>
-      <label for="motivoVisita">Motivo de la visita</label>
-      <input id="motivoVisita" formControlName="motivoVisita" required />
-    </div>
-
-    <button type="submit" [disabled]="resenaForm.invalid">Guardar Reseña</button>
+    <button type="submit" [disabled]="resenaForm.invalid || (isEdit && isNoChanges())">
+      {{ isEdit ? 'Actualizar' : 'Guardar' }} Reseña
+    </button>
     <button type="button" (click)="onCancel()">Cancelar</button>
   </form>
 </div>
 <app-footer></app-footer>
-

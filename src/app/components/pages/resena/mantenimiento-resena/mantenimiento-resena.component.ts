@@ -27,7 +27,7 @@ interface ResenaConNombre extends Resena {
 })
 export class MantenimientoResenaComponent {
 
-  displayedColumns: string[] = ['nombreProfesional', 'motivoVisita', 'comentario', 'calificacion', 'recomienda'];
+  displayedColumns: string[] = ['nombreProfesional', 'motivoVisita', 'comentario', 'calificacion', 'recomienda', 'acciones'];
   dataSource = new MatTableDataSource<ResenaConNombre>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -82,6 +82,20 @@ export class MantenimientoResenaComponent {
       });
     } else {
       this.cargarResenas();
+    }
+  }
+
+  editar(resena: Resena) {
+    this.router.navigate(['/resena-edit', resena.id]);
+  }
+
+  eliminar(resena: Resena) {
+    const confirmado = confirm(`¿Estás seguro de eliminar la reseña con motivo: "${resena.motivoVisita}"?`);
+    if (confirmado) {
+      this.servResena.deleteResena(resena).subscribe(() => {
+        alert('Reseña eliminada correctamente');
+        this.cargarResenas();
+      });
     }
   }
 
