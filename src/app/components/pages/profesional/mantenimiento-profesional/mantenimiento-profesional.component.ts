@@ -82,7 +82,7 @@ export class MantenimientoProfesionalComponent {
         this.servicioLogin.obtenerCuentaPorProfesionalId(profesional.id).subscribe(cuenta => {
           if (cuenta) {
             this.servicioLogin.eliminarCuenta(cuenta.id).subscribe(() => {
-              this.mostrarMensaje('¡Profesional y su cuenta eliminados exitosamente!', 'success');
+              //this.mostrarMensaje('¡Profesional y su cuenta eliminados exitosamente!', 'success');
               this.cargarProfesionales();
             });
           } else {
@@ -94,7 +94,7 @@ export class MantenimientoProfesionalComponent {
     }
   }
 
-  mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
+  /*mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
     const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
     
     this.snackBar.open(mensaje, 'Cerrar', {
@@ -103,5 +103,5 @@ export class MantenimientoProfesionalComponent {
       verticalPosition: 'bottom',
       panelClass: [className]
     });
-  }
+  }*/
 }
