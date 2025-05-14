@@ -10,6 +10,7 @@ import { HeaderComponent } from "../../../shared/header/header.component";
 import { FooterComponent } from "../../../shared/footer/footer.component";
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { ServServiciosjsonService } from '../../../../services/servicio-servicios/serv-serviciosjson.service';
+import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 
 @Component({
   selector: 'app-registro-actualizacion-cita',

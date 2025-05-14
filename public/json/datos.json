@@ -178,17 +178,6 @@
       "prioridad": "media",
       "fechaHora": "2024-05-12T09:00",
       "estado": "agendada"
-    },
-    {
-      "id": "9ce8",
-      "direccion": "Consultorio Medico Health - Av.Victor Manuel Rendon",
-      "prioridad": "Baja",
-      "metodoPago": "efectivo",
-      "fechaHora": "2025-05-14T15:49:19.520Z",
-      "estado": "agendada",
-      "servicioId": "1",
-      "profesionalId": "1",
-      "usuarioId": "3"
     }
   ],
   "resenas": [
