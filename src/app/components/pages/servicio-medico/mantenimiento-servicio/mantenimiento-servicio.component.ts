@@ -10,6 +10,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { Route, Router } from "@angular/router";
 import { TablaReutilizableComponent } from "../../../shared/tabla-reutilizable/tabla-reutilizable.component";
+import { DialogoComponent } from "../../../shared/dialogo/dialogo.component";
+import { DialogData } from "../../../../models/Dialog-data";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-mantenimiento-servicio',
@@ -19,7 +22,7 @@ import { TablaReutilizableComponent } from "../../../shared/tabla-reutilizable/t
 })
 export class MantenimientoServicioComponent {
 
-  constructor(private serviceServiciosMedicos:ServServiciosjsonService, private router:Router){}
+  constructor(private serviceServiciosMedicos:ServServiciosjsonService, private router:Router, private dialog: MatDialog){}
 
   // displayedColumns: string[] = ['nombre', 'descripcion', 'precio', 'fechaDisponible', 'requiereChequeo', 'Acciones'];
   dataSource = new MatTableDataSource<ServicioMedico>();
@@ -83,12 +86,33 @@ export class MantenimientoServicioComponent {
   }
 
   eliminar(servicio:ServicioMedico) {
-    const confirmado = confirm("Estas seguro de eliminar el servicio de nombre: "+servicio.nombre+" ?");
-    if(confirmado){
-      this.serviceServiciosMedicos.deleteService(servicio).subscribe(()=>{
-        alert("Servicio eliminado exitosamente");
-        this.cargarServicios(); //actualizar el datasource
-      })
-    }
+    this.confirmarEliminacion(servicio);
+  }
+
+  confirmarEliminacion(servicio:ServicioMedico): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+          width: '400px',
+          data: <DialogData>{
+            title: 'Confirmar Eliminación',
+            message: '¿Estás seguro de que deseas eliminar este servicio?',
+            confirmText: 'Sí, eliminar',
+            cancelText: 'Cancelar',
+            isConfirmation: true
+          }
+        });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.deleteServicio(servicio); // Confirmado
+        }
+        // Si result es false o undefined, no hacemos nada
+      });
+  }
+
+  deleteServicio(servicio:ServicioMedico): void {
+    this.serviceServiciosMedicos.deleteService(servicio).subscribe(() => {
+      this.cargarServicios();
+      this.router.navigate(['/my-services'], { replaceUrl: true });
+    });
   }
 }

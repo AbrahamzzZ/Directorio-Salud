@@ -19,6 +19,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Cuenta } from '../../../../models/Cuenta';
+import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
+import { DialogData } from '../../../../models/Dialog-data';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-registro-actualizacion-profesional',
@@ -36,8 +39,8 @@ export class RegistroActualizacionProfesionalComponent {
   public fotoSeleccionada: File | null = null;
   public fotoPrevia: string | null = null;
 
-  constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar){
-  this.form = this.fb.group({
+  constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog){
+    this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(5), Validators.max(50)]],
       especialidad: ['', Validators.required],
       ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(3), Validators.max(50)]],
@@ -75,7 +78,7 @@ export class RegistroActualizacionProfesionalComponent {
     });
 
     if (this.isEdit && profesional.foto) {
-      this.fotoPrevia = profesional.foto; // Asegúrate de que `foto` sea una URL accesible
+      this.fotoPrevia = profesional.foto; 
     }
 
     if (this.isEdit) {
@@ -84,12 +87,33 @@ export class RegistroActualizacionProfesionalComponent {
     }
   }
 
-  onSubmit(): void {
+  onSubmit(event?: Event): void {
+    event?.preventDefault();
+
     if (this.isEdit) {
-      this.actualizar();
+      this.confirmarActualizacion();
     } else {
-      this.registrar();
+      this.confirmarRegistro();
     }
+  }
+
+  confirmarRegistro(): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: <DialogData>{
+        title: 'Confirmar Registro',
+        message: '¿Estás seguro de que deseas registrar este profesional?',
+        confirmText: 'Sí, registrar',
+        cancelText: 'Cancelar',
+        isConfirmation: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.registrar(); // Confirmado
+      }
+    });
   }
 
   registrar(): void {
@@ -119,11 +143,28 @@ export class RegistroActualizacionProfesionalComponent {
       };
 
       this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
-          console.log(nuevoProfesional);
-          //this.mostrarMensaje('¡Personal registrado exitosamente!', 'success');
           this.router.navigate(['/login'], { replaceUrl: true });
         });
       });
+    });
+  }
+
+  confirmarActualizacion(): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: <DialogData>{
+        title: 'Confirmar Edición',
+        message: '¿Estás seguro de que deseas guardar los cambios en este profesional?',
+        confirmText: 'Sí, actualizar',
+        cancelText: 'Cancelar',
+        isConfirmation: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.actualizar(); // Confirmado
+      }
     });
   }
 
@@ -133,9 +174,7 @@ export class RegistroActualizacionProfesionalComponent {
       ...this.form.value
     };
     this.service.editarInformacionProfesional(updatedServicio).subscribe(() => {
-      //this.mostrarMensaje('¡Personal editado exitosamente!', 'success');
       this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
-
     });
   }
 
@@ -179,7 +218,29 @@ export class RegistroActualizacionProfesionalComponent {
 
   isNoChanges(): boolean {
     // Verificar si no hubo cambios en el formulario
-    return JSON.stringify(this.profesionalOriginal) === JSON.stringify(this.form.value);
+    if (!this.profesionalOriginal) return false;
+
+    const original = {
+      nombre: this.profesionalOriginal.nombre,
+      especialidad: this.profesionalOriginal.especialidad,
+      ubicacion: this.profesionalOriginal.ubicacion,
+      edad: this.profesionalOriginal.edad,
+      sexo: this.profesionalOriginal.sexo,
+      telefono: this.profesionalOriginal.telefono,
+      //disponibilidad: this.disponibilidad.disponibilidad
+    };
+
+    const current = this.form.value;
+
+    return (
+      original.nombre === current.nombre &&
+      original.especialidad === current.especialidad &&
+      original.ubicacion === current.ubicacion &&
+      Number(original.edad) === Number(current.edad) &&
+      //originalDate === currentDate &&
+      original.sexo === current.sexo &&
+      original.telefono === current.telefono
+    );
   }
 
   onCancel(): void {
@@ -189,15 +250,4 @@ export class RegistroActualizacionProfesionalComponent {
       this.router.navigate(['/registrar']); // Redirigir a la pagina para seleccionar el tipo de usuario
     }
   }
-
-  /*mostrarMensaje(mensaje: string, tipo: 'success' | 'error' = 'success') {
-    const className = tipo === 'success' ? 'success-snackbar' : 'error-snackbar';
-    
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      horizontalPosition: 'end',
-      verticalPosition: 'bottom',
-      panelClass: [className]
-    });
-  }*/
 }

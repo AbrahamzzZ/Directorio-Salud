@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServLoginService } from '../../../../services/serv-login.service';
-import { ServResenasService } from '../../../../services/serv-resenas.service';
+import { ServResenasService } from '../../../../services/servicio-resena/serv-resenas.service';
 import { Resena } from '../../../../models/Resena';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';

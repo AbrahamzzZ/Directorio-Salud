@@ -1,6 +1,6 @@
 <app-header></app-header>
-<h1>{{ isEdit ? 'Editar Servicio' : 'Registrar Servicio' }}</h1>
-<form class="example-form-grid" [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+<h1>{{ isEdit ? ('Editar Servicio'|uppercase) : ('Registrar Servicio')|uppercase }}</h1>
+<form class="example-form-grid" [formGroup]="serviceForm" (ngSubmit)="onSubmit($event)">
     <mat-form-field>
         <mat-label for="nombre">Nombre del servicio</mat-label>
         <input matInput placeholder="El nombre aqui" formControlName="nombre">

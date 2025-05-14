@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-
+import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 import { Router } from '@angular/router';
 import {  map, switchMap,tap } from 'rxjs';
 import { Cita } from '../../../../models/Citas';

@@ -83,7 +83,7 @@
     {
       "id": "f2a9",
       "nombre": "ANGELITO",
-      "descripcion": "Vivanco",
+      "descripcion": "Vivanco 545454",
       "precio": 1,
       "fechaDisponible": "2025-05-18",
       "requiereChequeo": true,
@@ -147,6 +147,13 @@
       "password": "1234poiu/",
       "rol": "profesional",
       "profesionalId": "4"
+    },
+    {
+      "id": "p5",
+      "email": "w@gmail.com",
+      "password": "123456789",
+      "rol": "profesional",
+      "profesionalId": "5"
     }
   ],
   "citas": [
