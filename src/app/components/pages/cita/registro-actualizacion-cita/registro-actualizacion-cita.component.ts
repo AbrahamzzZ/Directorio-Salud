@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ServicioMedico } from '../../../../models/ServicioMedico';
 import { Cita } from '../../../../models/Citas';
-import { ServCitaService } from '../../../../services/serv-cita.service';
+import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { HeaderComponent } from "../../../shared/header/header.component";
