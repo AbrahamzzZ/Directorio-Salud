@@ -1,0 +1,28 @@
+<app-header></app-header>
+
+<h1>Reseñas del Profesional</h1>
+
+<div class="cards-contenedor">
+  @for (resena of resenas; track resena.id) {
+    <mat-card class="card-listaServ">
+      <mat-card-header>
+        <mat-card-title>Usuario</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="calificacion-linea">
+        <strong>Calificación:</strong>
+        <span class="estrellas">
+            <ng-container *ngFor="let star of [].constructor(resena.calificacion)">
+            <mat-icon class="estrella-amarilla">star</mat-icon>
+            </ng-container>
+        </span>
+        </p>
+        <p><strong>Motivo de la visita:</strong> {{ resena.motivoVisita }}</p>
+        <p><strong>Comentario:</strong> {{ resena.comentario }}</p>
+        <p><strong>¿Recomienda al profesional?:</strong> {{ resena.recomienda ? 'Sí' : 'No' }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<app-footer></app-footer>

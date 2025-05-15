@@ -1,0 +1,33 @@
+.card-listaServ{
+  margin-bottom: 20px;
+}
+
+.mat-mdc-outlined-button{
+  margin: 5px;
+  width: 20%;
+  align-content: center;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+}
+
+.calificacion-linea {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.estrellas {
+  display: flex;
+  align-items: center;
+}
+
+.estrella-amarilla {
+  color: #fbc02d; 
+  font-size: 30px;
+  line-height: 0.78;
+}
