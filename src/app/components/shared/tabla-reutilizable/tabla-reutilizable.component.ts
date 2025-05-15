@@ -7,6 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-tabla-reutilizable',
+  
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule],
   templateUrl: './tabla-reutilizable.component.html',
   styleUrl: './tabla-reutilizable.component.css'
@@ -39,6 +40,10 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
         return 'Fecha Disponible';
       case 'requiereChequeo':
         return 'Requiere Chequeo';
+      case 'fechaRegistro':
+        return 'Fecha de Registro';
+      case 'tipoSangre':
+        return 'Tipo de Sangre';      
       default:
         return col.charAt(0).toUpperCase() + col.slice(1); // Capitaliza
     }
