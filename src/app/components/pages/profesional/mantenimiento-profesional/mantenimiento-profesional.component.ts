@@ -8,8 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 import { Profesional } from '../../../../models/Profesional';
-import { ServLoginService } from '../../../../services/serv-login.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/tabla-reutilizable.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
@@ -23,7 +22,7 @@ import { DialogData } from '../../../../models/Dialog-data';
 })
 export class MantenimientoProfesionalComponent {
 
-  constructor(private servicio:ServProfesionalesService, /*private servicioLogin: ServLoginService,*/ private router:Router, private dialog: MatDialog){}
+  constructor(private servicio:ServProfesionalesService, private router:Router, private dialog: MatDialog){}
   //displayedColumns: string[] = ['nombre', 'especialidad', 'ubicacion', 'disponibilidad', 'sexo', 'telefono', 'accion'];
   dataSource = new MatTableDataSource<Profesional>();
   columnasKeys: string[] = [];
