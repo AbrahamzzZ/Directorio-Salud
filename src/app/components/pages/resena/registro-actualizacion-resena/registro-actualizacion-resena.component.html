@@ -1,32 +1,62 @@
 <app-header></app-header>
-<div class="container">
-  <h2>{{ isEdit ? 'Editar Reseña' : 'Registrar Reseña' }}</h2>
 
-  <form [formGroup]="resenaForm" (ngSubmit)="onSubmit()">   
-    <div>
-      <label for="motivoVisita">Motivo de la visita</label>
-      <input id="motivoVisita" formControlName="motivoVisita" required />
+<h1>{{ isEdit ? ('Editar Reseña' | uppercase) : ('Registrar Reseña' | uppercase) }}</h1>
+
+<form class="example-form-grid" [formGroup]="resenaForm" (ngSubmit)="onSubmit($event)">
+  <!-- Motivo de la visita -->
+  <mat-form-field>
+    <mat-label for="motivoVisita">Motivo de la visita</mat-label>
+    <input matInput id="motivoVisita" placeholder="Motivo" formControlName="motivoVisita">
+    @if (resenaForm.get('motivoVisita')?.hasError('required')) {
+      <mat-error>Este campo es obligatorio.</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Comentario -->
+  <mat-form-field>
+    <mat-label for="comentario">Comentario</mat-label>
+    <textarea matInput id="comentario" placeholder="Ingrese su comentario" formControlName="comentario" rows="3"></textarea>
+    @if (resenaForm.get('comentario')?.hasError('required')) {
+      <mat-error>El comentario es obligatorio.</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Calificación -->
+  <mat-form-field>
+    <mat-label for="calificacion">Calificación (1 a 5)</mat-label>
+    <input matInput id="calificacion" type="number" min="1" max="5" formControlName="calificacion">
+    @if (resenaForm.get('calificacion')?.hasError('required')) {
+      <mat-error>La calificación es obligatoria.</mat-error>
+    }
+    @if (resenaForm.get('calificacion')?.hasError('min') || resenaForm.get('calificacion')?.hasError('max')) {
+      <mat-error>La calificación debe estar entre 1 y 5.</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Recomienda -->
+  <section class="example-section">
+    <mat-checkbox class="example-margin" id="recomienda" formControlName="recomienda">
+      ¿Recomienda este profesional?
+    </mat-checkbox>
+  </section>
+
+  <!-- Botones -->
+  <section class="buttons-container">
+    <div class="example-button-container">
+      <button mat-fab extended type="submit" color="primary" [disabled]="resenaForm.invalid || (isEdit && isNoChanges())">
+        <mat-icon>{{ isEdit ? 'edit' : 'add' }}</mat-icon>
+        {{ isEdit ? 'Actualizar' : 'Agregar' }}
+      </button>
     </div>
 
-    <div>
-      <label for="comentario">Comentario</label>
-      <textarea id="comentario" formControlName="comentario" required rows="3"></textarea>
+    <div class="example-button-container">
+      <button mat-fab extended color="warn" type="button" (click)="onCancel()" class="btnCancel">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
     </div>
+  </section>
+</form>
 
-    <div>
-      <label for="calificacion">Calificación (1 a 5)</label>
-      <input id="calificacion" formControlName="calificacion" type="number" min="1" max="5" required />
-    </div>
-
-    <div>
-      <label for="recomienda">¿Recomienda este profesional?</label>
-      <input id="recomienda" formControlName="recomienda" type="checkbox" />
-    </div>
-
-    <button type="submit" [disabled]="resenaForm.invalid || (isEdit && isNoChanges())">
-      {{ isEdit ? 'Actualizar' : 'Guardar' }} Reseña
-    </button>
-    <button type="button" (click)="onCancel()">Cancelar</button>
-  </form>
-</div>
 <app-footer></app-footer>
+

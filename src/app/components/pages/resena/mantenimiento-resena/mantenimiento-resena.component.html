@@ -1,62 +1,15 @@
 <app-header></app-header>
-
-<h1>Mis Reseñas</h1>
-
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Buscar:</mat-label>
-    <input matInput placeholder="Motivo de visita" type="search" (keyup)="search(searchInput)" #searchInput>
-  </mat-form-field>
-</form>
-
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
-
-    <!-- Nombre del Profesional -->
-    <ng-container matColumnDef="nombreProfesional">
-      <th mat-header-cell *matHeaderCellDef> Profesional </th>
-      <td mat-cell *matCellDef="let element"> {{ element.nombreProfesional }} </td>
-    </ng-container>
-
-    <!-- Motivo de Visita -->
-    <ng-container matColumnDef="motivoVisita">
-      <th mat-header-cell *matHeaderCellDef> Motivo Visita </th>
-      <td mat-cell *matCellDef="let element"> {{ element.motivoVisita }} </td>
-    </ng-container>
-
-    <!-- Comentario -->
-    <ng-container matColumnDef="comentario">
-      <th mat-header-cell *matHeaderCellDef> Comentario </th>
-      <td mat-cell *matCellDef="let element"> {{ element.comentario }} </td>
-    </ng-container>
-
-    <!-- Calificación -->
-    <ng-container matColumnDef="calificacion">
-      <th mat-header-cell *matHeaderCellDef> Calificación </th>
-      <td mat-cell *matCellDef="let element"> {{ element.calificacion }} </td>
-    </ng-container>
-
-    <!-- ¿Recomienda? -->
-    <ng-container matColumnDef="recomienda">
-      <th mat-header-cell *matHeaderCellDef> ¿Recomienda? </th>
-      <td mat-cell *matCellDef="let element"> {{ element.recomienda ? 'Sí' : 'No' }} </td>
-    </ng-container>
-
-    <!-- Acciones -->
-    <ng-container matColumnDef="acciones">
-      <th mat-header-cell *matHeaderCellDef> Acciones </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-raised-button color="accent" (click)="editar(element)">Editar</button>
-        <button mat-raised-button color="warn" (click)="eliminar(element)">Eliminar</button>
-      </td>
-    </ng-container>
-
-    <!-- Filas -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-</div>
-
+  <h1>Mis Reseñas</h1>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Buscar:</mat-label>
+      <input matInput placeholder="Motivo o comentario" type="search" (keyup)="search(searchInput)" #searchInput/>
+    </mat-form-field>
+  </form>
+  <app-tabla-reutilizable
+    [columnas]="columnasKeys"
+    [data]="dataSource.data"
+    [acciones]="acciones"
+    (accion)="gestionarAccion($event)"
+  ></app-tabla-reutilizable>
 <app-footer></app-footer>

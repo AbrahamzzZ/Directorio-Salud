@@ -50,14 +50,14 @@ export class ServResenasService {
 ////////////////////////////////////////////
 
 // Obtener reseñas hechas a un profesional específico
-getResenasPorProfesional(profesionalId: string): Observable<Resena[]> {
-  return this.http.get<Resena[]>(`${this.jsonUrl}?profesionalId=${profesionalId}`);
-}
+// getResenasPorProfesional(profesionalId: string): Observable<Resena[]> {
+//   return this.http.get<Resena[]>(`${this.jsonUrl}?profesionalId=${profesionalId}`);
+// }
 
 // Obtener todas las reseñas (para el admin)
-getTodasLasResenas(): Observable<Resena[]> {
-  return this.http.get<Resena[]>(this.jsonUrl);
-}
+// getTodasLasResenas(): Observable<Resena[]> {
+//   return this.http.get<Resena[]>(this.jsonUrl);
+// }
 
 
 

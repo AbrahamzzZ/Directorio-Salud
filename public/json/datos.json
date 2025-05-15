@@ -193,22 +193,22 @@
   ],
   "resenas": [
     {
-      "id": "1",
-      "profesionalId": "1",
-      "usuarioId": "2",
-      "comentario": "Muy buena atención, EDITADO.",
+      "id": "4412",
+      "comentario": "La atención de la doctora es muy buena, me supo explicar a detalle que es lo que sucede o tengo, de manera en que yo la entienda, sin usar terminos muy tecnicos, una exelente doctora.",
       "calificacion": 5,
       "recomienda": true,
-      "motivoVisita": "Ya tengo motivo"
+      "motivoVisita": "Dolor en el pecho",
+      "profesionalId": "1",
+      "usuarioId": "1"
     },
     {
-      "id": "3dae",
-      "comentario": "Hola, esta es una reseña al dra Maria Lopez",
+      "id": "31cd",
+      "comentario": "El doctor me atendio bien, me recomendo como llevar el proceso de la fiebre por un virus que se encuentra en la ciudad.",
       "calificacion": 4,
       "recomienda": true,
-      "motivoVisita": "Me duele el corazao",
-      "profesionalId": "1",
-      "usuarioId": "5"
+      "motivoVisita": "Fiebre",
+      "profesionalId": "2",
+      "usuarioId": "1"
     }
   ],
   "pacientes": [
