@@ -4,18 +4,29 @@ import { CommonModule } from '@angular/common';
 import { ServLoginService } from '../../../services/serv-login.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, MatButtonModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
+  MatIconModule,MatCardModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
   mensajeError: string = '';
+  ocultarContrasena: boolean = true;
 
-  constructor(private fb: FormBuilder, private loginService: ServLoginService, private router:Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private loginService: ServLoginService, 
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -32,9 +43,9 @@ export class LoginComponent {
             this.router.navigate(['/profesional-dashboard']);
           } else if (cuenta.rol === 'usuario') {
             this.router.navigate(['/patients-dashboard']);
-          } else if(cuenta.rol === 'administrador'){
-            this.router.navigate(['/admin-dashboard'])
-          }else {
+          } else if (cuenta.rol === 'administrador') {
+            this.router.navigate(['/admin-dashboard']);
+          } else {
             this.mensajeError = 'Rol desconocido';
           }
         } else {
@@ -44,7 +55,7 @@ export class LoginComponent {
     }
   }
 
-  registrar(){
+  registrar() {
     this.router.navigate(['/registrar']);
   }
 }
