@@ -203,13 +203,14 @@
       "usuarioId": "1"
     },
     {
-      "id": "320a",
-      "comentario": "ddddddddddddddddd dsdsd ds dddd s dds",
-      "calificacion": 2,
-      "recomienda": false,
-      "motivoVisita": "sadsadsadsadsdsdsds",
+      "id": "baa2",
+      "comentario": "fechaaaa sin tiempooo",
+      "calificacion": 3,
+      "recomienda": true,
+      "motivoVisita": "nuevaaaaaa",
       "profesionalId": "1",
-      "usuarioId": "1"
+      "usuarioId": "1",
+      "fechaResena": "2025-05-15"
     }
   ],
   "pacientes": [
