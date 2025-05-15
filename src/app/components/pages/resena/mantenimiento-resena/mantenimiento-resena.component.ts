@@ -22,7 +22,6 @@ interface ResenaConNombre extends Resena {
 
 @Component({
   selector: 'app-mantenimiento-resena',
-  standalone: true,
   imports: [
     CommonModule, HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule,
     MatInputModule, TablaReutilizableComponent, MatDialogModule],
@@ -118,25 +117,34 @@ export class MantenimientoResenaComponent {
     this.router.navigate(['/resena-edit', resena.id]);
   }
 
-  eliminar(resena: Resena) {
-    const dialogRef = this.dialog.open(DialogoComponent, {
-      width: '400px',
-      data: <DialogData>{
-        title: 'Confirmar eliminación',
-        message: `¿Estás seguro de eliminar la reseña con motivo: "${resena.motivoVisita}"?`,
-        confirmText: 'Sí, eliminar',
-        cancelText: 'Cancelar',
-        isConfirmation: true
-      }
-    });
 
-    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
-      if (confirmado) {
-        this.servResena.deleteResena(resena).subscribe(() => {
-          alert('Reseña eliminada correctamente');
-          this.cargarResenas();
-        });
-      }
-    });
+  eliminar(resena: ResenaConNombre): void {
+    this.confirmarEliminacion(resena);
   }
+
+  confirmarEliminacion(resena: ResenaConNombre): void {
+  const dialogRef = this.dialog.open(DialogoComponent, {
+    width: '400px',
+    data: <DialogData>{
+      title: 'Confirmar eliminación',
+      message: `¿Estás seguro de eliminar la reseña con motivo: "${resena.motivoVisita}"?`,
+      confirmText: 'Sí, eliminar',
+      cancelText: 'Cancelar',
+      isConfirmation: true
+    }
+  });
+  dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+    if (confirmado === true) {
+      this.deleteResena(resena);
+    }
+  });
+}
+
+deleteResena(resena: Resena): void {
+  this.servResena.deleteResena(resena).subscribe(() => {
+    this.cargarResenas();
+    this.router.navigate(['mantenimiento-resena'], { replaceUrl: true }); 
+  });
+}
+
 }

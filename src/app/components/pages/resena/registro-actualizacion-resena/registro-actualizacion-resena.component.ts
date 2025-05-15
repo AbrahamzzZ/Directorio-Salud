@@ -142,7 +142,7 @@ export class RegistroActualizacionResenaComponent {
     };
 
     this.servicioResena.editResena(updatedResena).subscribe(() => {
-      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
+      this.router.navigate(['mantenimiento-resena'], { replaceUrl: true });
     });
   }
 
@@ -167,6 +167,6 @@ export class RegistroActualizacionResenaComponent {
   }
 
   onCancel(): void {
-    this.router.navigate(['/patients-dashboard']);
+    this.router.navigate(['mantenimiento-resena']);
   }
 }
