@@ -1,27 +1,3 @@
-<!--<nav>
-    @if (miServicio.rol==='profesional') {
-        <ul routerLink="/profesional-dashboard">Home</ul>
-        <ul routerLink="/my-services">Mis Servicios</ul>
-        <ul routerLink="/service-register">Nuevo Servicio</ul>
-        <ul [routerLink]="['/profesional-edit', idProfesional]">Perfil</ul>
-        <ul routerLink="/login">Cerrar Sesion</ul>
-
-    }@else if (miServicio.rol==='administrador') {
-        <ul routerLink="/admin-dashboard">Home</ul>
-        <ul routerLink="/list-profesional">Profesionales</ul>
-        <ul routerLink="/login">Cerrar Sesion</ul>
-    }
-    @else {
-        <ul routerLink="">Home</ul>
-        <ul routerLink="">Persona</ul>
-        <ul routerLink="/lista-servicios">Servicios</ul>
-        <ul routerLink="/mantenimiento-paciente-cita">Mis Citas</ul>
-        <ul routerLink="/mantenimiento-resena">Mis Reseñas</ul>
-        <ul routerLink="">Pacientes</ul>
-        <ul routerLink="/login">Cerrar Sesion</ul>
-    }
-</nav>-->
-
 <mat-toolbar class="main-toolbar">
   <span class="app-title" routerLink="/profesional-dashboard">VitaCare</span>
 
@@ -37,7 +13,7 @@
       <a mat-button [routerLink]="['/profesional-edit', idProfesional]">Perfil</a>
     }@else if (miServicio.rol === 'administrador') {
       <a mat-button routerLink="/admin-dashboard">Home</a>
-      <!--<a mat-button routerLink="/mis-pacientes">Pacientes</a>-->
+      <a mat-button routerLink="/mis-pacientes">Pacientes</a>
       <a mat-button routerLink="/profesional-list">Profesionales</a>
     }@else {
       <a mat-button routerLink="/patients-dashboard">Home</a>
@@ -58,7 +34,7 @@
       <a mat-button [routerLink]="['/profesional-edit', idProfesional]" (click)="toggleMenu()">Perfil</a>
     }@else if (miServicio.rol === 'administrador') {
       <a mat-button routerLink="/admin-dashboard" (click)="toggleMenu()">Home</a>
-      <!--<a mat-button routerLink="/mis-pacientes" (click)="toggleMenu()">Pacientes</a>-->
+      <a mat-button routerLink="/mis-pacientes" (click)="toggleMenu()">Pacientes</a>
       <a mat-button routerLink="/profesional-list" (click)="toggleMenu()">Profesionales</a>
     } @else {
       <a mat-button routerLink="/patients-dashboard" (click)="toggleMenu()">Home</a>

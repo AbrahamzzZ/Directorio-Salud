@@ -11,10 +11,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServPacientesService } from '../../../services/serv-pacientes.service';
-import { Paciente } from '../../../models/Paciente';
-import { HeaderComponent } from "../../shared/header/header.component";
-import { FooterComponent } from "../../shared/footer/footer.component";
+import { ServPacientesService } from '../../../../services/serv-pacientes.service';
+import { Paciente } from '../../../../models/Paciente';
+import { HeaderComponent } from "../../../shared/header/header.component";
+import { FooterComponent } from "../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-registro-actualizacion-paciente',
