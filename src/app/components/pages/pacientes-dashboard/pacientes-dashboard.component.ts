@@ -41,7 +41,11 @@ export class PacientesDashboardComponent {
     }
   }
 
-    irAResena(profesionalId: string): void {
+  irAResena(profesionalId: string): void {
     this.router.navigate(['/resena-register', profesionalId]);
+  }
+
+  verResenas(profesionalId: string): void {
+    this.router.navigate(['/ver-resenas', profesionalId]);
   }
 }
