@@ -26,6 +26,10 @@ export class ServPacientesService {
     );
    }  
 
+  getPacientePorId(id: string): Observable<Paciente> {
+    return this.http.get<Paciente>(`${this.jsonUrl}/${id}`);
+  }
+
    //agregar
   addPatient(paciente:Paciente):Observable<Paciente>{    
     return this.http.post<Paciente>(this.jsonUrl, paciente);      

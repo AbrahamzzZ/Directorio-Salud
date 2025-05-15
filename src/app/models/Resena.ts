@@ -6,4 +6,5 @@ export interface Resena {
     motivoVisita: string;
     profesionalId?: string;
     usuarioId?: string;
+    pacienteId?: string;
 }
