@@ -3,11 +3,8 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { ProfesionalDashboardComponent } from './components/pages/profesional-dashboard/profesional-dashboard.component';
 import { MantenimientoServicioComponent } from './components/pages/servicio-medico/mantenimiento-servicio/mantenimiento-servicio.component';
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
-
-import { RegistroActualizacionServicioComponent } from './components/pages/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
-
-import { MantenimientoPacienteComponent } from './components/pages/mantenimiento-paciente/mantenimiento-paciente.component';
-import { RegistroActualizacionPacienteComponent } from './components/pages/registro-actualizacion-paciente/registro-actualizacion-paciente.component';
+import { MantenimientoPacienteComponent } from './components/pages/paciente/mantenimiento-paciente/mantenimiento-paciente.component';
+import { RegistroActualizacionPacienteComponent } from './components/pages/paciente/registro-actualizacion-paciente/registro-actualizacion-paciente.component';
 
 import { RegistroActualizacionServicioComponent } from './components/pages/servicio-medico/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
 import { RegistrarseComponent } from './components/pages/registrarse/registrarse.component';
@@ -27,15 +24,10 @@ export const routes: Routes = [
     { path: 'service-register', component: RegistroActualizacionServicioComponent },
     { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent },
     { path: 'patients-dashboard', component: PacientesDashboardComponent },
-
-
     { path: 'mis-pacientes', component: MantenimientoPacienteComponent},//y
     { path: 'pacientes-registro', component: RegistroActualizacionPacienteComponent},//y
     { path: 'editar-pacientes/:id', component: RegistroActualizacionPacienteComponent},//y
-
     { path: 'admin-dashboard', component: AdministradorDashboardComponent, title: 'Administrador'},
-
-
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login'}
 ];
