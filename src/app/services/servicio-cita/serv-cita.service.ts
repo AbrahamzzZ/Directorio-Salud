@@ -2,15 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cita } from '../../models/Citas';
-import { HttpClient } from '@angular/common/http';
 import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjson.service';
 import { ServProfesionalesService } from '../servicio-profesional/serv-profesionales.service';
-
-import {  Observable } from 'rxjs';
-import { Cita } from '../../models/Citas';
-import { ServProfesionalesService } from '../servicio-profesional/serv-profesionales.service';
-import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjson.service';
-
 
 @Injectable({
   providedIn: 'root'
