@@ -108,7 +108,8 @@ export class RegistroActualizacionResenaComponent {
     const nuevaResena: Resena = {
       ...this.resenaForm.value,
       profesionalId: this.profesionalId,
-      usuarioId: this.usuarioId
+      usuarioId: this.usuarioId,
+      fechaResena: new Date().toISOString().split('T')[0]
     };
 
     this.servicioResena.addResena(nuevaResena).subscribe(() => {

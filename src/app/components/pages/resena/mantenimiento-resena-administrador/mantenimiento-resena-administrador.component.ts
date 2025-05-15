@@ -43,7 +43,8 @@ export class MantenimientoResenaAdministradorComponent {
     { key: 'motivoVisita', titulo: 'Motivo de Visita' },
     { key: 'comentario', titulo: 'Comentario' },
     { key: 'calificacion', titulo: 'Calificación' },
-    { key: 'recomienda', titulo: '¿Recomienda?' }
+    { key: 'recomienda', titulo: '¿Recomienda?' },
+    { key: 'fechaResena', titulo: 'Fecha' }
   ];
 
   acciones = [

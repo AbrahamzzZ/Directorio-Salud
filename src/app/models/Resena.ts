@@ -4,6 +4,7 @@ export interface Resena {
     calificacion: number;
     recomienda: boolean;
     motivoVisita: string;
+    fechaResena: string;
     profesionalId?: string;
     usuarioId?: string;
     pacienteId?: string;
