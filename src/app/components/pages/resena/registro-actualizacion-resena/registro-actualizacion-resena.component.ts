@@ -8,10 +8,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { FooterComponent } from '../../../shared/footer/footer.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogData } from '../../../../models/Dialog-data';
+import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 
 @Component({
   selector: 'app-registro-actualizacion-resena',
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent, MatFormFieldModule,
+    MatInputModule, MatCheckboxModule, MatIconModule, MatButtonModule],
   templateUrl: './registro-actualizacion-resena.component.html',
   styleUrl: './registro-actualizacion-resena.component.css'
 })
@@ -29,7 +39,8 @@ export class RegistroActualizacionResenaComponent {
     private route: ActivatedRoute,
     private router: Router,
     private servicioResena: ServResenasService,
-    private servicioLogin: ServLoginService
+    private servicioLogin: ServLoginService,
+    private dialog: MatDialog
   ) {
     this.resenaForm = this.fb.group({
       comentario: ['', Validators.required],
@@ -62,17 +73,38 @@ export class RegistroActualizacionResenaComponent {
     });
   }
 
-  onSubmit(): void {
+  onSubmit(event?: Event): void {
+    event?.preventDefault();
+
     if (this.resenaForm.invalid) return;
 
     if (this.isEdit) {
-      this.updateResena();
+      this.confirmarEdicion();
     } else {
-      this.addResena();
+      this.confirmarRegistro();
     }
   }
 
-  addResena(): void {
+  confirmarRegistro(): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: <DialogData>{
+        title: 'Confirmar Registro',
+        message: '¿Estás seguro de que deseas registrar esta reseña?',
+        confirmText: 'Sí, registrar',
+        cancelText: 'Cancelar',
+        isConfirmation: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.registrarResena();
+      }
+    });
+  }
+
+  registrarResena(): void {
     const nuevaResena: Resena = {
       ...this.resenaForm.value,
       profesionalId: this.profesionalId,
@@ -80,8 +112,26 @@ export class RegistroActualizacionResenaComponent {
     };
 
     this.servicioResena.addResena(nuevaResena).subscribe(() => {
-      alert('Reseña registrada con éxito');
-      this.router.navigate(['/patients-dashboard']);
+      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
+    });
+  }
+
+  confirmarEdicion(): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: <DialogData>{
+        title: 'Confirmar Edición',
+        message: '¿Estás seguro de que deseas actualizar esta reseña?',
+        confirmText: 'Sí, actualizar',
+        cancelText: 'Cancelar',
+        isConfirmation: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.updateResena();
+      }
     });
   }
 
@@ -92,13 +142,28 @@ export class RegistroActualizacionResenaComponent {
     };
 
     this.servicioResena.editResena(updatedResena).subscribe(() => {
-      alert('Reseña actualizada con éxito');
-      this.router.navigate(['/patients-dashboard']);
+      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
     });
   }
 
   isNoChanges(): boolean {
-    return JSON.stringify(this.resenaOriginal) === JSON.stringify(this.resenaForm.value);
+    if (!this.resenaOriginal) return false;
+
+    const original = {
+      comentario: this.resenaOriginal.comentario,
+      calificacion: this.resenaOriginal.calificacion,
+      recomienda: this.resenaOriginal.recomienda,
+      motivoVisita: this.resenaOriginal.motivoVisita
+    };
+
+    const current = this.resenaForm.value;
+
+    return (
+      original.comentario === current.comentario &&
+      original.calificacion === current.calificacion &&
+      original.recomienda === current.recomienda &&
+      original.motivoVisita === current.motivoVisita
+    );
   }
 
   onCancel(): void {
