@@ -1,0 +1,81 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.form-card {
+  margin: 12px 0;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  background-color: white;
+}
+
+.fila {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.doble {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.completo, .doble mat-form-field {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .doble mat-form-field {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 599px) {
+  .doble {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fila {
+    gap: 8px;
+  }
+}
+
+.check {
+  margin: 12px 0 0 8px;  
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.BtnContainer {
+  display: flex;
+}
+
+.botonCancelar {
+  background-color: rgb(189, 203, 214);
+}
+
+mat-form-field.fecha-registro-field {
+  width: 61%; 
+}
+
+@media (max-width: 480px) {
+  mat-form-field {
+    font-size: 13px;
+  }  
+}
