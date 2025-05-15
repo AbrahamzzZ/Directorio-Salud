@@ -1,25 +1,71 @@
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
+  gap: 24px;
+  padding: 24px;
+  justify-content: center;
 }
 
 .profesional-card {
-  width: 300px;
+    display: flex;
+    flex-direction: column;
 }
 
-.example-form {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
+.card-header-content {
+    flex-grow: 1;
+    margin-right: 16px;
 }
 
-.container__search__input {
-  width: 100%;
-  max-width: 500px;
+.profesional-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.mat-form-field {
-  width: 100%;
+mat-card-header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: 16px;
+}
+
+mat-card-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+mat-card-subtitle {
+  font-size: 14px;
+  color: #666;
+}
+
+mat-card-content {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+mat-card-content p {
+  margin: 8px 0;
+}
+
+button[mat-stroked-button] {
+  margin: 12px 8px 16px;
+  width: calc(50% - 16px);
+  border-radius: 20px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+button[mat-stroked-button]:hover {
+  background-color: #e0f7fa;
+}
+
+.foto-profesional-derecha {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    align-self: flex-end;
+    margin-bottom: 16px;
 }

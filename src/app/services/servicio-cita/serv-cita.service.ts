@@ -1,7 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cita } from '../../models/Citas';
-import { HttpClient } from '@angular/common/http';
 import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjson.service';
 import { ServProfesionalesService } from '../servicio-profesional/serv-profesionales.service';
 
@@ -9,9 +9,10 @@ import { ServProfesionalesService } from '../servicio-profesional/serv-profesion
   providedIn: 'root'
 })
 export class ServCitaService {
-  private jsonUrl:string = "http://localhost:3000/citas";
 
-  constructor(private http:HttpClient, private serviceServiciosMedicos:ServServiciosjsonService, private serviceServicioProfesionales: ServProfesionalesService) { }
+private jsonUrl:string = "http://localhost:3000/citas";
+
+  constructor(private http:HttpClient, private servServiciosMedicos:ServServiciosjsonService, private servProf:ServProfesionalesService) { }
 
 // Obtener todas las citas
   getCitas(): Observable<Cita[]> {
@@ -43,4 +44,5 @@ export class ServCitaService {
   deleteCita(id: string): Observable<void> {
     return this.http.delete<void>(`${this.jsonUrl}/${id}`);
   }
+  
 }

@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 import { Router } from '@angular/router';
-import { forkJoin, map, switchMap, of, catchError, tap } from 'rxjs';
+import {  map, switchMap,tap } from 'rxjs';
 import { Cita } from '../../../../models/Citas';
 import { Profesional } from '../../../../models/Profesional';
 import { DatePipe, CommonModule } from '@angular/common';
@@ -11,10 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from '../../../shared/footer/footer.component';
 import { HeaderComponent } from '../../../shared/header/header.component';
-import { MatIcon } from '@angular/material/icon';
 import { ServicioMedico } from '../../../../models/ServicioMedico';
 import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 import { ServServiciosjsonService } from '../../../../services/servicio-servicios/serv-serviciosjson.service';
+import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 
 @Component({
   selector: 'app-mantenimiento-paciente-cita',
