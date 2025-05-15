@@ -36,7 +36,10 @@
       <a mat-button [routerLink]="['/profesional-edit', idProfesional]">Perfil</a>
     }@else if (miServicio.rol === 'administrador') {
       <a mat-button routerLink="/admin-dashboard">Home</a>
-      <a mat-button routerLink="/list-profesional">Profesionales</a>
+      <a mat-button routerLink="/list-profesional">Profesionales</a>   
+      <a mat-button routerLink="/pacientes-registro">Pacientes</a>     
+      <a mat-button routerLink="/mis-pacientes">Lista de Pacientes</a> 
+         
     }@else {
       <a mat-button routerLink="/">Home</a>
       <a mat-button routerLink="#">Persona</a>
@@ -58,6 +61,8 @@
     }@else if (miServicio.rol === 'administrador') {
       <a mat-button routerLink="/admin-dashboard" (click)="toggleMenu()">Home</a>
       <a mat-button routerLink="/list-profesional" (click)="toggleMenu()">Profesionales</a>
+      <a mat-button routerLink="/pacientes-registro" (click)="toggleMenu()">Pacientes</a>     
+      <a mat-button routerLink="/mis-pacientes"(click)="toggleMenu()">Lista de Pacientes</a> 
     } @else {
       <a mat-button routerLink="/" (click)="toggleMenu()">Home</a>
       <a mat-button routerLink="#" (click)="toggleMenu()">Persona</a>
