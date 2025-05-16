@@ -3,38 +3,43 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Ocupa toda la altura de la pantalla */
-  text-align: center;
+  height: 100vh;
+  padding: 24px;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 h1 {
+  margin-bottom: 24px;
+  font-size: 32px;
+  font-weight: 600;
+  color: #222;
+}
+
+.subtitle {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #555;
+}
+
+.custom-select {
+  width: 250px;
   margin-bottom: 16px;
 }
 
-span {
-  margin-bottom: 8px;
-  font-size: 18px;
+.login-text {
+  font-size: 14px;
+  color: #666;
 }
 
-mat-form-field {
-  width: 250px;
-}
-
-.regresar-link {
-  display: inline-flex;
-  gap: 6px;
-  margin-top: 20px;
-  font-size: 16px;
-  color: #1976d2;
+.login-link {
   cursor: pointer;
+  color: #3f51b5;
   text-decoration: none;
-  transition: color 0.3s ease;
+  margin-left: 6px;
+  font-weight: 500;
 }
 
-.regresar-link mat-icon {
-  font-size: 20px;
-}
-
-.regresar-link:hover {
-  color: #0d47a1; 
+.login-link:hover {
+  text-decoration: underline;
 }
