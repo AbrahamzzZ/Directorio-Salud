@@ -16,8 +16,8 @@ export class RolPermisos implements CanMatch{
 
     // Define permisos por rol
     const permisos: { [key: string]: string[] } = {
-      profesional: ['/profesional-dashboard', '/profesional-list', '/profesional-register', '/profesional-edit'],
-      paciente: ['/patients-dashboard', '/pacientes-registro', '/editar-pacientes', '/mis-pacientes'],
+      profesional: ['/profesional-dashboard',  '/profesional-edit'],
+      paciente: ['/patients-dashboard', '/editar-pacientes', '/mis-pacientes'],
       administrador: ['/admin-dashboard']
     };
 
