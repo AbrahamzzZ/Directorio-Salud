@@ -141,11 +141,11 @@ export class MantenimientoResenaComponent {
   });
 }
 
-deleteResena(resena: Resena): void {
-  this.servResena.deleteResena(resena).subscribe(() => {
-    this.cargarResenas();
-    this.router.navigate(['mantenimiento-resena'], { replaceUrl: true }); 
-  });
-}
+  deleteResena(resena: Resena): void {
+    this.servResena.deleteResena(resena).subscribe(() => {
+      this.cargarResenas();
+      this.router.navigate(['mantenimiento-resena'], { replaceUrl: true }); 
+    });
+  }
 
 }

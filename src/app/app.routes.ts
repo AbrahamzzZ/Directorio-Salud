@@ -18,6 +18,7 @@ import { ListaServiciosComponent } from './components/pages/cita/lista-servicios
 import { MantenimientoResenaProfesionalComponent } from './components/pages/resena/mantenimiento-resena-profesional/mantenimiento-resena-profesional.component';
 import { Autenticacion } from './guards/autenticacion.guard';
 import { RolPermisos } from './guards/rol-permisos.guard';
+import { MantenimientoResenaAdministradorComponent } from './components/pages/resena/mantenimiento-resena-administrador/mantenimiento-resena-administrador.component';
 
 
 export const routes: Routes = [
@@ -48,6 +49,8 @@ export const routes: Routes = [
     { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Mis Reseñas' },
     { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Editar Reseña' },
     { path: 'ver-resenas/:profesionalId', component: MantenimientoResenaProfesionalComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Reseñas del Profesional'},
+    { path: 'admin-resenas', component: MantenimientoResenaAdministradorComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Reseñas del Administrador'},
+
     
     //Rutas del modulo Cita--Gabriel Vera
     { path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Paciente'},
