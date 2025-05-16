@@ -1,3 +1,49 @@
 <app-header></app-header>
-<h1>ESTOY EN LA PAGINA PRINCIPAL</h1>
+
+<div class="contenedor-principal">
+  <div class="content-container">
+    <h1 class="subtitulo-dashboard">Citas Programadas</h1>
+
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Buscar:</mat-label>
+        <input
+          matInput
+          placeholder="Buscar...."
+          type="search"
+          (keyup)="buscar(searchInput)"
+          #searchInput
+        />
+      </mat-form-field>
+    </form>
+
+    <div class="cards-contenedor">
+      @for (cita of citasFiltradas; track cita.id) {
+      <mat-card class="card-cita">
+        <mat-card-header>
+          <mat-card-title>{{ cita.nombreServicio | uppercase }}</mat-card-title>
+          <mat-card-subtitle>{{ cita.especialidad }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Dirección:</strong> {{ cita.direccion }}</p>
+          <p><strong>Método de Pago:</strong> {{ cita.metodoPago }}</p>
+          <p><strong>Prioridad:</strong> {{ cita.prioridad }}</p>
+          <p>
+            <strong>Fecha y Hora:</strong> {{ cita.fechaHora | date : "short" }}
+          </p>
+          <p><strong>Estado:</strong> {{ cita.estado }}</p>
+        </mat-card-content>
+      </mat-card>
+      }
+
+      <p
+        *ngIf="citasFiltradas.length === 0"
+        style="margin-top: 1rem; font-style: italic; color: #888"
+      >
+        No se encontraron citas que coincidan con la búsqueda.
+      </p>
+    </div>
+  </div>
+</div>
+
 <app-footer></app-footer>

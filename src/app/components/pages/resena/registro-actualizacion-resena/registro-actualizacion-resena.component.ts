@@ -108,7 +108,8 @@ export class RegistroActualizacionResenaComponent {
     const nuevaResena: Resena = {
       ...this.resenaForm.value,
       profesionalId: this.profesionalId,
-      usuarioId: this.usuarioId
+      usuarioId: this.usuarioId,
+      fechaResena: new Date().toISOString().split('T')[0]
     };
 
     this.servicioResena.addResena(nuevaResena).subscribe(() => {
@@ -142,7 +143,7 @@ export class RegistroActualizacionResenaComponent {
     };
 
     this.servicioResena.editResena(updatedResena).subscribe(() => {
-      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
+      this.router.navigate(['mantenimiento-resena'], { replaceUrl: true });
     });
   }
 
@@ -167,6 +168,6 @@ export class RegistroActualizacionResenaComponent {
   }
 
   onCancel(): void {
-    this.router.navigate(['/patients-dashboard']);
+    this.router.navigate(['mantenimiento-resena']);
   }
 }
