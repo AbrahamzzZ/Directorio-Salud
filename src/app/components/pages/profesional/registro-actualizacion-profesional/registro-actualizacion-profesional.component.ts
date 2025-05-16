@@ -15,9 +15,8 @@ import { MatChipsModule} from '@angular/material/chips';
 import { MatIcon} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Cuenta } from '../../../../models/Cuenta';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 import { DialogData } from '../../../../models/Dialog-data';
@@ -25,7 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-registro-actualizacion-profesional',
-  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatDatepickerModule, MatCardModule, MatSnackBarModule, DatePipe, ReactiveFormsModule, FormsModule, NgIf],
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule, MatButtonModule, MatInputModule, MatChipsModule, MatIcon, MatSelectModule, MatRadioModule, MatCardModule, MatSnackBarModule, DatePipe, ReactiveFormsModule, FormsModule, NgIf],
   templateUrl: './registro-actualizacion-profesional.component.html',
   styleUrl: './registro-actualizacion-profesional.component.css'
 })
@@ -41,16 +40,16 @@ export class RegistroActualizacionProfesionalComponent {
 
   constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog){
     this.form = this.fb.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(5), Validators.max(50)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
       especialidad: ['', Validators.required],
-      ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.min(3), Validators.max(50)]],
+      ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(3), Validators.maxLength(50)]],
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100)]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       sexo: ['', Validators.required],
       disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima]),
       correo: ['', [Validators.required, Validators.email]], 
       clave: ['', [Validators.required, Validators.minLength(8)]],
-      foto: [null, Validators.required]
+      foto: [null, this.isEdit ? [] : [Validators.required]]
     });
   }
 
@@ -75,6 +74,7 @@ export class RegistroActualizacionProfesionalComponent {
       telefono: profesional.telefono,
       sexo: profesional.sexo,
       disponibilidad: profesional.disponibilidad,
+      foto: profesional.foto
     });
 
     if (this.isEdit && profesional.foto) {
@@ -198,8 +198,9 @@ export class RegistroActualizacionProfesionalComponent {
     if (this.nuevaDisponibilidad) {
       const lista = this.form.get('disponibilidad')?.value || [];
       if (!lista.includes(this.nuevaDisponibilidad)) {
-        lista.push(this.nuevaDisponibilidad);
-        this.form.get('disponibilidad')?.setValue(lista);
+        const nuevaLista = [...lista, this.nuevaDisponibilidad];
+        this.form.get('disponibilidad')?.setValue(nuevaLista);
+        this.form.get('disponibilidad')?.markAsDirty(); 
       }
       this.nuevaDisponibilidad = '';
     }
@@ -210,10 +211,11 @@ export class RegistroActualizacionProfesionalComponent {
     return value && value.length > 0 ? null : { required: true };
   }
 
-  eliminarDisponibilidad(index: number) {
+  eliminarDisponibilidad(fecha: string) {
     const lista = this.form.get('disponibilidad')?.value || [];
-    lista.splice(index, 1);
-    this.form.get('disponibilidad')?.setValue(lista);
+    const nuevaLista = lista.filter((f: string) => f !== fecha);
+    this.form.get('disponibilidad')?.setValue(nuevaLista);
+    this.form.get('disponibilidad')?.markAsDirty(); 
   }
 
   isNoChanges(): boolean {
@@ -227,20 +229,38 @@ export class RegistroActualizacionProfesionalComponent {
       edad: this.profesionalOriginal.edad,
       sexo: this.profesionalOriginal.sexo,
       telefono: this.profesionalOriginal.telefono,
-      //disponibilidad: this.disponibilidad.disponibilidad
+      disponibilidad: this.profesionalOriginal.disponibilidad || [],
+      foto: this.profesionalOriginal.foto
     };
 
     const current = this.form.value;
+    const disponibilidadSinCambios = this.arraysSonIguales(
+      original.disponibilidad,
+      current.disponibilidad
+    );
+
 
     return (
       original.nombre === current.nombre &&
       original.especialidad === current.especialidad &&
       original.ubicacion === current.ubicacion &&
       Number(original.edad) === Number(current.edad) &&
-      //originalDate === currentDate &&
       original.sexo === current.sexo &&
-      original.telefono === current.telefono
+      original.telefono === current.telefono &&
+      disponibilidadSinCambios &&
+      original.foto === current.foto
     );
+  }
+
+  private arraysSonIguales(arr1: any[], arr2: any[]): boolean {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+    if (arr1.length !== arr2.length) return false;
+
+    // Si los elementos son simples (como strings o números)
+    const sorted1 = [...arr1].sort();
+    const sorted2 = [...arr2].sort();
+
+    return sorted1.every((val, index) => val === sorted2[index]);
   }
 
   onCancel(): void {

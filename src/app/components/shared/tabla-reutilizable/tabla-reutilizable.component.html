@@ -12,7 +12,11 @@
                 <td mat-cell *matCellDef="let row">
                     {{ row[col] | date: 'yyyy-MM-dd' }}
                 </td>
-            } @else {
+            } @else if (getTituloCabecera(col) === 'Disponibilidad') {
+                <td mat-cell *matCellDef="let row">
+                    {{ row[col] | formatearFechaDisponibilidad }}
+                </td>
+            }@else {
                 <td mat-cell *matCellDef="let row">
                     {{ row[col] === true ? "Sí" : row[col] === false ? "No" : row[col] }}
                 </td>
@@ -39,4 +43,3 @@
 </table>
 
 <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecciona página" class="paginator"></mat-paginator>
-

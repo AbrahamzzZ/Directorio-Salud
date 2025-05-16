@@ -3,8 +3,8 @@ import { LoginComponent } from './components/pages/login/login.component';
 import { ProfesionalDashboardComponent } from './components/pages/profesional-dashboard/profesional-dashboard.component';
 import { MantenimientoServicioComponent } from './components/pages/servicio-medico/mantenimiento-servicio/mantenimiento-servicio.component';
 import { PacientesDashboardComponent } from './components/pages/pacientes-dashboard/pacientes-dashboard.component';
-import { MantenimientoPacienteComponent } from './components/pages/mantenimiento-paciente/mantenimiento-paciente.component';
-import { RegistroActualizacionPacienteComponent } from './components/pages/registro-actualizacion-paciente/registro-actualizacion-paciente.component';
+import { MantenimientoPacienteComponent } from './components/pages/paciente/mantenimiento-paciente/mantenimiento-paciente.component';
+import { RegistroActualizacionPacienteComponent } from './components/pages/paciente/registro-actualizacion-paciente/registro-actualizacion-paciente.component';
 import { RegistroActualizacionServicioComponent } from './components/pages/servicio-medico/registro-actualizacion-servicio/registro-actualizacion-servicio.component';
 import { RegistrarseComponent } from './components/pages/registrarse/registrarse.component';
 import { RegistroActualizacionProfesionalComponent } from './components/pages/profesional/registro-actualizacion-profesional/registro-actualizacion-profesional.component';
@@ -15,6 +15,8 @@ import { MantenimientoResenaComponent } from './components/pages/resena/mantenim
 import { MantenimientoPacienteCitaComponent } from './components/pages/cita/mantenimiento-paciente-cita/mantenimiento-paciente-cita.component';
 import { RegistroActualizacionCitaComponent } from './components/pages/cita/registro-actualizacion-cita/registro-actualizacion-cita.component';
 import { ListaServiciosComponent } from './components/pages/cita/lista-servicios/lista-servicios.component';
+import { MantenimientoResenaProfesionalComponent } from './components/pages/resena/mantenimiento-resena-profesional/mantenimiento-resena-profesional.component';
+import { MantenimientoResenaAdministradorComponent } from './components/pages/resena/mantenimiento-resena-administrador/mantenimiento-resena-administrador.component';
 
 
 export const routes: Routes = [
@@ -44,6 +46,8 @@ export const routes: Routes = [
     { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
     { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
     { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
+    { path: 'ver-resenas/:profesionalId', component: MantenimientoResenaProfesionalComponent, title: 'Reseñas del Profesional'},
+    { path: 'admin-resenas', component: MantenimientoResenaAdministradorComponent, title: 'Reseñas del Sistema' },
 
     //Rutas del modulo Cita--Gabriel Vera
     { path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, title: 'Paciente'},

@@ -12,18 +12,25 @@
   @for (profesional of profesionales; track profesional.id) {
     <mat-card class="profesional-card">
       <mat-card-header>
-        <mat-card-title>{{ profesional.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ profesional.especialidad }}</mat-card-subtitle>
+        <div class="card-header-content">
+            <mat-card-title>{{ profesional.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{ profesional.especialidad }}</mat-card-subtitle>
+        </div>
+        <img [src]="profesional.foto" alt="Foto del profesional" class="foto-profesional" onerror="this.src='assets/default-avatar.png'" />
       </mat-card-header>
       <mat-card-content>
         <p><strong>Ubicación:</strong> {{ profesional.ubicacion }}</p>
-        <p><strong>Edad:</strong> {{ profesional.edad }}</p>
-        <p><strong>Sexo:</strong> {{ profesional.sexo }}</p>
         <p><strong>Teléfono:</strong> {{ profesional.telefono }}</p>
-        <p><strong>Disponibilidad:</strong> {{ profesional.disponibilidad }}</p>
+        <p><strong>Disponibilidad:</strong> {{ formatDisponibilidad(profesional.disponibilidad)}}</p>
       </mat-card-content>
-        <button mat-stroked-button (click)="irAResena(profesional.id)">Reseña</button>
-        <button mat-stroked-button>Ver reseña</button>
+      <div class="botones-resenia">
+        <button mat-stroked-button (click)="irAResena(profesional.id)">    
+          <mat-icon>rate_review</mat-icon> Reseña
+        </button>
+        <button mat-stroked-button (click)="verResenas(profesional.id)">
+          <mat-icon>visibility</mat-icon> Ver reseña
+        </button>
+      </div>
     </mat-card>
   }
 </div>

@@ -46,7 +46,7 @@
   <!-- Edad -->
   <mat-form-field>
     <mat-label for="edad">Edad:</mat-label>
-    <input matInput id="edad" formControlName="edad" type="number">
+    <input matInput id="edad" formControlName="edad" type="number" step="1">
     @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')) {
       <mat-error class="error">Este campo es obligatorio.</mat-error>
     } @else if(form.get('edad')?.hasError('min')) {
@@ -71,10 +71,10 @@
   <mat-radio-group formControlName="sexo">
     <mat-radio-button value="F">Femenino</mat-radio-button>
     <mat-radio-button value="M">Masculino</mat-radio-button>
-    @if(form.get('sexo')?.touched && form.get('sexo')?.hasError('required')){
-      <mat-error class="error">Debe seleccionar un sexo.</mat-error>
-    }
   </mat-radio-group>
+  @if(form.get('sexo')?.touched && form.get('sexo')?.hasError('required')){
+    <mat-error class="error">Debe seleccionar un sexo.</mat-error>
+  }
 
   <!-- Disponibilidad -->
   <div class="custom-form-field">

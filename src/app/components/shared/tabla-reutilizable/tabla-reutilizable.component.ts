@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { FormatearFechaDisponibilidadPipe } from '../../../pipes/formatear-fecha-disponibilidad.pipe';
 
 @Component({
   selector: 'app-tabla-reutilizable',
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, FormatearFechaDisponibilidadPipe],
   templateUrl: './tabla-reutilizable.component.html',
   styleUrl: './tabla-reutilizable.component.css'
 })

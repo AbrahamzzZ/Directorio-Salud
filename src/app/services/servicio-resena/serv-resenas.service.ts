@@ -38,6 +38,27 @@ export class ServResenasService {
     return this.http.get<Resena>(`${this.jsonUrl}/${id}`);
   }
 
+  getResenasByProfesional(profesionalId: string): Observable<Resena[]> {
+    return this.http.get<Resena[]>(`${this.jsonUrl}?profesionalId=${profesionalId}`);
+  }
+
+  // Obtener todas las reseñas (modo administrador)
+  getResenas(): Observable<Resena[]> {
+    return this.http.get<Resena[]>(this.jsonUrl);
+  }
+
+  // Búsqueda general por término (modo administrador)
+  searchResenas(termino: string): Observable<Resena[]> {
+    return this.http.get<Resena[]>(this.jsonUrl).pipe(
+      map((resenas) =>
+        resenas.filter((r) =>
+          r.motivoVisita.toLowerCase().includes(termino.toLowerCase()) ||
+          r.comentario?.toLowerCase().includes(termino.toLowerCase())
+        )
+      )
+    );
+  }
+
   editResena(resena: Resena): Observable<Resena> {
     return this.http.put<Resena>(`${this.jsonUrl}/${resena.id}`, resena);
   }
@@ -45,20 +66,5 @@ export class ServResenasService {
   deleteResena(resena: Resena): Observable<void> {
     return this.http.delete<void>(`${this.jsonUrl}/${resena.id}`);
   }
-
-
-////////////////////////////////////////////
-
-// Obtener reseñas hechas a un profesional específico
-getResenasPorProfesional(profesionalId: string): Observable<Resena[]> {
-  return this.http.get<Resena[]>(`${this.jsonUrl}?profesionalId=${profesionalId}`);
-}
-
-// Obtener todas las reseñas (para el admin)
-getTodasLasResenas(): Observable<Resena[]> {
-  return this.http.get<Resena[]>(this.jsonUrl);
-}
-
-
 
 }

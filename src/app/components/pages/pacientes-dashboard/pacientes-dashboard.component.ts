@@ -8,11 +8,12 @@ import { ServProfesionalesService } from '../../../services/servicio-profesional
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-pacientes-dashboard',
-  imports: [HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, FormsModule, MatInputModule],
+  imports: [HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, FormsModule, MatInputModule, MatIcon],
   templateUrl: './pacientes-dashboard.component.html',
   styleUrl: './pacientes-dashboard.component.css'
 })
@@ -30,6 +31,32 @@ export class PacientesDashboardComponent {
     });
   }
 
+  formatDisponibilidad(fechas: string[]): string {
+    // Si es una sola fecha, la formateamos directamente
+    const fechaUnica = fechas.join(',');
+    if (!fechaUnica.includes(',')) {
+        return new Date(fechaUnica).toLocaleString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // Si hay múltiples fechas, las procesamos una por una
+    const fechasArray = fechaUnica.split(',');
+    return fechasArray.map(fecha => {
+        return new Date(fecha.trim()).toLocaleString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }).join(', ');
+  }
+
   buscar(searchInput: HTMLInputElement) {
     const termino = searchInput.value.trim();
     if (termino) {
@@ -41,7 +68,11 @@ export class PacientesDashboardComponent {
     }
   }
 
-    irAResena(profesionalId: string): void {
+  irAResena(profesionalId: string): void {
     this.router.navigate(['/resena-register', profesionalId]);
+  }
+
+  verResenas(profesionalId: string): void {
+    this.router.navigate(['/ver-resenas', profesionalId]);
   }
 }

@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from '../../../shared/footer/footer.component';
 import { HeaderComponent } from '../../../shared/header/header.component';
 
+
 @Component({
   selector: 'app-mantenimiento-paciente-cita',
     imports: [HeaderComponent,FooterComponent, MatTableModule, MatPaginatorModule,

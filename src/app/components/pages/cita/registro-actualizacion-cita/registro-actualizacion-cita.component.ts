@@ -29,6 +29,7 @@ import { MatDialog } from '@angular/material/dialog'; // Importa MatDialog
 import { DialogData } from '../../../../models/Dialog-data'; // Importa DialogData
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component'; // Importa DialogoComponent
 
+
 @Component({
   selector: 'app-registro-actualizacion-cita',
   imports: [
