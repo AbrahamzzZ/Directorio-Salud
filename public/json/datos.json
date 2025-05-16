@@ -9,11 +9,11 @@
   "servicios": [],
   "cuentas": [
     {
-      "id": "1",
-      "email": "q@gmail.com",
-      "password": "123456",
-      "rol": "paciente",
-      "pacienteId": null
+      "id": "a1",
+      "email": "roberto@gmail.com",
+      "password": "hola",
+      "rol": "administrador",
+      "administradorId": "1"
     }
   ],
   "citas": [],
