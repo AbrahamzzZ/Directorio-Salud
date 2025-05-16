@@ -74,6 +74,12 @@ export class ServLoginService {
         );
     }
 
+    obtenerCuentaPorPacienteId(pacienteId: string): Observable<Cuenta | undefined> {
+        return this.http.get<Cuenta[]>(this.jsonUrl).pipe(
+            map(cuentas => cuentas.find(c => c.pacienteId === pacienteId))
+        );
+    }
+
     // Eliminar cuenta por su ID
     eliminarCuenta(id: string): Observable<void> {
         return this.http.delete<void>(`${this.jsonUrl}/${id}`);
