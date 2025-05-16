@@ -5,4 +5,5 @@ export interface Cuenta {
     rol: string;
     profesionalId?: string;
     usuarioId?: string;
+    administradorId?: string;
 }
