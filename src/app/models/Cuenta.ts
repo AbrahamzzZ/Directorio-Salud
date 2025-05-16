@@ -4,6 +4,6 @@ export interface Cuenta {
     password: string;
     rol: string;
     profesionalId?: string;
-    usuarioId?: string;
+    pacienteId?: string;
     administradorId?: string;
 }

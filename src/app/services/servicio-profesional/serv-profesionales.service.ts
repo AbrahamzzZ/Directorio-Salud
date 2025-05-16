@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, forkJoin, map, mapTo, Observable } from 'rxjs';
 import { Profesional } from '../../models/Profesional';
+import { ServLoginService } from '../serv-login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class ServProfesionalesService {
 
   private jsonUrl = 'http://localhost:3000/profesionales';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private login: ServLoginService) {}
 
   // Obtener todos los profesionales
   getProfesionales(): Observable<Profesional[]> {
@@ -53,7 +54,16 @@ export class ServProfesionalesService {
   }
 
   // Permite eliminar un profesional
-  eliminarProfesional(profesional:Profesional):Observable<void>{
-    return this.http.delete<void>(`${this.jsonUrl}/${profesional.id}`);
+  eliminarProfesional(profesional: Profesional): Observable<void> {
+    return forkJoin({
+        profesional: this.http.delete<void>(`${this.jsonUrl}/${profesional.id}`),
+        cuenta: this.login.eliminarCuenta(profesional.id)
+    }).pipe(
+        mapTo(void 0),
+        catchError(error => {
+            console.error('Error al eliminar profesional y cuenta:', error);
+            throw error;
+        })
+    );
   }
 }

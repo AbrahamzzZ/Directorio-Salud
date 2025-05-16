@@ -34,7 +34,7 @@ export class LoginComponent {
           this.mensajeError = '';
           if (cuenta.rol === 'profesional') {
             this.router.navigate(['/profesional-dashboard']);
-          } else if (cuenta.rol === 'usuario') {
+          } else if (cuenta.rol === 'paciente') {
             this.router.navigate(['/patients-dashboard']);
           } else if(cuenta.rol === 'administrador'){
             this.router.navigate(['/admin-dashboard'])

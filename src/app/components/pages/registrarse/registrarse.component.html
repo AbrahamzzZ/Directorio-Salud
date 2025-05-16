@@ -1,12 +1,17 @@
 <div class="container">
   <h1>Registrarse</h1>
   <span>Crear cuenta como:</span>
-  <mat-form-field appearance="fill">
+  
+  <mat-form-field appearance="fill" class="custom-select">
     <mat-label>Selecciona tipo de cuenta</mat-label>
     <mat-select (selectionChange)="redirigir($event.value)">
       <mat-option value="profesional">Profesional</mat-option>
       <mat-option value="paciente">Paciente</mat-option>
     </mat-select>
   </mat-form-field>
-  <a class="regresar-link" (click)="regresar()"><mat-icon>keyboard_backspace</mat-icon>Regresar</a>
+
+  <span class="login-text">
+    ¿Ya tienes una cuenta?
+    <u class="login-link" (click)="regresar()">Inicia sesión</u>
+  </span>
 </div>

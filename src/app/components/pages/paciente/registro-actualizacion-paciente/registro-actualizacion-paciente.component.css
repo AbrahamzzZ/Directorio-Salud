@@ -1,46 +1,47 @@
-.container {
-  max-width: 900px;
-  margin: 0 auto;
+.example-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  max-width: 400px;
+  width: 90%;
+  margin: 20px auto;
   padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;  
 }
 
-.form-card {
-  margin: 20px 0;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.fila {
+.example-form-grid h1 {
+  text-align: center;
   margin-bottom: 20px;
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
 }
 
-.doble {
-  display: flex;
-  gap: 20px;
+.example-form-grid h2 {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
 }
 
-.completo, .doble mat-form-field {
+.example-section {
+  justify-self: start;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
 }
 
-.botones {
+.example-button-container {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 20px;
 }
 
-mat-card-title {
-  font-size: 24px;
-  margin-bottom: 20px;  
+.btnCancel {
+  background-color: rgb(189, 203, 214);
 }
 
-.estado-checkbox {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
+.example-form-grid mat-form-field {
+  width: 100%;
 }
