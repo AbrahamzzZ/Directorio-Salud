@@ -29,7 +29,7 @@ export class RegistroActualizacionResenaComponent {
 
   resenaForm: FormGroup;
   profesionalId: string = '';
-  usuarioId: string = '';
+  pacienteId: string = '';
   resenaId: string | null = null;
   resenaOriginal: Resena | null = null;
   isEdit = false;
@@ -53,7 +53,7 @@ export class RegistroActualizacionResenaComponent {
   ngOnInit(): void {
     this.resenaId = this.route.snapshot.paramMap.get('id');
     this.profesionalId = this.route.snapshot.paramMap.get('profesionalId') || '';
-    this.usuarioId = this.servicioLogin.getIdentificador() ?? '';
+    this.pacienteId = this.servicioLogin.getIdentificador() ?? '';
 
     if (this.resenaId) {
       this.isEdit = true;
@@ -108,7 +108,7 @@ export class RegistroActualizacionResenaComponent {
     const nuevaResena: Resena = {
       ...this.resenaForm.value,
       profesionalId: this.profesionalId,
-      usuarioId: this.usuarioId,
+      pacienteId: this.pacienteId,
       fechaResena: new Date().toISOString().split('T')[0]
     };
 

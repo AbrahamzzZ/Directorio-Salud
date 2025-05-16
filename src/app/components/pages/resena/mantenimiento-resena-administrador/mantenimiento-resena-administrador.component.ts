@@ -15,7 +15,7 @@ import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/t
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 import { DialogData } from '../../../../models/Dialog-data';
-import { ServPacientesService } from '../../../../services/serv-pacientes.service';
+import { ServPacientesService } from '../../../../services/servicio-paciente/serv-pacientes.service';
 
 interface ResenaConDetalles extends Resena {
   nombreProfesional?: string;
@@ -149,7 +149,7 @@ export class MantenimientoResenaAdministradorComponent {
   deleteResena(resena: Resena): void {
     this.servResena.deleteResena(resena).subscribe(() => {
       this.cargarResenas();
-      this.router.navigate(['mantenimiento-resena-administrador'], { replaceUrl: true });
+      this.router.navigate(['admin-resenas'], { replaceUrl: true });
     });
   }
 }
