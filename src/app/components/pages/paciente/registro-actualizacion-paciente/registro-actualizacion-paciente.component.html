@@ -1,89 +1,119 @@
-<app-header></app-header>
-<div class="container">
-  <mat-card class="form-card">
-    <mat-card-header>
-      <mat-card-title>{{ isEdit ? 'Editar Paciente' : 'Registrar Nuevo Paciente' }}</mat-card-title>
-    </mat-card-header>
-    
-    <mat-card-content>
-      <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
-        
-         <div class="fila">
-          <mat-form-field appearance="outline" class="completo">
-            <mat-label>Nombre Completo</mat-label>
-            <input matInput formControlName="nombre" placeholder="Nombre y apellidos">            
-          </mat-form-field>
-        </div>
-        
-        <div class="fila doble">
-          <mat-form-field appearance="outline">
-            <mat-label>Correo</mat-label>
-            <input matInput formControlName="correo" placeholder="ejemplo@email.com">            
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Telefono</mat-label>
-            <input matInput formControlName="telefono" placeholder="0987654321">            
-          </mat-form-field>
-        </div>
-        
-        <div class="fila doble">
-          <mat-form-field appearance="outline">
-            <mat-label>Edad</mat-label>
-            <input matInput type="number" formControlName="Edad">            
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Tipo de Sangre</mat-label>
-            <mat-select formControlName="tipoSangre">
-              <mat-option *ngFor="let tipo of tiposDeSangre" [value]="tipo">
-                {{tipo}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        
-        <div class="fila">
-          <mat-form-field appearance="outline" class="completo">
-            <mat-label>Diagnostico</mat-label>
-            <textarea matInput formControlName="diagnostico" rows="3" placeholder="Diagnostico preliminar"></textarea>
-          </mat-form-field>
-        </div>
-        
-        <div class="fila">
-          <mat-form-field appearance="outline" class="completo">
-            <mat-label>Metodo de Contacto Preferido</mat-label>
-            <mat-select formControlName="contacto">
-              <mat-option *ngFor="let metodo of metodosContacto" [value]="metodo">
-                {{ metodo }}
-              </mat-option>
-            </mat-select>            
-          </mat-form-field>
-        </div>
-        
-        <div class="fila">
-          <mat-form-field appearance="outline">
-            <mat-label>Fecha de Registro</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="fechaRegistro">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          
-          <div class="check">
-            <mat-checkbox formControlName="estado">El paciente se encuentra activo?</mat-checkbox>
-          </div>
-        </div>
-        
-        <div class="botones">
-          <button mat-raised-button color="primary" type="submit" [disabled]="pacienteForm.invalid">
-            {{ isEdit ? 'Actualizar' : 'Guardar' }}
-          </button>
-          <button mat-button type="button" (click)="onCancel()">Cancelar</button>
-        </div>
-        
-      </form>
-    </mat-card-content>
-  </mat-card>
+<h1>{{ isEditMode ? ('Editar Paciente' | uppercase) : ('Registrar Nuevo Paciente' | uppercase) }}</h1>
 
-</div>
-<app-footer></app-footer>
+<form class="example-form-grid" [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
+
+  <mat-form-field>
+    <mat-label>Nombre Completo</mat-label>
+    <input matInput formControlName="nombre" placeholder="Nombre y apellidos">
+    @if(pacienteForm.get('nombre')?.errors?.['required']) {
+      <mat-error>El nombre es requerido</mat-error>
+    }
+    @if(pacienteForm.get('nombre')?.errors?.['pattern']) {
+      <mat-error>El nombre no debe contener números</mat-error>
+    }
+    @if(pacienteForm.get('nombre')?.errors?.['minlength']) {
+      <mat-error>El nombre debe tener al menos 3 caracteres</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono" placeholder="0987654321">
+    @if(pacienteForm.get('telefono')?.errors?.['required']) {
+      <mat-error>El teléfono es requerido</mat-error>
+    }
+    @if(pacienteForm.get('telefono')?.errors?.['pattern']) {
+      <mat-error>Debe ingresar un número de 10 dígitos</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Edad</mat-label>
+    <input matInput type="number" placeholder="Ingrese la edad" formControlName="Edad">
+    @if(pacienteForm.get('Edad')?.errors?.['required']) {
+      <mat-error>La edad es requerida</mat-error>
+    }
+    @if(pacienteForm.get('Edad')?.errors?.['min']) {
+      <mat-error>La edad no puede ser negativa</mat-error>
+    }
+    @if(pacienteForm.get('Edad')?.errors?.['max']) {
+      <mat-error>La edad no puede ser mayor a 120 años</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Tipo de Sangre</mat-label>
+    <mat-select formControlName="tipoSangre">
+      <mat-option *ngFor="let tipo of tiposDeSangre" [value]="tipo">{{tipo}}</mat-option>
+    </mat-select>
+    @if(pacienteForm.get('tipoSangre')?.errors?.['required']) {
+      <mat-error>El tipo de sangre es requerido</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Método de Contacto Preferido</mat-label>
+    <mat-select formControlName="contacto">
+      <mat-option *ngFor="let metodo of metodosContacto" [value]="metodo">{{metodo}}</mat-option>
+    </mat-select>
+    @if(pacienteForm.get('contacto')?.errors?.['required']) {
+      <mat-error>El método de contacto es requerido</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Fecha de Registro</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="fechaRegistro" placeholder="DD/MM/YYYY" [min]="fechaMin">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    @if(pacienteForm.get('fechaRegistro')?.errors?.['required']) {
+      <mat-error>La fecha es requerida</mat-error>
+    }
+  </mat-form-field>
+
+  <section class="example-section">
+    <mat-checkbox formControlName="estado">¿El paciente se encuentra activo?</mat-checkbox>
+  </section>
+
+  <h2>Información de Cuenta</h2>
+
+  <div [formGroup]="cuentaForm">
+    <mat-form-field>
+      <mat-label>Correo Electrónico</mat-label>
+      <input matInput formControlName="email" placeholder="correo@ejemplo.com" type="email">
+      @if(cuentaForm.get('email')?.errors?.['required']) {
+        <mat-error>El correo electrónico es requerido</mat-error>
+      }
+      @if(cuentaForm.get('email')?.errors?.['email']) {
+        <mat-error>Debe ingresar un correo electrónico válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Contraseña</mat-label>
+      <input matInput formControlName="password" placeholder="Contraseña" type="password">
+      @if(cuentaForm.get('password')?.errors?.['required']) {
+        <mat-error>La contraseña es requerida</mat-error>
+      }
+      @if(cuentaForm.get('password')?.errors?.['minlength']) {
+        <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <section class="buttons-container">
+    <div class="example-button-container">
+      <button mat-fab extended type="submit" [disabled]="pacienteForm.invalid || cuentaForm.invalid">
+        <mat-icon>{{ isEditMode ? 'edit' : 'person_add' }}</mat-icon>
+        {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+
+    <div class="example-button-container">
+      <button mat-fab extended color="warn" type="button" (click)="onCancel()" class="btnCancel">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </section>
+</form>
