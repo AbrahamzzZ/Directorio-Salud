@@ -118,7 +118,11 @@ export class RegistroActualizacionProfesionalComponent {
 
   registrar(): void {
     this.service.getProfesionales().subscribe(profesionales => {
-      const maxId = Math.max(...profesionales.map(p => +p.id || 0));
+      const ids = profesionales
+        .map(p => parseInt(p.id, 10))
+        .filter(id => !isNaN(id));
+
+      const maxId = ids.length > 0 ? Math.max(...ids) : 0;
       const nuevoId = (maxId + 1).toString();
 
       const nuevoProfesional: Profesional = {
@@ -135,14 +139,14 @@ export class RegistroActualizacionProfesionalComponent {
 
       this.service.agregarProfesional(nuevoProfesional).subscribe(() => {
         const nuevaCuenta: Cuenta = {
-          id: 'p' + nuevoId,
+          id: nuevoId,
           email: this.form.value.correo,
           password: this.form.value.clave,
           rol: 'profesional',
           profesionalId: nuevoId
-      };
+        };
 
-      this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
+        this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
           this.router.navigate(['/login'], { replaceUrl: true });
         });
       });
