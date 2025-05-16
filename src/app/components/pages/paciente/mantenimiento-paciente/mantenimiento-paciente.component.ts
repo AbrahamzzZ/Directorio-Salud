@@ -10,6 +10,8 @@ import { ServPacientesService } from '../../../../services/servicio-paciente/ser
 import { Router } from '@angular/router';
 import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/tabla-reutilizable.component';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-mantenimiento-paciente',
@@ -19,7 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './mantenimiento-paciente.component.css'
 })
 export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
-  constructor(private servicePacientes:ServPacientesService, private router:Router){}
+  constructor(
+    private servicePacientes: ServPacientesService, 
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   dataSource = new MatTableDataSource<Paciente>();
   col: string[] = [];
@@ -27,11 +33,9 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   columns = [
-    { key: 'nombre', titulo: 'Nombre' },
-    { key: 'correo', titulo: 'Correo' },
+    { key: 'nombre', titulo: 'Nombre' },  
     { key: 'telefono', titulo: 'Telefono' },
-    { key: 'Edad', titulo: 'Edad' }, 
-    { key: 'diagnostico', titulo: 'Diagnostico' },
+    { key: 'Edad', titulo: 'Edad' },    
     { key: 'tipoSangre', titulo: 'Tipo de Sangre' },
     { key: 'fechaRegistro', titulo: 'Fecha de Registro' }, 
     { key: 'estado', titulo: 'Estado'}       
@@ -87,12 +91,34 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
   }
 
   eliminar(paciente: Paciente) {
-    const confirmar = confirm("¿Estas seguro de eliminar al paciente " + paciente.nombre + "?");
-    if (confirmar) {
-      this.servicePacientes.deletePatient(paciente).subscribe(() => {
-        alert("Paciente eliminado exitosamente");
-        this.cargarPacientes();
-      });
-    }
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar eliminación',
+        message: `¿Estás seguro de eliminar al paciente ${paciente.nombre}?`,
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        isConfirmation: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.servicePacientes.deletePatient(paciente).subscribe(() => {
+          const alertDialog = this.dialog.open(DialogoComponent, {
+            width: '400px',
+            data: {
+              title: 'Éxito',
+              message: 'Paciente eliminado exitosamente',
+              isConfirmation: false
+            }
+          });
+          
+          alertDialog.afterClosed().subscribe(() => {
+            this.cargarPacientes();
+          });
+        });
+      }
+    });
   }
 }
