@@ -1,20 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Cita } from '../../models/Citas';
-import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjson.service';
 import { ServProfesionalesService } from '../servicio-profesional/serv-profesionales.service';
+import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjson.service';
+
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ServCitaService {
+  private jsonUrl: string = 'http://localhost:3000/citas';
 
-private jsonUrl:string = "http://localhost:3000/citas";
+  constructor(
+    private http: HttpClient,
+    private servServiciosMedicos: ServServiciosjsonService,
+    private servProf: ServProfesionalesService
+  ) {}
 
-  constructor(private http:HttpClient, private servServiciosMedicos:ServServiciosjsonService, private servProf:ServProfesionalesService) { }
-
-// Obtener todas las citas
+  // Obtener todas las citas
   getCitas(): Observable<Cita[]> {
     return this.http.get<Cita[]>(this.jsonUrl);
   }
@@ -34,15 +39,8 @@ private jsonUrl:string = "http://localhost:3000/citas";
     return this.http.put<Cita>(`${this.jsonUrl}/${cita.id}`, cita);
   }
 
-  // Eliminar una cita
-
-  //deleteCita(cita:Cita):Observable<void>{
- //   return this.http.delete<void>(`${this.jsonUrl}/${cita.id}`);
-  //}
-
-   // Eliminar una cita por el id
+  // Eliminar una cita por el id
   deleteCita(id: string): Observable<void> {
     return this.http.delete<void>(`${this.jsonUrl}/${id}`);
   }
-  
 }
