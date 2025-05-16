@@ -17,6 +17,21 @@ export class ServLoginService {
         this.rol = localStorage.getItem('rol') || '';
     }
 
+    estaAutenticado(): boolean {
+        return !!localStorage.getItem('identificador'); 
+    }
+
+    cerrarSesion() {
+        localStorage.removeItem('identificador');
+        localStorage.removeItem('rol');
+        this.identificador = undefined;
+        this.rol = '';
+    }
+
+    getRol(): string {
+        return this.rol || localStorage.getItem('rol') || '';
+    }
+
     getIdentificador() {
         return this.identificador;
     }
@@ -25,17 +40,23 @@ export class ServLoginService {
         return this.http.get<Cuenta[]>(this.jsonUrl).pipe(
         map((cuentas: Cuenta[]) => {
             const cuenta = cuentas.find(
-            (c: Cuenta) => c.email === email && c.password === password
-            );
+            (c: Cuenta) => c.email === email && c.password === password);
             this.rol = cuenta?.rol;
-            this.identificador = cuenta?.profesionalId;
+
+            if (cuenta?.rol === 'profesional') {
+            this.identificador = cuenta.profesionalId;
+            } else if (cuenta?.rol === 'usuario') {
+            this.identificador = cuenta.usuarioId;
+            } else if (cuenta?.rol === 'administrador') {
+            this.identificador = cuenta.administradorId;
+            }
+
             localStorage.setItem('rol', this.rol);
 
             // Guardar en localStorage para que persista tras actualizar
             if (this.identificador) {
-                localStorage.setItem('identificador', this.identificador);
+            localStorage.setItem('identificador', this.identificador);
             }
-
             return cuenta || null;
         })
         );
@@ -58,4 +79,3 @@ export class ServLoginService {
         return this.http.delete<void>(`${this.jsonUrl}/${id}`);
     }
 }
-
