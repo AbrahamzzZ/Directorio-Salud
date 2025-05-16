@@ -39,8 +39,14 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
       case 'fechaDisponible':
         return 'Fecha Disponible';
       case 'requiereChequeo':
-        return 'Requiere Chequeo';
-      default:
+        return 'Requiere Chequeo';      
+      case  'fechaRegistro':
+        return 'Fecha de Registro'
+      case  'tipoSangre':
+        return 'Tipo de Sangre' 
+      case 'estado':
+        return 'Activo' 
+      default: 
         return col.charAt(0).toUpperCase() + col.slice(1); // Capitaliza
     }
   }

@@ -150,35 +150,39 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
     this.pacientesService.getpacientes().subscribe({
       next: (pacientes) => {
         let nextIdNumber = 1;
+
+        // Extraer los números de IDs con prefijo "p" (como "p1", "p2", etc.)
         if (pacientes && pacientes.length > 0) {
           const idNumbers = pacientes
             .map(p => {
-              if (p.id && typeof p.id === 'string') {
-                const num = parseInt(p.id, 10);
+              if (p.id && typeof p.id === 'string' && p.id.startsWith('p')) {
+                const num = parseInt(p.id.slice(1), 10); // elimina la 'p' y convierte a número
                 return isNaN(num) ? null : num;
               }
               return null;
             })
             .filter((num): num is number => num !== null);
-          
+
           if (idNumbers.length > 0) {
             nextIdNumber = Math.max(...idNumbers) + 1;
           }
         }
-        
+
+        const newId = `p${nextIdNumber}`;
+
         const newPaciente: Paciente = {
-          id: nextIdNumber.toString(),
+          id: newId,
           ...this.pacienteForm.value
         };
-        
+
         const newCuenta: Cuenta = {
-          id: nextIdNumber.toString(), 
+          id: newId, // usa el mismo ID con prefijo
           email: this.cuentaForm.value.email,
           password: this.cuentaForm.value.password,
           rol: 'paciente',
-          pacienteId: nextIdNumber.toString()
+          pacienteId: newId
         };
-        
+
         this.pacientesService.addPatient(newPaciente).subscribe({
           next: () => {
             this.loginService.registrarCuenta(newCuenta).subscribe({
