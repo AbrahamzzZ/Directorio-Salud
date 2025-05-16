@@ -22,7 +22,7 @@
       <a routerLink="/mantenimiento-paciente-cita">Mis Citas</a>
       <a routerLink="/mantenimiento-resena">Mis Reseñas</a>
     }
-    <a mat-button routerLink="/login">Cerrar Sesión</a>
+    <a mat-button (click)="cerrarSesion()">Cerrar Sesión</a>
   </nav>
 </mat-toolbar>
 
@@ -43,9 +43,8 @@
       <a mat-button routerLink="/lista-servicios" (click)="toggleMenu()">Servicios</a>
       <a mat-button routerLink="/mantenimiento-paciente-cita" (click)="toggleMenu()">Mis citas</a>
     }
-    <a mat-button routerLink="/login" (click)="toggleMenu()">Cerrar Sesión</a>
+    <a mat-button routerLink="/login" (click)="cerrarSesion(); toggleMenu()">Cerrar Sesión</a>
   </div>
 }
 
 <router-outlet></router-outlet>
-

@@ -19,3 +19,22 @@ span {
 mat-form-field {
   width: 250px;
 }
+
+.regresar-link {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #1976d2;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.regresar-link mat-icon {
+  font-size: 20px;
+}
+
+.regresar-link:hover {
+  color: #0d47a1; 
+}

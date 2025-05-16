@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ServLoginService } from '../../../services/serv-login.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -14,7 +14,7 @@ export class HeaderComponent {
   menuAbierto = false;
   idProfesional: string | null | undefined = null;
 
-  constructor(public miServicio: ServLoginService, private renderer: Renderer2) {
+  constructor(public miServicio: ServLoginService, private renderer: Renderer2, private router: Router) {
     this.idProfesional = this.miServicio.getIdentificador();
   }
 
@@ -26,5 +26,10 @@ export class HeaderComponent {
     } else {
       this.renderer.removeClass(body, 'menu-abierto'); // Remueve la clase del body
     }
+  }
+
+  cerrarSesion() {
+    this.miServicio.cerrarSesion();
+    this.router.navigate(['/login']);
   }
 }

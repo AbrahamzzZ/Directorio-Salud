@@ -1,4 +1,10 @@
 {
+  "administrador": [
+    {
+      "id": "1",
+      "nombre": "Roberto Felipe Sanchez"
+    }
+  ],
   "profesionales": [
     {
       "id": "1",
@@ -112,12 +118,6 @@
       "nombre": "Luis Rivera",
       "genero": "M",
       "email": "luis@example.com"
-    },
-    {
-      "id": "3",
-      "nombre": "Roberto Perez",
-      "genero": "M",
-      "email": "roberto@example.com"
     }
   ],
   "cuentas": [
@@ -140,7 +140,7 @@
       "email": "roberto@example.com",
       "password": "hola",
       "rol": "administrador",
-      "usuarioId": "3"
+      "administradorId": "1"
     },
     {
       "id": "p4",
