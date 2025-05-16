@@ -11,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServPacientesService } from '../../../../services/serv-pacientes.service';
+import { ServPacientesService } from '../../../../services/servicio-paciente/serv-pacientes.service';
 import { Paciente } from '../../../../models/Paciente';
 import { HeaderComponent } from "../../../shared/header/header.component";
 import { FooterComponent } from "../../../shared/footer/footer.component";

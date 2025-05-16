@@ -6,7 +6,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { Paciente } from '../../../../models/Paciente';
-import { ServPacientesService } from '../../../../services/serv-pacientes.service';
+import { ServPacientesService } from '../../../../services/servicio-paciente/serv-pacientes.service';
 import { Router } from '@angular/router';
 import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/tabla-reutilizable.component';
 import { MatIconModule } from '@angular/material/icon';
