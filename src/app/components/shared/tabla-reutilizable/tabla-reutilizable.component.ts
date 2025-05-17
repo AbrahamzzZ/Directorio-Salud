@@ -50,6 +50,18 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
         return 'Metodo de Pago'
       case 'fechaHora':
         return 'Fecha de Registro'
+      case 'nombreProfesional':
+        return 'Profesional';
+      case 'nombrePaciente':
+        return 'Paciente';        
+      case 'motivoVisita':
+        return 'Motivo de Visita';
+      case 'calificacion':
+        return 'Calificación';
+      case 'fechaResena':
+        return 'Fecha';
+      case 'recomienda':
+      return '¿Recomienda?';        
       default: 
         return col.charAt(0).toUpperCase() + col.slice(1); // Capitaliza
     }

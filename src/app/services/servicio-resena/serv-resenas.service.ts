@@ -4,13 +4,11 @@ import { Observable, map } from 'rxjs';
 import { Resena } from '../../models/Resena';
 import { ServLoginService } from '../serv-login.service';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class ServResenasService {
   private jsonUrl = "http://localhost:3000/resenas";
-
 
   constructor(private http: HttpClient, private servicioLogin: ServLoginService) { }
 
