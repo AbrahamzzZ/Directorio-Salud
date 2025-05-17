@@ -40,9 +40,9 @@ export class RegistroActualizacionProfesionalComponent {
 
   constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog){
     this.form = this.fb.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ.\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
       especialidad: ['', Validators.required],
-      ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(3), Validators.maxLength(50)]],
+      ubicacion: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), this.ubicacionConLetras]],
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100), this.soloEnteros]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       sexo: ['', Validators.required],
@@ -311,5 +311,14 @@ export class RegistroActualizacionProfesionalComponent {
     const valor = control.value;
     if (valor == null || valor === '') return null;
     return Number.isInteger(valor) ? null : { noEntero: true };
+  }
+
+  ubicacionConLetras(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value;
+    if (!valor) return null;
+
+    // Debe contener al menos una letra (mayúscula o minúscula, con acentos incluidos)
+    const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(valor);
+    return contieneLetra ? null : { sinLetras: true };
   }
 }
