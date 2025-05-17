@@ -1,56 +1,105 @@
 <app-header></app-header>
-<h2>{{ esEdicion ? 'Editar Cita' : 'Registrar Nueva Cita' }}</h2>
+<h2>{{ esEdicion ? "Editar Cita" : "Registrar Nueva Cita" }}</h2>
 
 <mat-card *ngIf="detallesServicio" class="service-details-card">
-    <mat-card-header>
-        <mat-card-title>Servicio Seleccionado</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <p><strong>Nombre:</strong> {{ detallesServicio.nombre }}</p>
-        <p><strong>Descripción:</strong> {{ detallesServicio.descripcion }}</p>
-        <p><strong>Fecha Disponible:</strong> {{ detallesServicio.fechaDisponible| date }}</p>
-        <p><strong>Precio:</strong> {{ detallesServicio.precio | currency:"USD" }}</p>
-    </mat-card-content>
+  <mat-card-header>
+    <mat-card-title>Servicio Seleccionado</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p><strong>Nombre:</strong> {{ detallesServicio.nombre }}</p>
+    <p><strong>Descripción:</strong> {{ detallesServicio.descripcion }}</p>
+    <p>
+      <strong>Fecha Disponible:</strong>
+      {{ detallesServicio.fechaDisponible | date }}
+    </p>
+    <p>
+      <strong>Precio:</strong> {{ detallesServicio.precio | currency : "USD" }}
+    </p>
+  </mat-card-content>
 </mat-card>
 
-<form [formGroup]="formularioCita" (ngSubmit)="enviarFormulario()" class="cita-form-grid">
+<form
+  [formGroup]="formularioCita"
+  (ngSubmit)="enviarFormulario()"
+  class="cita-form-grid"
+>
+  <mat-form-field>
+    <mat-label for="direccion">Dirección</mat-label>
+    <mat-select id="direccion" formControlName="direccion" required>
+      <mat-option value="" disabled>Seleccionar Dirección</mat-option>
+      <mat-option
+        *ngFor="let direccion of direccionesUnicas"
+        [value]="direccion"
+        >{{ direccion }}</mat-option
+      >
+    </mat-select>
+    @if (formularioCita.get('direccion')?.hasError('required') &&
+    formularioCita.get('direccion')?.touched) {
+    <mat-error>La dirección es requerida.</mat-error>
+    }
+  </mat-form-field>
 
-    <mat-form-field>
-        <mat-label for="direccion">Dirección</mat-label>
-        <mat-select id="direccion" formControlName="direccion" required>
-            <mat-option value="" disabled>Seleccionar Dirección</mat-option>
-            <mat-option *ngFor="let direccion of direccionesUnicas" [value]="direccion">{{ direccion }}</mat-option>
-        </mat-select>
-        @if (formularioCita.get('direccion')?.hasError('required') && formularioCita.get('direccion')?.touched) {
-            <mat-error>La dirección es requerida.</mat-error>
-        }
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label for="prioridad">Prioridad</mat-label>
+    <input
+      matInput
+      id="prioridad"
+      formControlName="prioridad"
+      placeholder="Ej: Alta, Media, Baja"
+    />
+    @if (formularioCita.get('prioridad')?.hasError('required') &&
+    formularioCita.get('prioridad')?.touched) {
+    <mat-error>La prioridad es requerida.</mat-error>
+    } @if (formularioCita.get('prioridad')?.hasError('pattern') &&
+    formularioCita.get('prioridad')?.touched) {
+    <mat-error
+      >Por favor, ingrese una prioridad válida: Alta, Media o Baja.</mat-error
+    >
+    }
+  </mat-form-field>
 
-    <mat-form-field>
-        <mat-label for="prioridad">Prioridad</mat-label>
-        <input matInput id="prioridad" formControlName="prioridad" placeholder="Ej: Alta, Media, Baja">
-        @if (formularioCita.get('prioridad')?.hasError('pattern') && formularioCita.get('prioridad')?.touched) {
-            <mat-error>Por favor, ingrese una prioridad válida: Alta, Media o Baja.</mat-error>
-        }
-    </mat-form-field>
-
-    <mat-radio-group aria-label="Seleccionar método de pago" formControlName="metodoPago" class="radio-group">
-        <label class="radio-label">Método de Pago:</label>
-        <mat-radio-button value="efectivo">Efectivo</mat-radio-button>
-        <mat-radio-button value="transferencia">Transferencia</mat-radio-button>
-        @if (formularioCita.get('metodoPago')?.hasError('required') && formularioCita.get('metodoPago')?.touched) {
-            <mat-error>El método de pago es requerido.</mat-error>
-        }
-    </mat-radio-group>
-    <label class="checkbox-label">
+  <mat-radio-group
+    aria-label="Seleccionar método de pago"
+    formControlName="metodoPago"
+    class="radio-group"
+  >
+    <label class="radio-label">Método de Pago:</label>
+    <mat-radio-button value="efectivo">Efectivo</mat-radio-button>
+    <mat-radio-button value="transferencia">Transferencia</mat-radio-button>
+    @if (formularioCita.get('metodoPago')?.hasError('required') &&
+    formularioCita.get('metodoPago')?.touched) {
+    <mat-error>El método de pago es requerido.</mat-error>
+    }
+  </mat-radio-group>
+  <label class="checkbox-label">
     ¿Es Nuevo Paciente?
-    <mat-checkbox formControlName="esNuevoPaciente" class="checkbox-nuevo-paciente"></mat-checkbox>
+    <mat-checkbox
+      formControlName="esNuevoPaciente"
+      class="checkbox-nuevo-paciente"
+    ></mat-checkbox>
   </label>
-    <div class="buttons-container">
-        <button mat-raised-button color="primary" type="submit" [disabled]="formularioCita.invalid || !detallesServicio?.id">
-            {{ esEdicion ? 'Guardar Cambios' : 'Registrar Cita' }}
-        </button>
-        <button mat-button type="button" (click)="onCancelar()">Cancelar</button>
-    </div>
+  <div class="buttons-container">
+    <button
+      mat-fab
+      extended
+      type="submit"
+      color="primary"
+      [disabled]="formularioCita.invalid || !detallesServicio?.id"
+    >
+      <mat-icon>{{ esEdicion ? "edit" : "add" }}</mat-icon>
+      {{ esEdicion ? "Guardar Cambios" : "Registrar Cita" }}
+    </button>
+    <button
+      mat-fab
+      extended
+      color="warn"
+      type="button"
+      (click)="onCancelar()"
+      class="btnCancel"
+    >
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+  </div>
 </form>
 <app-footer></app-footer>
