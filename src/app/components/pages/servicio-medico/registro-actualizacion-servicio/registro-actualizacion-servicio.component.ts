@@ -20,7 +20,7 @@ import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-registro-actualizacion-servicio',
-  imports: [ReactiveFormsModule, HeaderComponent, FooterComponent, MatInputModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatIconModule, MatButtonModule, UpperCasePipe],
+  imports: [ReactiveFormsModule, HeaderComponent, FooterComponent, MatInputModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatIconModule, MatButtonModule],
   templateUrl: './registro-actualizacion-servicio.component.html',
   styleUrl: './registro-actualizacion-servicio.component.css'
 })
