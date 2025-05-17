@@ -17,19 +17,12 @@ export class ServLoginService {
         this.rol = localStorage.getItem('rol') || '';
     }
 
-    estaAutenticado(): boolean {
-        return !!localStorage.getItem('identificador'); 
-    }
-
+    // Borra el rol y el identificador del usuario en el local storage
     cerrarSesion() {
         localStorage.removeItem('identificador');
         localStorage.removeItem('rol');
         this.identificador = undefined;
         this.rol = '';
-    }
-
-    getRol(): string {
-        return this.rol || localStorage.getItem('rol') || '';
     }
 
     getIdentificador() {
