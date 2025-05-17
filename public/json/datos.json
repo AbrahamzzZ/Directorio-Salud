@@ -88,6 +88,13 @@
       "password": "123456",
       "rol": "paciente",
       "pacienteId": "p3"
+    },
+    {
+      "id": "p4",
+      "email": "ejemplo@gmail.com",
+      "password": "123456",
+      "rol": "paciente",
+      "pacienteId": "p4"
     }
   ],
   "citas": [
@@ -195,6 +202,16 @@
       "tipoSangre": "O-",
       "fechaRegistro": "2025-05-16T05:00:00.000Z",
       "estado": true
+    },
+    {
+      "id": "p4",
+      "nombre": "aaaaa",
+      "telefono": "1212121212",
+      "Edad": 34,
+      "contacto": "email",
+      "tipoSangre": "A+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
     }
   ]
 }
