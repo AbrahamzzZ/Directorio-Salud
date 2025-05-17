@@ -46,6 +46,10 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
         return 'Tipo de Sangre' 
       case 'estado':
         return 'Activo' 
+      case 'metodoPago':
+        return 'Metodo de Pago'
+      case 'fechaHora':
+        return 'Fecha de Registro'
       default: 
         return col.charAt(0).toUpperCase() + col.slice(1); // Capitaliza
     }
