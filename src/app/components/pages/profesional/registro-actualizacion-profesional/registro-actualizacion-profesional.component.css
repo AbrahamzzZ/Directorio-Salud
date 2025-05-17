@@ -39,7 +39,6 @@
 .error {
   color: red;
   font-size: 13px;
-  margin-top: 4px;
   display: block;
 }
 
@@ -96,6 +95,10 @@
   text-align: center;
 }
 
+.custom-form-field-photo {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
 
 .buttons-container {
   display: flex;

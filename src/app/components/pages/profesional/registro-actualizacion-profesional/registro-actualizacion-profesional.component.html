@@ -53,6 +53,8 @@
       <mat-error class="error">Debe tener al menos 18 años.</mat-error>
     } @else if(form.get('edad')?.hasError('max')) {
       <mat-error class="error">Edad demasiada alta.</mat-error>
+    }@else if(form.get('edad')?.hasError('noEntero')) {
+      <mat-error class="error">La edad debe ser un número entero.</mat-error>
     }
   </mat-form-field>
 
@@ -78,12 +80,14 @@
 
   <!-- Disponibilidad -->
   <div class="custom-form-field">
-    <label for="nuevaFecha">Selecciona una fecha y hora:</label>
+    <label for="nuevaFecha">Selecciona los días y horas en los que puedes atender</label>
     <input type="datetime-local" id="nuevaFecha" [(ngModel)]="nuevaDisponibilidad" name="nuevaFecha" [ngModelOptions]="{standalone: true}">
   </div>
     <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar Fecha</button>
     @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')){
       <mat-error>Debe agregar al menos una fecha.</mat-error>
+    }@else if(form.get('disponibilidad')?.hasError('fechaPasada')){
+      <mat-error>La fecha no puede ser anterior al día de hoy.</mat-error>
     }
 
   <mat-chip-listbox aria-label="Fechas seleccionadas">
@@ -97,7 +101,10 @@
   <!-- Foto profesional -->
   <div class="file-upload-group">
     <div class="label-and-button">
-      <button mat-stroked-button type="button" (click)="fileInput.click()" class="file-upload-button">Seleccionar foto</button>
+      <div class="custom-form-field-photo">
+        <label>Elige una foto que te represente</label>
+      </div>
+      <button mat-stroked-button type="button" (click)="fileInput.click()" class="file-upload-button">Subir foto</button>
       <input type="file" #fileInput hidden (change)="archivoSeleccionado($event)" accept="image/*">
     </div>
 
@@ -125,8 +132,9 @@
         <input matInput id="clave" formControlName="clave" type="password">
         @if(form.get('clave')?.touched && form.get('clave')?.hasError('required')) {
           <mat-error class="error">Este campo es obligatorio.</mat-error>
-        } @else if(form.get('clave')?.hasError('minlength')) {
-          <mat-error class="error">Debe tener al menos 6 caracteres.</mat-error>
+        } @else if(form.get('clave')?.hasError('formatoClave')) {
+          <mat-error class="error">La contraseña debe tener mínimo 8 caracteres, incluyendo letras, números y un
+            carácter especial.</mat-error>
         }
       </mat-form-field>
     }
