@@ -16,48 +16,44 @@ import { MantenimientoPacienteCitaComponent } from './components/pages/cita/mant
 import { RegistroActualizacionCitaComponent } from './components/pages/cita/registro-actualizacion-cita/registro-actualizacion-cita.component';
 import { ListaServiciosComponent } from './components/pages/cita/lista-servicios/lista-servicios.component';
 import { MantenimientoResenaProfesionalComponent } from './components/pages/resena/mantenimiento-resena-profesional/mantenimiento-resena-profesional.component';
-import { Autenticacion } from './guards/autenticacion.guard';
-import { RolPermisos } from './guards/rol-permisos.guard';
 
 
 export const routes: Routes = [
     //Rutas principales de la aplicacion
     { path: 'login', component: LoginComponent },
     { path: 'registrar', component: RegistrarseComponent, title: 'Formulario de registro'},
-    { path: 'profesional-dashboard', component: ProfesionalDashboardComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Menú Profesional' },
-    { path: 'patients-dashboard', component: PacientesDashboardComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Menú Paciente' },
-    { path: 'admin-dashboard', component: AdministradorDashboardComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Menú Administrador'},
+    { path: 'profesional-dashboard', component: ProfesionalDashboardComponent, title: 'Menú Profesional' },
+    { path: 'patients-dashboard', component: PacientesDashboardComponent, title: 'Menú Paciente' },
+    { path: 'admin-dashboard', component: AdministradorDashboardComponent, title: 'Menú Administrador'},
 
     //Rutas del modulo Profesional--Abraham Farfan
     { path: 'profesional-register', component:  RegistroActualizacionProfesionalComponent, title: 'Formulario de registro'},
-    { path: 'profesional-edit/:id', component: RegistroActualizacionProfesionalComponent, canActivate: [Autenticacion]/*,canMatch: [RolPermisos]*/, title: 'Formulario de edición'},
-    { path: 'profesional-list', component: MantenimientoProfesionalComponent, canActivate: [Autenticacion], title: 'Listado de profesionales'},
+    { path: 'profesional-edit/:id', component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
+    { path: 'profesional-list', component: MantenimientoProfesionalComponent, title: 'Listado de profesionales'},
 
     //Rutas del modulo Paciente--Alejandreo Larrea
-    { path: 'mis-pacientes', component: MantenimientoPacienteComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/},
+    { path: 'mis-pacientes', component: MantenimientoPacienteComponent},
     { path: 'pacientes-registro', component: RegistroActualizacionPacienteComponent},
-    { path: 'editar-pacientes/:id', component: RegistroActualizacionPacienteComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/},
+    { path: 'editar-pacientes/:id', component: RegistroActualizacionPacienteComponent},
 
     //Rutas del modulo Servicio--Jose Agurto
-    { path: 'my-services', component: MantenimientoServicioComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/ },
-    { path: 'service-register', component: RegistroActualizacionServicioComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/ },
-    { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/},
+    { path: 'my-services', component: MantenimientoServicioComponent},
+    { path: 'service-register', component: RegistroActualizacionServicioComponent},
+    { path: 'service-edit/:id', component: RegistroActualizacionServicioComponent},
 
     //Rutas del modulo Reseña--Angel Vivanco
-    { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Registrar Reseña' },
-    { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Mis Reseñas' },
-    { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Editar Reseña' },
-    { path: 'ver-resenas/:profesionalId', component: MantenimientoResenaProfesionalComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Reseñas del Profesional'},
+    { path: 'resena-register/:profesionalId', component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
+    { path: 'mantenimiento-resena', component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
+    { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
+    { path: 'ver-resenas/:profesionalId', component: MantenimientoResenaProfesionalComponent, title: 'Reseñas del Profesional'},
     
     //Rutas del modulo Cita--Gabriel Vera
-    { path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Paciente'},
-    { path: 'registro-actualizacion-cita', component: RegistroActualizacionCitaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Paciente'},
-    { path: 'registro-actualizacion-cita/:id', component: RegistroActualizacionCitaComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Paciente' },
-    { path: 'lista-servicios', component: ListaServiciosComponent, canActivate: [Autenticacion]/*, canMatch: [RolPermisos]*/, title: 'Paciente'},
+    { path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, title: 'Paciente'},
+    { path: 'registro-actualizacion-cita', component: RegistroActualizacionCitaComponent,title: 'Paciente'},
+    { path: 'registro-actualizacion-cita/:id', component: RegistroActualizacionCitaComponent,  title: 'Paciente' },
+    { path: 'lista-servicios', component: ListaServiciosComponent, title: 'Paciente'},
 
     //Rutas por defecto
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '**', redirectTo: '/login'}
 ];
-
-
