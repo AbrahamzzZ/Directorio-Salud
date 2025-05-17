@@ -1,4 +1,7 @@
 table, .paginator{
     background-color: transparent;
-    color: white;
+}
+
+.paginator{
+    color: black;
 }
