@@ -1,55 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
 import { ServicioMedico } from '../../../../models/ServicioMedico';
 import { Cita } from '../../../../models/Citas';
 import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
-import {
-  MatCard,
-  MatCardContent,
-  MatCardHeader,
-  MatCardTitle,
-} from '@angular/material/card';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle,} from '@angular/material/card';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { FooterComponent } from '../../../shared/footer/footer.component';
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { ServServiciosjsonService } from '../../../../services/servicio-servicios/serv-serviciosjson.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogData } from '../../../../models/Dialog-data';
+import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
+import { Profesional } from '../../../../models/Profesional';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog'; // Importa MatDialog
-import { DialogData } from '../../../../models/Dialog-data'; // Importa DialogData
-import { DialogoComponent } from '../../../shared/dialogo/dialogo.component'; // Importa DialogoComponent
-
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-registro-actualizacion-cita',
   imports: [
-    MatCard,
-    MatCardContent,
-    MatCardHeader,
-    MatCardTitle,
-    ReactiveFormsModule,
-    DatePipe,
-    CurrencyPipe,
-    HeaderComponent,
-    FooterComponent,
-    FooterComponent,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatButtonModule,
-    
+    MatCard, MatCardContent, MatCardHeader, MatCardTitle, ReactiveFormsModule, DatePipe, CurrencyPipe, HeaderComponent,
+    FooterComponent, CommonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatRadioModule, MatButtonModule,
   ],
   templateUrl: './registro-actualizacion-cita.component.html',
   styleUrls: ['./registro-actualizacion-cita.component.css'],
@@ -61,6 +37,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
   idCitaActual: string | null = null;
   direccionesUnicas: string[] = [];
   prioridadesValidas: string[] = ['baja', 'media', 'alta'];
+  profesional: Profesional | null = null;
 
   constructor(
     private rutaActiva: ActivatedRoute,
@@ -69,40 +46,32 @@ export class RegistroActualizacionCitaComponent implements OnInit {
     private enrutador: Router,
     private servicioLogin: ServLoginService,
     private servicioServicios: ServServiciosjsonService,
-    private dialog: MatDialog // Inyecta MatDialog
+    private dialog: MatDialog,
+    private servicioProfesionales: ServProfesionalesService
   ) {
-    this.formularioCita = this.constructorFormulario.group({
-      direccion: ['', Validators.required],
-      prioridad: [
-        'media',
-        [
-          Validators.pattern(
-            new RegExp(
-              this.prioridadesValidas.map((p) => `^${p}$`).join('|'),
-              'i'
-            )
-          ),
-        ],
-      ],
-      metodoPago: ['efectivo', Validators.required],
-      fechaHora: [''],
-      estado: ['agendada'],
-    });
+   this.formularioCita = this.constructorFormulario.group({
+  direccion: ['', Validators.required],
+  prioridad: ['', [Validators.pattern(new RegExp(this.prioridadesValidas.map(p => `^${p}$`).join('|'), 'i'))]],
+  metodoPago: ['', Validators.required],
+  fechaHora: [''],
+  estado: ['agendada']
+});
   }
 
   ngOnInit(): void {
     this.rutaActiva.paramMap.subscribe((params) => {
       this.idCitaActual = params.get('id');
-      this.esEdicion = !!this.idCitaActual; // Si hay ID, estamos en edición
+      this.esEdicion = !!this.idCitaActual;
       if (this.esEdicion) {
         this.cargarCitaParaEdicion(this.idCitaActual!);
       } else {
         this.cargarDireccionesUnicas();
-        this.cargarDetallesServicioParaNuevo(); // Cargar detalles si no es edición
+        this.cargarDetallesServicioParaNuevo();
       }
     });
   }
 
+  // Cargar cita por ID para edición
   cargarCitaParaEdicion(citaId: string): void {
     this.servicioCita.getCitaById(citaId).subscribe((cita) => {
       if (!this.direccionesUnicas.includes(cita.direccion)) {
@@ -112,24 +81,25 @@ export class RegistroActualizacionCitaComponent implements OnInit {
       this.cargarDetallesServicioPorId(cita.servicioId!);
     });
   }
+
+  // Cargar direcciones únicas de citas existentes
   cargarDireccionesUnicas(): void {
-    this.servicioCita.getCitas().subscribe((citas) => {
-      this.direccionesUnicas = [
-        ...new Set(citas.map((cita) => cita.direccion)),
-      ];
-    });
+    this.servicioCita.getCitas().subscribe(citas =>
+      this.direccionesUnicas = [...new Set(citas.map(c => c.direccion))]
+    );
   }
 
+  // Cargar detalles del servicio por ID
   cargarDetallesServicioPorId(servicioId: string): void {
     if (servicioId) {
-      this.servicioServicios
-        .getServiceById(servicioId)
-        .subscribe((servicio) => {
-          this.detallesServicio = servicio;
-        });
+      this.servicioServicios.getServiceById(servicioId).subscribe((servicio) => {
+        this.detallesServicio = servicio;
+        this.cargarProfesional(servicio.profesionalId);
+      });
     }
   }
 
+  // Cargar detalles del servicio desde parámetros (nuevo registro)
   cargarDetallesServicioParaNuevo(): void {
     this.rutaActiva.queryParams.subscribe((params) => {
       this.detallesServicio = {
@@ -141,9 +111,36 @@ export class RegistroActualizacionCitaComponent implements OnInit {
         profesionalId: params['profesionalId'],
         requiereChequeo: params['requiereChequeo'] === 'true',
       } as ServicioMedico;
+      this.cargarProfesional(params['profesionalId']);
     });
   }
 
+  // Cargar información del profesional
+  cargarProfesional(profesionalId: string): void {
+    if (profesionalId) {
+      this.servicioProfesionales.obtenerprofesionalID(profesionalId).subscribe(
+        (profesional) => {
+          this.profesional = profesional;
+          if (this.esEdicion) {
+            this.formularioCita.patchValue({
+              direccion: profesional.ubicacion,
+            });
+          }
+          if (!this.esEdicion) {
+            this.direccionesUnicas = [profesional.ubicacion];
+          }
+        },
+        (error) => {
+          console.error('Error al cargar el profesional:', error);
+          this.profesional = null;
+        }
+      );
+    } else {
+      this.profesional = null;
+    }
+  }
+
+  // Prellenar el formulario con datos de cita existente
   prellenarFormulario(cita: Cita): void {
     this.formularioCita.patchValue({
       direccion: cita.direccion,
@@ -153,7 +150,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
       estado: cita.estado,
     });
   }
-
+  // Enviar formulario (crear o actualizar)
   enviarFormulario(): void {
     if (this.formularioCita.valid && this.detallesServicio?.id) {
       if (this.esEdicion && this.idCitaActual) {
@@ -162,12 +159,10 @@ export class RegistroActualizacionCitaComponent implements OnInit {
         this.confirmarRegistroCita();
       }
     } else {
-      console.log(
-        'El formulario no es válido o no se recibieron los datos del servicio.'
-      );
+      console.log('El formulario no es válido o no se recibieron los datos del servicio.');
     }
   }
-
+  // Confirmar antes de crear
   confirmarRegistroCita(): void {
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
@@ -182,19 +177,39 @@ export class RegistroActualizacionCitaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.createCita(); // Llama a tu función de creación de cita
+        this.createCita();
       }
-      // Si result es false o undefined, no hacemos nada -> se queda en el formulario
     });
   }
 
+  // Crear la cita
+  createCita(): void {
+    const userId = this.servicioLogin.getIdentificador();
+    const citaData = {
+      ...this.formularioCita.value,
+      servicioId: this.detallesServicio!.id,
+      profesionalId: this.detallesServicio!.profesionalId,
+      pacienteId: userId || 'Usuario no registrado',
+      fechaHora: this.formularioCita.value.fechaHora || new Date().toISOString(),
+      estado: 'agendada',
+    };
+
+    this.servicioCita.createCita(citaData).subscribe(
+      () => {
+        this.enrutador.navigate(['/mantenimiento-paciente-cita'], { replaceUrl: true });
+      },
+      (error) => {
+        console.error('Error al registrar la cita:', error);
+      }
+    );
+  }
+  // Confirmar antes de actualizar
   confirmarEdicionCita(): void {
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
       data: <DialogData>{
         title: 'Confirmar Edición',
-        message:
-          '¿Estás seguro de que deseas guardar los cambios en esta cita?',
+        message: '¿Estás seguro de que deseas guardar los cambios en esta cita?',
         confirmText: 'Sí, guardar',
         cancelText: 'Cancelar',
         isConfirmation: true,
@@ -203,35 +218,12 @@ export class RegistroActualizacionCitaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.updateCita(); // Llama a tu función de actualización de cita
+        this.updateCita();
       }
-      // Si result es false o undefined, no hacemos nada -> se queda en el formulario
     });
   }
 
-  createCita(): void {
-    const userId = this.servicioLogin.getIdentificador();
-    const citaData = {
-      ...this.formularioCita.value,
-      servicioId: this.detallesServicio!.id,
-      profesionalId: this.detallesServicio!.profesionalId,
-      usuarioId: userId || 'Usuario no registrado',
-      fechaHora:
-        this.formularioCita.value.fechaHora || new Date().toISOString(),
-    };
-
-    this.servicioCita.createCita(citaData).subscribe(
-      () => {
-        this.enrutador.navigate(['/mantenimiento-paciente-cita'], {
-          replaceUrl: true,
-        });
-      },
-      (error) => {
-        console.error('Error al registrar la cita:', error);
-      }
-    );
-  }
-
+  // Actualizar la cita
   updateCita(): void {
     const citaData = {
       ...this.formularioCita.value,
@@ -242,16 +234,13 @@ export class RegistroActualizacionCitaComponent implements OnInit {
 
     this.servicioCita.updateCita(citaData).subscribe(
       () => {
-        this.enrutador.navigate(['/mantenimiento-paciente-cita'], {
-          replaceUrl: true,
-        });
+        this.enrutador.navigate(['/mantenimiento-paciente-cita'], { replaceUrl: true });
       },
       (error) => {
         console.error('Error al actualizar la cita:', error);
       }
     );
   }
-
   onCancelar(): void {
     this.enrutador.navigate(['/mantenimiento-paciente-cita']);
   }

@@ -17,12 +17,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from '../../../shared/footer/footer.component';
 import { HeaderComponent } from '../../../shared/header/header.component';
-
+import { ServLoginService } from '../../../../services/serv-login.service'; // Importa el servicio de login
 
 @Component({
   selector: 'app-mantenimiento-paciente-cita',
-    imports: [HeaderComponent,FooterComponent, MatTableModule, MatPaginatorModule,
-    MatButtonModule, MatInputModule,CommonModule, TablaReutilizableComponent // Asegúrate de incluirlo en los imports
+  imports: [HeaderComponent, FooterComponent, MatTableModule, MatPaginatorModule,
+    MatButtonModule, MatInputModule, CommonModule, TablaReutilizableComponent
   ],
   templateUrl: './mantenimiento-paciente-cita.component.html',
   styleUrl: './mantenimiento-paciente-cita.component.css',
@@ -36,7 +36,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
     { key: 'profesional', titulo: 'Profesional' },
     { key: 'especialidad', titulo: 'Especialidad' },
     { key: 'direccion', titulo: 'Dirección' },
-    { key: 'metodoPago', titulo: 'Método de Pago' },
+    { key: 'metodoPago', titulo: 'Metodo de Pago' },
     { key: 'prioridad', titulo: 'Prioridad' },
     {
       key: 'fechaHora',
@@ -55,68 +55,79 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
   @ViewChild(MatPaginator) paginador!: MatPaginator;
 
   constructor(
-    private servicioCita: ServCitaService, private servicioProfesional: ServProfesionalesService, 
-    private servicioServicios: ServServiciosjsonService, private navegador: Router, private dialog: MatDialog
-  ) {}
+    private servicioCita: ServCitaService,
+    private servicioProfesional: ServProfesionalesService,
+    private servicioServicios: ServServiciosjsonService,
+    private navegador: Router,
+    private dialog: MatDialog,
+    private servicioLogin: ServLoginService // Inyecta el servicio de login
+  ) { }
 
   ngOnInit(): void {
-    this.cargarCitasConDatosProfesionales();
+    this.cargarCitasDelPaciente(); // Llama a la nueva función para cargar solo las citas del paciente
   }
 
-  cargarCitasConDatosProfesionales(): void {
-    this.servicioCita
-      .getCitas()
-      .pipe(
-        tap((citas) => (this.listadoCitas = citas)),
-        switchMap(() => this.servicioServicios.getAllServices()),
-        tap((servicios) => {
-          servicios.forEach((servicio) => {
-            if (servicio.id) this.mapaServicios.set(servicio.id, servicio);
-          });
-        }),
-        switchMap(() => this.servicioProfesional.getProfesionales()),
-        tap((profesionales) => {
-          profesionales.forEach((profesional) => {
-            if (profesional.id)
-              this.mapaProfesionales.set(profesional.id, profesional);
-          });
-        }),
-        map(() =>
-          this.listadoCitas.map((cita) => {
-            let especialidad = 'No disponible';
-            let profesional = 'No asignado';
+  cargarCitasDelPaciente(): void {
+    const pacienteId = this.servicioLogin.getIdentificador();
+    if (pacienteId) {
+      this.servicioCita.getCitas() // Aquí podrías tener un método específico en tu servicio para obtener citas por pacienteId (opción recomendada)
+        .pipe(
+          tap((citas) => (this.listadoCitas = citas.filter(cita => cita.pacienteId === pacienteId))),
+          switchMap(() => this.servicioServicios.getAllServices()),
+          tap((servicios) => {
+            servicios.forEach((servicio) => {
+              if (servicio.id) this.mapaServicios.set(servicio.id, servicio);
+            });
+          }),
+          switchMap(() => this.servicioProfesional.getProfesionales()),
+          tap((profesionales) => {
+            profesionales.forEach((profesional) => {
+              if (profesional.id)
+                this.mapaProfesionales.set(profesional.id, profesional);
+            });
+          }),
+          map(() =>
+            this.listadoCitas.map((cita) => {
+              let especialidad = 'No disponible';
+              let profesionalNombre = 'No asignado';
+              let direccionProfesional = 'No disponible';
 
-            const profesionalData = cita.profesionalId
-              ? this.mapaProfesionales.get(cita.profesionalId)
-              : cita.servicioId && this.mapaServicios.get(cita.servicioId)?.profesionalId
-              ? this.mapaProfesionales.get(
-                  this.mapaServicios.get(cita.servicioId)!.profesionalId!
-                )
-              : undefined;
+              const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
+              let profesionalData: Profesional | undefined;
 
-            if (profesionalData) {
-              especialidad = profesionalData.especialidad || 'No disponible';
-              profesional = profesionalData.nombre;
-            }
+              if (servicioDeCita && servicioDeCita.profesionalId) {
+                profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
+              }
 
-            return {
-              ...cita,
-              especialidad,
-              profesional,
-            };
-          })
-        )
-      )
-      .subscribe(
-        (data) => {
-          this.sourceDatos.data = data;
-        },
-        (error) =>
-          console.error(
-            'Error al cargar citas con especialidades y profesionales:',
-            error
+              if (profesionalData) {
+                especialidad = profesionalData.especialidad || 'No disponible';
+                profesionalNombre = profesionalData.nombre;
+                direccionProfesional = profesionalData.ubicacion || 'No disponible';
+              }
+
+              return {
+                ...cita,
+                especialidad,
+                profesional: profesionalNombre,
+                direccion: direccionProfesional,
+              };
+            })
           )
-      );
+        )
+        .subscribe(
+          (data) => {
+            this.sourceDatos.data = data;
+          },
+          (error) =>
+            console.error(
+              'Error al cargar citas con especialidades y profesionales:',
+              error
+            )
+        );
+    } else {
+      console.warn('No se pudo obtener el ID del paciente.');
+      this.sourceDatos.data = []; // O podrías mostrar un mensaje indicando que no hay citas
+    }
   }
 
   editarCita(cita: any): void {
@@ -130,15 +141,16 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
     const citasFiltradas = this.listadoCitas
       .filter((cita) => {
         let nombreProfesional = '';
-        const profesionalData = cita.profesionalId
-          ? this.mapaProfesionales.get(cita.profesionalId)
-          : cita.servicioId && this.mapaServicios.get(cita.servicioId)?.profesionalId
-          ? this.mapaProfesionales.get(
-              this.mapaServicios.get(cita.servicioId)!.profesionalId!
-            )
-          : undefined;
+        let direccionProfesional = '';
+        const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
+        let profesionalData: Profesional | undefined;
+
+        if (servicioDeCita && servicioDeCita.profesionalId) {
+          profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
+        }
 
         nombreProfesional = profesionalData ? profesionalData.nombre : '';
+        direccionProfesional = profesionalData ? profesionalData.ubicacion : '';
 
         return (
           cita.direccion.toLowerCase().includes(termino) ||
@@ -147,30 +159,32 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
           cita.estado.toLowerCase().includes(termino) ||
           (profesionalData?.especialidad?.toLowerCase().includes(termino) ??
             false) ||
-          nombreProfesional.toLowerCase().includes(termino)
+          nombreProfesional.toLowerCase().includes(termino) ||
+          direccionProfesional.toLowerCase().includes(termino)
         );
       })
       .map((cita) => {
         let especialidad = 'No disponible';
         let nombreProfesional = 'No asignado';
+        let direccionProfesional = 'No disponible';
+        const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
+        let profesionalData: Profesional | undefined;
 
-        const profesionalData = cita.profesionalId
-          ? this.mapaProfesionales.get(cita.profesionalId)
-          : cita.servicioId && this.mapaServicios.get(cita.servicioId)?.profesionalId
-          ? this.mapaProfesionales.get(
-              this.mapaServicios.get(cita.servicioId)!.profesionalId!
-            )
-          : undefined;
+        if (servicioDeCita && servicioDeCita.profesionalId) {
+          profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
+        }
 
         if (profesionalData) {
           especialidad = profesionalData.especialidad || 'No disponible';
           nombreProfesional = profesionalData.nombre;
+          direccionProfesional = profesionalData.ubicacion || 'No disponible';
         }
 
         return {
           ...cita,
           especialidad,
           profesional: nombreProfesional,
+          direccion: direccionProfesional,
         };
       });
 
@@ -211,7 +225,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
         'Eliminación Exitosa',
         'La cita se ha eliminado correctamente.'
       );
-      this.cargarCitasConDatosProfesionales();
+      this.cargarCitasDelPaciente(); // Recarga solo las citas del paciente
     }, (error) => {
       console.error('Error al eliminar la cita:', error);
       this.mostrarDialogo(
@@ -233,4 +247,3 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
     });
   }
 }
-

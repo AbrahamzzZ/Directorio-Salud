@@ -21,7 +21,7 @@
             <mat-option value="" disabled>Seleccionar Dirección</mat-option>
             <mat-option *ngFor="let direccion of direccionesUnicas" [value]="direccion">{{ direccion }}</mat-option>
         </mat-select>
-        @if (formularioCita.get('direccion')?.hasError('required')) {
+        @if (formularioCita.get('direccion')?.hasError('required') && formularioCita.get('direccion')?.touched) {
             <mat-error>La dirección es requerida.</mat-error>
         }
     </mat-form-field>
@@ -29,7 +29,7 @@
     <mat-form-field>
         <mat-label for="prioridad">Prioridad</mat-label>
         <input matInput id="prioridad" formControlName="prioridad" placeholder="Ej: alta, media, baja">
-        @if (formularioCita.get('prioridad')?.hasError('pattern')) {
+        @if (formularioCita.get('prioridad')?.hasError('pattern') && formularioCita.get('prioridad')?.touched) {
             <mat-error>Por favor, ingrese una prioridad válida: alta, media o baja.</mat-error>
         }
     </mat-form-field>
@@ -38,7 +38,7 @@
         <label class="radio-label">Método de Pago:</label>
         <mat-radio-button value="efectivo">Efectivo</mat-radio-button>
         <mat-radio-button value="transferencia">Transferencia</mat-radio-button>
-        @if (formularioCita.get('metodoPago')?.hasError('required')) {
+        @if (formularioCita.get('metodoPago')?.hasError('required') && formularioCita.get('metodoPago')?.touched) {
             <mat-error>El método de pago es requerido.</mat-error>
         }
     </mat-radio-group>

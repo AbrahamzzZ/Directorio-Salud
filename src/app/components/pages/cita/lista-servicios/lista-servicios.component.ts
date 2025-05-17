@@ -46,7 +46,7 @@ export class ListaServiciosComponent implements OnInit {
     private servicioCita: ServCitaService,
     private servicioLogin: ServLoginService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarServicios();
@@ -95,7 +95,7 @@ export class ListaServiciosComponent implements OnInit {
     this.servicioCita.getCitas().subscribe(
       (citas) => {
         const citaExistente = citas.find(
-          (cita) => cita.usuarioId === userId && cita.servicioId === servicio.id
+          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id // Cambiado a pacienteId
         );
 
         if (citaExistente) {

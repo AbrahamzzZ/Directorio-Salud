@@ -1,7 +1,7 @@
 export interface Cita {
   id: string;
   profesionalId: string;
-  usuarioId: string;
+  pacienteId: string;
   servicioId: string;
   direccion: string;
   metodoPago: string;  

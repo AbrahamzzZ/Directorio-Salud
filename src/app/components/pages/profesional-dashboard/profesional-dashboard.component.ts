@@ -15,6 +15,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { HeaderComponent } from '../../shared/header/header.component';
+import { ServPacientesService } from '../../../services/servicio-paciente/serv-pacientes.service';
+import { combineLatest } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-profesional-dashboard',
@@ -38,7 +42,8 @@ export class ProfesionalDashboardComponent implements OnInit {
     private servicioCita: ServCitaService,
     private servicioLogin: ServLoginService,
     private servicioProfesional: ServProfesionalesService,
-    private servicioServicios: ServServiciosjsonService
+    private servicioServicios: ServServiciosjsonService,
+    private servicioPacientes: ServPacientesService 
   ) { }
 
   ngOnInit(): void {
@@ -50,31 +55,36 @@ export class ProfesionalDashboardComponent implements OnInit {
     }
   }
 
-  cargarDatosProfesionalYCitas(): void {
-    this.servicioProfesional.obtenerprofesionalID(this.profesionalId)
-      .pipe(
-        tap(profesional => this.profesionalInfo = profesional),
-        switchMap(() => this.servicioCita.getCitas()),
-        map(citas => citas.filter(cita => cita.profesionalId === this.profesionalId)),
-        switchMap(citasFiltradas =>
-          this.servicioServicios.getAllServices().pipe(
-            map(servicios => citasFiltradas.map(cita => ({
+cargarDatosProfesionalYCitas(): void {
+  this.servicioProfesional.obtenerprofesionalID(this.profesionalId)
+    .pipe(
+      tap(profesional => this.profesionalInfo = profesional),
+      switchMap(() => this.servicioCita.getCitas()),
+      map(citas => citas.filter(cita => cita.profesionalId === this.profesionalId)),
+      switchMap(citasFiltradas =>
+        combineLatest([
+          this.servicioServicios.getAllServices(),
+          this.servicioPacientes.getpacientes()
+        ]).pipe(
+          map(([servicios, pacientes]) =>
+            citasFiltradas.map(cita => ({
               ...cita,
               nombreServicio: servicios.find(s => s.id === cita.servicioId)?.nombre || 'Sin nombre',
               especialidad: this.profesionalInfo?.especialidad || 'Especialidad',
-              usuarioId: this.servicioLogin.getIdentificador() || 'nombre'
-            })))
+              nombrePaciente: pacientes.find(p => p.id === cita.pacienteId)?.nombre || 'Sin nombre'
+            }))
           )
         )
       )
-      .subscribe(
-        citasConServicio => {
-          this.citasProfesional = citasConServicio;
-          this.citasFiltradas = [...this.citasProfesional];
-        },
-        error => console.error('Error al cargar citas o servicios:', error)
-      );
-  }
+    )
+    .subscribe(
+      citasConServicio => {
+        this.citasProfesional = citasConServicio;
+        this.citasFiltradas = [...this.citasProfesional];
+      },
+      error => console.error('Error al cargar citas, servicios o pacientes:', error)
+    );
+}
 
   buscar(input: HTMLInputElement): void {
     const termino = input.value.trim().toLowerCase();
