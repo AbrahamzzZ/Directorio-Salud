@@ -28,9 +28,9 @@
 
     <mat-form-field>
         <mat-label for="prioridad">Prioridad</mat-label>
-        <input matInput id="prioridad" formControlName="prioridad" placeholder="Ej: alta, media, baja">
+        <input matInput id="prioridad" formControlName="prioridad" placeholder="Ej: Alta, Media, Baja">
         @if (formularioCita.get('prioridad')?.hasError('pattern') && formularioCita.get('prioridad')?.touched) {
-            <mat-error>Por favor, ingrese una prioridad válida: alta, media o baja.</mat-error>
+            <mat-error>Por favor, ingrese una prioridad válida: Alta, Media o Baja.</mat-error>
         }
     </mat-form-field>
 
@@ -42,7 +42,10 @@
             <mat-error>El método de pago es requerido.</mat-error>
         }
     </mat-radio-group>
-
+    <label class="checkbox-label">
+    ¿Es Nuevo Paciente?
+    <mat-checkbox formControlName="esNuevoPaciente" class="checkbox-nuevo-paciente"></mat-checkbox>
+  </label>
     <div class="buttons-container">
         <button mat-raised-button color="primary" type="submit" [disabled]="formularioCita.invalid || !detallesServicio?.id">
             {{ esEdicion ? 'Guardar Cambios' : 'Registrar Cita' }}
