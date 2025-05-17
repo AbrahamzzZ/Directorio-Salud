@@ -32,12 +32,25 @@ export class ServProfesionalesService {
 
   // Permite buscar al profesional por su nombre, especialidad y ubicacion
   buscarProfesional(profesional: string): Observable<Profesional[]>{
-    return this.http.get<Profesional[]>(`${this.jsonUrl}`).pipe(
+    /*return this.http.get<Profesional[]>(`${this.jsonUrl}`).pipe(
       map((servicios) =>
         servicios.filter((serv) =>
           serv.nombre.toLowerCase().includes(profesional.toLowerCase()) ||
           serv.especialidad.toLowerCase().includes(profesional.toLowerCase()) ||
-          serv.ubicacion.toLowerCase().includes(profesional.toLowerCase())
+          serv.ubicacion.toLowerCase().includes(profesional.toLowerCase())  ||
+          serv.disponibilidad.includes(profesional.toLowerCase())
+        )
+      )
+    );*/
+    const criterio = profesional.trim().toLowerCase();
+    
+    return this.http.get<Profesional[]>(`${this.jsonUrl}`).pipe(
+      map((servicios) =>
+        servicios.filter((serv) =>
+          serv.nombre.toLowerCase().includes(criterio) ||
+          serv.especialidad.toLowerCase().includes(criterio) ||
+          serv.ubicacion.toLowerCase().includes(criterio) ||
+          serv.disponibilidad.some(d => d.toLowerCase().includes(criterio))
         )
       )
     );

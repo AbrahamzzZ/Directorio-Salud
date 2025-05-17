@@ -36,10 +36,10 @@
     <input matInput id="ubicacion" formControlName="ubicacion" maxlength="50" minlength="3">
     @if(form.get('ubicacion')?.touched && form.get('ubicacion')?.hasError('required')){
       <mat-error class="error">Este campo es obligatorio.</mat-error>
-    }@else if (form.get('ubicacion')?.hasError('pattern')) {
-      <mat-error class="error">Solo se permiten letras.</mat-error>
     }@else if(form.get('ubicacion')?.hasError('minlength')){
       <mat-error class="error">Ubicación demasiada corta.</mat-error>
+    }@else if(form.get('ubicacion')?.hasError('sinLetras')) {
+      <mat-error class="error">Debe contener al menos una letra.</mat-error>
     }
   </mat-form-field>
 
