@@ -36,10 +36,19 @@
   "servicios": [
     {
       "id": "bf79",
-      "nombre": "servicio angel",
-      "descripcion": "cuenta angel",
+      "nombre": "servicio angel vivanvo",
+      "descripcion": "cuenta angellll",
       "precio": 32,
       "fechaDisponible": "2025-05-16T05:00:00.000Z",
+      "requiereChequeo": false,
+      "profesionalId": "1"
+    },
+    {
+      "id": "1965",
+      "nombre": "Dolor",
+      "descripcion": "asdsad",
+      "precio": 45,
+      "fechaDisponible": "2025-05-23T05:00:00.000Z",
       "requiereChequeo": true,
       "profesionalId": "1"
     }
@@ -81,7 +90,19 @@
       "pacienteId": "p3"
     }
   ],
-  "citas": [],
+  "citas": [
+    {
+      "id": "49dd",
+      "direccion": "Barrio Chino",
+      "prioridad": "Alta",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-17T04:00:37.820Z",
+      "estado": "agendada",
+      "servicioId": "bf79",
+      "profesionalId": "1",
+      "pacienteId": "p3"
+    }
+  ],
   "resenas": [
     {
       "id": "652c",
@@ -92,6 +113,56 @@
       "profesionalId": "1",
       "pacienteId": "p3",
       "fechaResena": "2025-05-16"
+    },
+    {
+      "id": "bae6",
+      "comentario": "sadasd",
+      "calificacion": 1,
+      "recomienda": false,
+      "motivoVisita": "qdadas",
+      "profesionalId": "1",
+      "pacienteId": "p3",
+      "fechaResena": "2025-05-17"
+    },
+    {
+      "id": "7610",
+      "comentario": "asdasdsad",
+      "calificacion": 3,
+      "recomienda": true,
+      "motivoVisita": "asdasdsa",
+      "profesionalId": "1",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-17"
+    },
+    {
+      "id": "e209",
+      "comentario": "fdfdsadsa",
+      "calificacion": 1,
+      "recomienda": true,
+      "motivoVisita": "22222",
+      "profesionalId": "1",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-17"
+    },
+    {
+      "id": "5a54",
+      "comentario": "asdsad",
+      "calificacion": 5,
+      "recomienda": true,
+      "motivoVisita": "asdsad",
+      "profesionalId": "1",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-17"
+    },
+    {
+      "id": "dd24",
+      "comentario": "asdsad",
+      "calificacion": 3,
+      "recomienda": true,
+      "motivoVisita": "asdq",
+      "profesionalId": "2",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-17"
     }
   ],
   "pacientes": [
