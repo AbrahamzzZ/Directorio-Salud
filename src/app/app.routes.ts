@@ -17,6 +17,7 @@ import { RegistroActualizacionCitaComponent } from './components/pages/cita/regi
 import { ListaServiciosComponent } from './components/pages/cita/lista-servicios/lista-servicios.component';
 import { MantenimientoResenaProfesionalComponent } from './components/pages/resena/mantenimiento-resena-profesional/mantenimiento-resena-profesional.component';
 import { MantenimientoResenaAdministradorComponent } from './components/pages/resena/mantenimiento-resena-administrador/mantenimiento-resena-administrador.component';
+import { MantenimientoVerResenaProfesionalComponent } from './components/pages/resena/mantenimiento-ver-resena-profesional/mantenimiento-ver-resena-profesional.component';
 
 
 
@@ -49,7 +50,8 @@ export const routes: Routes = [
     { path: 'resena-edit/:id', component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
     { path: 'ver-resenas/:profesionalId', component: MantenimientoResenaProfesionalComponent, title: 'Reseñas del Profesional'},
     { path: 'admin-resenas', component: MantenimientoResenaAdministradorComponent, title: 'Reseñas del Administrador'},
-    
+    { path: 'mis-resenas-profesional', component: MantenimientoVerResenaProfesionalComponent, title: 'Mis Reseñas Profesionales' },
+
     //Rutas del modulo Cita--Gabriel Vera
     { path: 'mantenimiento-paciente-cita', component: MantenimientoPacienteCitaComponent, title: 'Paciente'},
     { path: 'registro-actualizacion-cita', component: RegistroActualizacionCitaComponent,title: 'Paciente'},
