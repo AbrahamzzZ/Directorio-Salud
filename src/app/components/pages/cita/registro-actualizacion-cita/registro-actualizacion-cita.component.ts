@@ -21,13 +21,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-registro-actualizacion-cita',
   imports: [
     MatCard, MatCardContent, MatCardHeader, MatCardTitle, ReactiveFormsModule, DatePipe, CurrencyPipe, HeaderComponent,
     FooterComponent, CommonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatRadioModule, MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule, MatIcon
   ],
   templateUrl: './registro-actualizacion-cita.component.html',
   styleUrls: ['./registro-actualizacion-cita.component.css'],
@@ -51,15 +53,15 @@ export class RegistroActualizacionCitaComponent implements OnInit {
     private dialog: MatDialog,
     private servicioProfesionales: ServProfesionalesService
   ) {
-    this.formularioCita = this.constructorFormulario.group({
-      direccion: ['', Validators.required],
-      prioridad: ['', [Validators.pattern(new RegExp(`^(${this.prioridadesValidas.join('|')})$`, 'i'))]],
-      metodoPago: ['', Validators.required],
-      fechaHora: [''],
-      estadoCita: ['agendada'], 
-      esNuevoPaciente: [false],
-    });
-  }
+      this.formularioCita = this.constructorFormulario.group({
+    direccion: ['', Validators.required],
+    prioridad: ['', [Validators.required, Validators.pattern(new RegExp(`^(${this.prioridadesValidas.join('|')})$`, 'i'))]],
+    metodoPago: ['', Validators.required],
+    fechaHora: [''],
+    estadoCita: ['agendada'],
+    esNuevoPaciente: [false],
+  });
+    }
 
   ngOnInit(): void {
     this.rutaActiva.paramMap.subscribe((params) => {
