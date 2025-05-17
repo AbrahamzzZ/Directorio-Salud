@@ -7,5 +7,6 @@ export interface Cita {
   metodoPago: string;  
   prioridad: 'baja' | 'media' | 'alta'; 
   fechaHora: string;   
-  estado: 'agendada' | 'confirmada'; 
+  estadoCita: 'agendada' | 'confirmada';
+  esNuevoPaciente: boolean; 
 }

@@ -70,6 +70,7 @@ cargarDatosProfesionalYCitas(): void {
             citasFiltradas.map(cita => ({
               ...cita,
               nombreServicio: servicios.find(s => s.id === cita.servicioId)?.nombre || 'Sin nombre',
+              //fechaDisponible: servicios.find(s => s.id === cita.servicioId)?.fechaDisponible || 'Sin fecha',
               especialidad: this.profesionalInfo?.especialidad || 'Especialidad',
               nombrePaciente: pacientes.find(p => p.id === cita.pacienteId)?.nombre || 'Sin nombre'
             }))
@@ -94,7 +95,7 @@ cargarDatosProfesionalYCitas(): void {
       cita.direccion?.toLowerCase().includes(termino) ||
       cita.metodoPago?.toLowerCase().includes(termino) ||
       cita.prioridad?.toLowerCase().includes(termino) ||
-      cita.estado?.toLowerCase().includes(termino) ||
+      cita.estadoCita?.toLowerCase().includes(termino) ||
       (cita.fechaHora && new Date(cita.fechaHora).toLocaleDateString().includes(termino))
     );
   }
