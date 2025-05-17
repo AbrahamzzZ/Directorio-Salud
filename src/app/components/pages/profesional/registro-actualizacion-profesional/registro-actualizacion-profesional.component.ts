@@ -43,12 +43,12 @@ export class RegistroActualizacionProfesionalComponent {
       nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
       especialidad: ['', Validators.required],
       ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(3), Validators.maxLength(50)]],
-      edad: [null, [Validators.required, Validators.min(18), Validators.max(100)]],
+      edad: [null, [Validators.required, Validators.min(18), Validators.max(100), this.soloEnteros]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       sexo: ['', Validators.required],
-      disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima]),
+      disponibilidad: this.fb.control<string[]>([], [this.validarDisponibilidadMinima, this.validadFechaDisponibilidad]),
       correo: ['', [Validators.required, Validators.email]], 
-      clave: ['', [Validators.required, Validators.minLength(8)]],
+      clave: ['', [Validators.required, Validators.minLength(8), this.formatoClave()]],
       foto: [null, this.isEdit ? [] : [Validators.required]]
     });
   }
@@ -199,15 +199,30 @@ export class RegistroActualizacionProfesionalComponent {
   }
 
   agregarDisponibilidad() {
-    if (this.nuevaDisponibilidad) {
-      const lista = this.form.get('disponibilidad')?.value || [];
-      if (!lista.includes(this.nuevaDisponibilidad)) {
-        const nuevaLista = [...lista, this.nuevaDisponibilidad];
-        this.form.get('disponibilidad')?.setValue(nuevaLista);
-        this.form.get('disponibilidad')?.markAsDirty(); 
-      }
-      this.nuevaDisponibilidad = '';
+    if (!this.nuevaDisponibilidad) return;
+
+    const fechaIngresada = new Date(this.nuevaDisponibilidad);
+    const ahora = new Date();
+
+    fechaIngresada.setSeconds(0, 0);
+    ahora.setSeconds(0, 0);
+
+    if (fechaIngresada < ahora) {
+      this.form.get('disponibilidad')?.setErrors({ fechaPasada: true });
+      return; // No agregamos fechas pasadas
     }
+
+    const lista = this.form.get('disponibilidad')?.value || [];
+
+    const yaExiste = lista.includes(this.nuevaDisponibilidad);
+    if (!yaExiste) {
+      const nuevaLista = [...lista, this.nuevaDisponibilidad];
+      this.form.get('disponibilidad')?.setValue(nuevaLista);
+      this.form.get('disponibilidad')?.markAsDirty();
+      this.form.get('disponibilidad')?.setErrors(null);
+    }
+
+    this.nuevaDisponibilidad = '';
   }
 
   validarDisponibilidadMinima(control: AbstractControl): ValidationErrors | null {
@@ -220,6 +235,15 @@ export class RegistroActualizacionProfesionalComponent {
     const nuevaLista = lista.filter((f: string) => f !== fecha);
     this.form.get('disponibilidad')?.setValue(nuevaLista);
     this.form.get('disponibilidad')?.markAsDirty(); 
+  }
+
+  validadFechaDisponibilidad(control: AbstractControl): ValidationErrors | null {
+    const fecha = new Date(control.value);
+    const hoy = new Date();
+    fecha.setHours(0,0,0,0);
+    hoy.setHours(0,0,0,0);
+
+    return fecha < hoy ? { fechaPasada: true } : null;
   }
 
   isNoChanges(): boolean {
@@ -273,5 +297,19 @@ export class RegistroActualizacionProfesionalComponent {
     } else {
       this.router.navigate(['/registrar']); // Redirigir a la pagina para seleccionar el tipo de usuario
     }
+  }
+
+  formatoClave(){
+    return (control: AbstractControl): ValidationErrors | null => {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&+./_\-])[A-Za-z\d@$!%*?&+./_\-]{8,}$/;
+
+      return regex.test(control.value) ? null : { formatoClave: true };
+    };
+  }
+
+  soloEnteros(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value;
+    if (valor == null || valor === '') return null;
+    return Number.isInteger(valor) ? null : { noEntero: true };
   }
 }
