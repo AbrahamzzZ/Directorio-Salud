@@ -25,6 +25,7 @@
           <mat-card-subtitle>{{ cita.especialidad }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
+          <p><strong>Paciente:</strong> {{ cita.nombrePaciente }}</p>
           <p><strong>Dirección:</strong> {{ cita.direccion }}</p>
           <p><strong>Método de Pago:</strong> {{ cita.metodoPago }}</p>
           <p><strong>Prioridad:</strong> {{ cita.prioridad }}</p>
@@ -35,13 +36,6 @@
         </mat-card-content>
       </mat-card>
       }
-
-      <p
-        *ngIf="citasFiltradas.length === 0"
-        style="margin-top: 1rem; font-style: italic; color: #888"
-      >
-        No se encontraron citas que coincidan con la búsqueda.
-      </p>
     </div>
   </div>
 </div>

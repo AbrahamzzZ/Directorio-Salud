@@ -26,6 +26,7 @@
       <p><strong>Precio: </strong>{{ servicio.precio | currency:"USD" }}</p>
     </mat-card-content>
     <button mat-stroked-button (click)="agendarCita(servicio)">
+      <mat-icon>event</mat-icon>
       Agendar Cita
     </button>
   </mat-card>
