@@ -55,11 +55,97 @@
       "password": "1234qwer/",
       "rol": "profesional",
       "profesionalId": "6"
+    },
+    {
+      "id": "p1",
+      "email": "angelcuenca@outlook.com",
+      "password": "cuenca123",
+      "rol": "paciente",
+      "pacienteId": "p1"
+    },
+    {
+      "id": "p2",
+      "email": "alejandrolarrea55@gmail.com",
+      "password": "alejo27",
+      "rol": "paciente",
+      "pacienteId": "p2"
+    },
+    {
+      "id": "p3",
+      "email": "vivianamart@hotmail.es",
+      "password": "vivi23",
+      "rol": "paciente",
+      "pacienteId": "p3"
+    },
+    {
+      "id": "p4",
+      "email": "wilsonant43@gmail.com",
+      "password": "wilson67",
+      "rol": "paciente",
+      "pacienteId": "p4"
+    },
+    {
+      "id": "p5",
+      "email": "nelson@gmail.com",
+      "password": "soyyo34",
+      "rol": "paciente",
+      "pacienteId": "p5"
     }
   ],
   "citas": [],
   "resenas": [],
-  "pacientes": [],
+  "pacientes": [
+    {
+      "id": "p1",
+      "nombre": "Angel Cuenca",
+      "telefono": "0968275961",
+      "Edad": 7,
+      "contacto": "SMS",
+      "tipoSangre": "O+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p2",
+      "nombre": "Alejandro Rosales",
+      "telefono": "0978972716",
+      "Edad": 14,
+      "contacto": "SMS",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p3",
+      "nombre": "Viviana Martinez",
+      "telefono": "0954786523",
+      "Edad": 45,
+      "contacto": "llamada telefónica",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p4",
+      "nombre": "Wilson Rosales",
+      "telefono": "0923456433",
+      "Edad": 23,
+      "contacto": "SMS",
+      "tipoSangre": "B-",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p5",
+      "nombre": "Nelson Springfield",
+      "telefono": "0986745322",
+      "Edad": 56,
+      "contacto": "SMS",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    }
+  ],
   "profesionales": [
     {
       "id": "1",
