@@ -1,0 +1,37 @@
+<app-header></app-header>
+<h1>ESTE ES EL DASHBOARD DE PACIENTES</h1>
+
+<form class="example-form">
+    <mat-form-field appearance="outline" class="container__search__input">
+    <mat-label>Buscar:</mat-label>
+    <input matInput placeholder="Especialidad/Ubicacion/Disponibilidad" (keyup)="buscar(searchInput)" #searchInput>
+    </mat-form-field>
+</form>
+
+<div class="cards-container">
+  @for (profesional of profesionales; track profesional.id) {
+    <mat-card class="profesional-card">
+      <mat-card-header>
+        <div class="card-header-content">
+            <mat-card-title>{{ profesional.nombre }}</mat-card-title>
+            <mat-card-subtitle>{{ profesional.especialidad }}</mat-card-subtitle>
+        </div>
+        <img [src]="profesional.foto" alt="Foto del profesional" class="foto-profesional" onerror="this.src='assets/default-avatar.png'" />
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Ubicación:</strong> {{ profesional.ubicacion }}</p>
+        <p><strong>Teléfono:</strong> {{ profesional.telefono }}</p>
+        <p><strong>Disponibilidad:</strong> {{ formatDisponibilidad(profesional.disponibilidad)}}</p>
+      </mat-card-content>
+      <div class="botones-resenia">
+        <button mat-stroked-button (click)="irAResena(profesional.id)">    
+          <mat-icon>rate_review</mat-icon> Reseña
+        </button>
+        <button mat-stroked-button (click)="verResenas(profesional.id)">
+          <mat-icon>visibility</mat-icon> Ver reseña
+        </button>
+      </div>
+    </mat-card>
+  }
+</div>
+<app-footer></app-footer>

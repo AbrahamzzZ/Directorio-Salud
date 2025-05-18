@@ -20,6 +20,7 @@
     }@else {
       <a mat-button routerLink="/patients-dashboard">Home</a>
       <a routerLink="/lista-servicios">Servicios</a>
+      <a routerLink="/vista-profesionales">Profesionales</a>
       <a routerLink="/mantenimiento-paciente-cita">Mis Citas</a>
       <a routerLink="/mantenimiento-resena">Mis Reseñas</a>
     }
@@ -44,7 +45,9 @@
     } @else {
       <a mat-button routerLink="/patients-dashboard" (click)="toggleMenu()">Home</a>
       <a mat-button routerLink="/lista-servicios" (click)="toggleMenu()">Servicios</a>
+      <a mat-button routerLink="/vista-profesionales" (click)="toggleMenu()">Profesionales</a>
       <a mat-button routerLink="/mantenimiento-paciente-cita" (click)="toggleMenu()">Mis citas</a>
+      <a mat-button routerLink="/mantenimiento-resena" (click)="toggleMenu()">Mis Reseñas</a>
     }
     <a mat-button routerLink="/login" (click)="cerrarSesion(); toggleMenu()">Cerrar Sesión</a>
   </div>
