@@ -163,6 +163,13 @@
       "password": "soyyo34",
       "rol": "paciente",
       "pacienteId": "p5"
+    },
+    {
+      "id": "p6",
+      "email": "angel@gmail.com",
+      "password": "123456",
+      "rol": "paciente",
+      "pacienteId": "p6"
     }
   ],
   "citas": [
@@ -238,7 +245,78 @@
       "pacienteId": "p2"
     }
   ],
-  "resenas": [],
+  "resenas": [
+    {
+      "id": "2ff3",
+      "comentario": "La doctora González fue muy empática y profesional desde el primer momento. Me ayudó a entender mejor mis emociones y a desarrollar estrategias efectivas para manejar el estrés.",
+      "calificacion": 5,
+      "recomienda": true,
+      "motivoVisita": "Ansiedad y estrés laboral",
+      "profesionalId": "1",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "fba7",
+      "comentario": "Muy amable y paciente con los niños. Explica todo con claridad y genera confianza tanto en los padres como en los pequeños.",
+      "calificacion": 5,
+      "recomienda": true,
+      "motivoVisita": "Revisión médica de rutina para mi hijo",
+      "profesionalId": "2",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "65dc",
+      "comentario": "Me hizo sentir cómoda durante toda la consulta. Es detallada en su revisión y resuelve todas las dudas sin apuro.",
+      "calificacion": 4,
+      "recomienda": true,
+      "motivoVisita": "Chequeo ginecológico anual",
+      "profesionalId": "3",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "8202",
+      "comentario": "El tratamiento ha sido efectivo, aunque el doctor puede parecer un poco serio. Aun así, demuestra dominio del tema.",
+      "calificacion": 4,
+      "recomienda": true,
+      "motivoVisita": "Tratamiento de acné severo",
+      "profesionalId": "4",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "d310",
+      "comentario": "Excelente atención, muy cuidadoso y explica cada paso del procedimiento. La clínica está bien equipada.",
+      "calificacion": 5,
+      "recomienda": true,
+      "motivoVisita": "Limpieza dental y revisión",
+      "profesionalId": "5",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "4f18",
+      "comentario": "Fue muy claro en el diagnóstico y tratamiento. Me tranquilizó con su explicación y mostró mucha experiencia.",
+      "calificacion": 5,
+      "recomienda": true,
+      "motivoVisita": "Migrañas frecuentes",
+      "profesionalId": "6",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "e8c3",
+      "comentario": "El Dr. Peralta fue muy meticuloso durante la evaluación. Solicitó exámenes complementarios y me explicó detalladamente cada posibilidad. Su trato fue profesional y humano, lo que me hizo sentir en buenas manos.",
+      "calificacion": 4,
+      "recomienda": true,
+      "motivoVisita": "Pérdida de sensibilidad en manos y piernas",
+      "profesionalId": "6",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-18"
+    }
+  ],
   "pacientes": [
     {
       "id": "p1",
@@ -289,6 +367,16 @@
       "tipoSangre": "AB+",
       "estado": true,
       "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p6",
+      "nombre": "Angel Enrique Vivanco Garcia",
+      "telefono": "0998338556",
+      "Edad": 21,
+      "contacto": "email",
+      "tipoSangre": "O-",
+      "estado": true,
+      "fechaRegistro": "2025-05-18"
     }
   ],
   "profesionales": [
