@@ -1,4 +1,4 @@
-<h1>{{ isEditMode ? ('Editar Paciente' | uppercase) : ('Registrar Nuevo Paciente' | uppercase) }}</h1>
+<h1>{{ isEditMode ? 'Editar Paciente'  : 'Registrar Nuevo Paciente'}}</h1>
 
 <form class="example-form-grid" [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
 
@@ -59,17 +59,7 @@
     @if(pacienteForm.get('contacto')?.errors?.['required']) {
       <mat-error>El método de contacto es requerido</mat-error>
     }
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Fecha de Registro</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="fechaRegistro" placeholder="DD/MM/YYYY" [min]="fechaMin">
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-    @if(pacienteForm.get('fechaRegistro')?.errors?.['required']) {
-      <mat-error>La fecha es requerida</mat-error>
-    }
-  </mat-form-field>
+  </mat-form-field>  
 
   <section class="example-section">
     <mat-checkbox formControlName="estado">¿El paciente se encuentra activo?</mat-checkbox>

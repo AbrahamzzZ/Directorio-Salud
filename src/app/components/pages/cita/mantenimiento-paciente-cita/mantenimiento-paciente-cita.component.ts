@@ -33,19 +33,19 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
   mapaProfesionales: Map<string, Profesional> = new Map();
   mapaServicios: Map<string, ServicioMedico> = new Map();
   columnasCitas = [
-    { key: 'profesional', titulo: 'Profesional' },
-    { key: 'especialidad', titulo: 'Especialidad' },
-    { key: 'direccion', titulo: 'Dirección' },
-    { key: 'metodoPago', titulo: 'Metodo de Pago' },
-    { key: 'prioridad', titulo: 'Prioridad' },
-    {
-      key: 'fechaHora',
-      titulo: 'Fecha y Hora',
-      pipe: 'date',
-      pipeArgs: 'yyyy-MM-dd',
-    },
-    { key: 'estado', titulo: 'Estado' },
-  ];
+  { key: 'profesional', titulo: 'Profesional' },
+  { key: 'especialidad', titulo: 'Especialidad' },
+  { key: 'direccion', titulo: 'Dirección' },
+  { key: 'metodoPago', titulo: 'Metodo de Pago' },
+  { key: 'prioridad', titulo: 'Prioridad' },
+  {
+    key: 'fechaHora',
+    titulo: 'Fecha y Hora',
+    pipe: 'date',
+    pipeArgs: 'dd/MM/yyyy HH:mm',
+  },
+  { key: 'estadoCita', titulo: 'Estado' }, 
+];
   columnasKeysCitas: string[] = this.columnasCitas.map((col) => col.key);
   accionesCitas = [
     { tipo: 'editar', icono: 'edit', tooltip: 'Editar cita' },
@@ -156,7 +156,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
           cita.direccion.toLowerCase().includes(termino) ||
           cita.metodoPago.toLowerCase().includes(termino) ||
           cita.prioridad.toLowerCase().includes(termino) ||
-          cita.estado.toLowerCase().includes(termino) ||
+          cita.estadoCita.toLowerCase().includes(termino) ||
           (profesionalData?.especialidad?.toLowerCase().includes(termino) ??
             false) ||
           nombreProfesional.toLowerCase().includes(termino) ||

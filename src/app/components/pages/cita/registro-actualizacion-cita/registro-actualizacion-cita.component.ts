@@ -20,12 +20,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-registro-actualizacion-cita',
   imports: [
     MatCard, MatCardContent, MatCardHeader, MatCardTitle, ReactiveFormsModule, DatePipe, CurrencyPipe, HeaderComponent,
     FooterComponent, CommonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatRadioModule, MatButtonModule,
+    MatCheckboxModule, MatIcon
   ],
   templateUrl: './registro-actualizacion-cita.component.html',
   styleUrls: ['./registro-actualizacion-cita.component.css'],
@@ -36,7 +40,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
   esEdicion: boolean = false;
   idCitaActual: string | null = null;
   direccionesUnicas: string[] = [];
-  prioridadesValidas: string[] = ['baja', 'media', 'alta'];
+  prioridadesValidas: string[] = ['Baja', 'Media', 'Alta'];
   profesional: Profesional | null = null;
 
   constructor(
@@ -49,14 +53,15 @@ export class RegistroActualizacionCitaComponent implements OnInit {
     private dialog: MatDialog,
     private servicioProfesionales: ServProfesionalesService
   ) {
-   this.formularioCita = this.constructorFormulario.group({
-  direccion: ['', Validators.required],
-  prioridad: ['', [Validators.pattern(new RegExp(this.prioridadesValidas.map(p => `^${p}$`).join('|'), 'i'))]],
-  metodoPago: ['', Validators.required],
-  fechaHora: [''],
-  estado: ['agendada']
-});
-  }
+      this.formularioCita = this.constructorFormulario.group({
+    direccion: ['', Validators.required],
+    prioridad: ['', [Validators.required, Validators.pattern(new RegExp(`^(${this.prioridadesValidas.join('|')})$`, 'i'))]],
+    metodoPago: ['', Validators.required],
+    fechaHora: [''],
+    estadoCita: ['agendada'],
+    esNuevoPaciente: [false],
+  });
+    }
 
   ngOnInit(): void {
     this.rutaActiva.paramMap.subscribe((params) => {
@@ -142,14 +147,14 @@ export class RegistroActualizacionCitaComponent implements OnInit {
 
   // Prellenar el formulario con datos de cita existente
   prellenarFormulario(cita: Cita): void {
-    this.formularioCita.patchValue({
-      direccion: cita.direccion,
-      prioridad: cita.prioridad,
-      metodoPago: cita.metodoPago,
-      fechaHora: cita.fechaHora,
-      estado: cita.estado,
-    });
-  }
+  this.formularioCita.patchValue({
+    direccion: cita.direccion,
+    prioridad: cita.prioridad,
+    metodoPago: cita.metodoPago,
+    fechaHora: cita.fechaHora,
+    estadoCita: cita.estadoCita, // Cambiado de 'estado' a 'estadoCita'
+  });
+}
   // Enviar formulario (crear o actualizar)
   enviarFormulario(): void {
     if (this.formularioCita.valid && this.detallesServicio?.id) {
@@ -183,7 +188,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
   }
 
   // Crear la cita
-  createCita(): void {
+    createCita(): void {
     const userId = this.servicioLogin.getIdentificador();
     const citaData = {
       ...this.formularioCita.value,
@@ -191,7 +196,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
       profesionalId: this.detallesServicio!.profesionalId,
       pacienteId: userId || 'Usuario no registrado',
       fechaHora: this.formularioCita.value.fechaHora || new Date().toISOString(),
-      estado: 'agendada',
+      estadoCita: 'agendada', // Cambiado de 'estado' a 'estadoCita'
     };
 
     this.servicioCita.createCita(citaData).subscribe(

@@ -5,7 +5,80 @@
       "nombre": "Roberto Felipe Sanchez"
     }
   ],
-  "servicios": [],
+  "servicios": [
+    {
+      "id": "9cbc",
+      "nombre": "Sesion individual de terapia",
+      "descripcion": "Terapia personal para diversas problemáticas.",
+      "precio": 35,
+      "fechaDisponible": "2025-05-18T05:00:00.000Z",
+      "requiereChequeo": false,
+      "profesionalId": "1"
+    },
+    {
+      "id": "675e",
+      "nombre": "Terapia de pareja",
+      "descripcion": " Sesiones para mejorar la relación.",
+      "precio": 50,
+      "fechaDisponible": "2025-05-19T05:00:00.000Z",
+      "requiereChequeo": true,
+      "profesionalId": "1"
+    },
+    {
+      "id": "5db4",
+      "nombre": "Terapia Familiar",
+      "descripcion": "Intervenciones para la dinámica familiar.",
+      "precio": 60,
+      "fechaDisponible": "2025-05-20T05:00:00.000Z",
+      "requiereChequeo": false,
+      "profesionalId": "1"
+    },
+    {
+      "id": "d4cf",
+      "nombre": "Evaluacion psicologica para adultos",
+      "descripcion": "Pruebas e informe de funcionamiento psicológico.",
+      "precio": 80,
+      "fechaDisponible": "2025-05-22T05:00:00.000Z",
+      "requiereChequeo": true,
+      "profesionalId": "1"
+    },
+    {
+      "id": "2407",
+      "nombre": "Taller manejo estrés/ansiedad",
+      "descripcion": "Técnicas grupales para reducir estrés y ansiedad.",
+      "precio": 25,
+      "fechaDisponible": "2025-05-26T05:00:00.000Z",
+      "requiereChequeo": true,
+      "profesionalId": "1"
+    },
+    {
+      "id": "3e6c",
+      "nombre": "Orientacion vocacional",
+      "descripcion": "Apoyo para decisiones profesionales/educativas.",
+      "precio": 40,
+      "fechaDisponible": "2025-05-28T05:00:00.000Z",
+      "requiereChequeo": false,
+      "profesionalId": "1"
+    },
+    {
+      "id": "8b22",
+      "nombre": "Consulta pediatrica",
+      "descripcion": " Evaluación médica general (0-18 años).",
+      "precio": 30,
+      "fechaDisponible": "2025-06-01T05:00:00.000Z",
+      "requiereChequeo": false,
+      "profesionalId": "2"
+    },
+    {
+      "id": "ae09",
+      "nombre": "Control de salud de menores",
+      "descripcion": "Seguimiento crecimiento y desarrollo infantil.",
+      "precio": 35,
+      "fechaDisponible": "2025-06-05T05:00:00.000Z",
+      "requiereChequeo": true,
+      "profesionalId": "2"
+    }
+  ],
   "cuentas": [
     {
       "id": "a1",
@@ -55,11 +128,169 @@
       "password": "1234qwer/",
       "rol": "profesional",
       "profesionalId": "6"
+    },
+    {
+      "id": "p1",
+      "email": "angelcuenca@outlook.com",
+      "password": "cuenca123",
+      "rol": "paciente",
+      "pacienteId": "p1"
+    },
+    {
+      "id": "p2",
+      "email": "alejandrolarrea55@gmail.com",
+      "password": "alejo27",
+      "rol": "paciente",
+      "pacienteId": "p2"
+    },
+    {
+      "id": "p3",
+      "email": "vivianamart@hotmail.es",
+      "password": "vivi23",
+      "rol": "paciente",
+      "pacienteId": "p3"
+    },
+    {
+      "id": "p4",
+      "email": "wilsonant43@gmail.com",
+      "password": "wilson67",
+      "rol": "paciente",
+      "pacienteId": "p4"
+    },
+    {
+      "id": "p5",
+      "email": "nelson@gmail.com",
+      "password": "soyyo34",
+      "rol": "paciente",
+      "pacienteId": "p5"
     }
   ],
-  "citas": [],
+  "citas": [
+    {
+      "id": "10e7",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Baja",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-17T21:51:16.118Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": true,
+      "servicioId": "9cbc",
+      "profesionalId": "1",
+      "pacienteId": "p2"
+    },
+    {
+      "id": "281c",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Media",
+      "metodoPago": "transferencia",
+      "fechaHora": "2025-05-17T21:51:47.771Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": false,
+      "servicioId": "675e",
+      "profesionalId": "1",
+      "pacienteId": "p2"
+    },
+    {
+      "id": "cf37",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "transferencia",
+      "fechaHora": "2025-05-17T21:52:05.882Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": true,
+      "servicioId": "5db4",
+      "profesionalId": "1",
+      "pacienteId": "p2"
+    },
+    {
+      "id": "cd04",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-17T21:52:21.452Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": false,
+      "servicioId": "d4cf",
+      "profesionalId": "1",
+      "pacienteId": "p2"
+    },
+    {
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-17T21:52:39.099Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": false,
+      "servicioId": "2407",
+      "profesionalId": "1",
+      "id": "e641"
+    },
+    {
+      "id": "501b",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "transferencia",
+      "fechaHora": "2025-05-17T21:53:38.169Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": true,
+      "servicioId": "3e6c",
+      "profesionalId": "1",
+      "pacienteId": "p2"
+    }
+  ],
   "resenas": [],
-  "pacientes": [],
+  "pacientes": [
+    {
+      "id": "p1",
+      "nombre": "Angel Cuenca",
+      "telefono": "0968275961",
+      "Edad": 7,
+      "contacto": "SMS",
+      "tipoSangre": "O+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p2",
+      "nombre": "Alejandro Rosales",
+      "telefono": "0978972716",
+      "Edad": 14,
+      "contacto": "SMS",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p3",
+      "nombre": "Viviana Martinez",
+      "telefono": "0954786523",
+      "Edad": 45,
+      "contacto": "llamada telefónica",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p4",
+      "nombre": "Wilson Rosales",
+      "telefono": "0923456433",
+      "Edad": 23,
+      "contacto": "SMS",
+      "tipoSangre": "B-",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    },
+    {
+      "id": "p5",
+      "nombre": "Nelson Springfield",
+      "telefono": "0986745322",
+      "Edad": 56,
+      "contacto": "SMS",
+      "tipoSangre": "AB+",
+      "estado": true,
+      "fechaRegistro": "2025-05-17"
+    }
+  ],
   "profesionales": [
     {
       "id": "1",
