@@ -2,10 +2,13 @@
     display: flex;
     justify-content: space-between; 
     align-items: center;
-    background-color: transparent;
+    background-color: #7db1e6;
     color: black;
-    padding: 10px 20px;
+    padding: 10px 60px;
     margin-bottom: 60px;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    width: 100vw;
 }
 
 .app-title {
@@ -19,11 +22,42 @@
     gap: 15px;
 }
 
-.nav-links a {
+.nav-links a,
+.mobile-menu a {
     font-size: 16px;
     color: black;
     text-decoration: none;
     cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #010a1b; 
+    font-weight: bold;
+}
+
+
+.mobile-menu a:hover {
+    color: #3485d6;
+}
+
+
+.nav-links a::after,
+.mobile-menu a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: -4px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.mobile-menu a:hover::after {
+    width: 100%;
 }
 
 .hamburger {
@@ -61,6 +95,7 @@
     display: block;
     width: 100%; 
 }
+
 
 @media (max-width: 600px) {
     .nav-links {

@@ -42,6 +42,15 @@
       "fechaDisponible": "2025-05-16T05:00:00.000Z",
       "requiereChequeo": true,
       "profesionalId": "1"
+    },
+    {
+      "id": "512c",
+      "nombre": "dfgh",
+      "descripcion": "dfghgfd",
+      "precio": 18,
+      "fechaDisponible": "2025-05-24T05:00:00.000Z",
+      "requiereChequeo": true,
+      "profesionalId": "2"
     }
   ],
   "cuentas": [
@@ -79,6 +88,13 @@
       "password": "123456",
       "rol": "paciente",
       "pacienteId": "p3"
+    },
+    {
+      "id": "p4",
+      "email": "luis@hotmail.com",
+      "password": "1234sdfr",
+      "rol": "paciente",
+      "pacienteId": "p4"
     }
   ],
   "citas": [],
@@ -123,6 +139,16 @@
       "contacto": "email",
       "tipoSangre": "O-",
       "fechaRegistro": "2025-05-16T05:00:00.000Z",
+      "estado": true
+    },
+    {
+      "id": "p4",
+      "nombre": "Cristian",
+      "telefono": "0987878778",
+      "Edad": 39,
+      "contacto": "llamada telefónica",
+      "tipoSangre": "B+",
+      "fechaRegistro": "2025-05-23T05:00:00.000Z",
       "estado": true
     }
   ]

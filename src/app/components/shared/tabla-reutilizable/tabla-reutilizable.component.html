@@ -1,3 +1,4 @@
+<div class="tabla-responsive">
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     @for (col of columnas; track col) {
         <ng-container [matColumnDef]="col">
@@ -41,5 +42,5 @@
     <tr mat-header-row *matHeaderRowDef="columnas.concat(acciones.length > 0 ? ['acciones'] : [])"></tr>
     <tr mat-row *matRowDef="let row; columns: columnas.concat(acciones.length > 0 ? ['acciones'] : [])"></tr>
 </table>
-
+</div>
 <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Selecciona página" class="paginator"></mat-paginator>
