@@ -18,6 +18,7 @@ import { ListaServiciosComponent } from './components/pages/cita/lista-servicios
 import { MantenimientoResenaProfesionalComponent } from './components/pages/resena/mantenimiento-resena-profesional/mantenimiento-resena-profesional.component';
 import { MantenimientoResenaAdministradorComponent } from './components/pages/resena/mantenimiento-resena-administrador/mantenimiento-resena-administrador.component';
 import { MantenimientoVerResenaProfesionalComponent } from './components/pages/resena/mantenimiento-ver-resena-profesional/mantenimiento-ver-resena-profesional.component';
+import { VistaProfesionalesComponent } from './components/pages/profesional/vista-profesionales/vista-profesionales.component';
 
 
 
@@ -33,6 +34,7 @@ export const routes: Routes = [
     { path: 'profesional-register', component:  RegistroActualizacionProfesionalComponent, title: 'Formulario de registro'},
     { path: 'profesional-edit/:id', component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
     { path: 'profesional-list', component: MantenimientoProfesionalComponent, title: 'Listado de profesionales'},
+    { path: 'vista-profesionales', component: VistaProfesionalesComponent, title: 'Profesionales' },
 
     //Rutas del modulo Paciente--Alejandreo Larrea
     { path: 'mis-pacientes', component: MantenimientoPacienteComponent},
