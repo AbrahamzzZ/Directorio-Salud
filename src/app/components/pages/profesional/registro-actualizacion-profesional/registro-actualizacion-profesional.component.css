@@ -15,6 +15,14 @@
   margin-bottom: 20px;
 }
 
+.example-form-grid h2 {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+}
+
 .custom-form-field {
   display: flex;
   flex-direction: column;

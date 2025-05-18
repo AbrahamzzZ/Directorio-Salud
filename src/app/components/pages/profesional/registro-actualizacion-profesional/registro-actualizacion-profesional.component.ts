@@ -137,19 +137,32 @@ export class RegistroActualizacionProfesionalComponent {
         foto: this.form.value.foto  
       };
 
-      this.service.agregarProfesional(nuevoProfesional).subscribe(() => {
-        const nuevaCuenta: Cuenta = {
-          id: nuevoId,
-          email: this.form.value.correo,
-          password: this.form.value.clave,
-          rol: 'profesional',
-          profesionalId: nuevoId
-        };
+      this.service.agregarProfesional(nuevoProfesional).subscribe({
+        next: () => {
+          const nuevaCuenta: Cuenta = {
+            id: nuevoId,
+            email: this.form.value.correo,
+            password: this.form.value.clave,
+            rol: 'profesional',
+            profesionalId: nuevoId
+          };
 
-        this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
-          this.router.navigate(['/login'], { replaceUrl: true });
-        });
+          this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe({
+            next: () => {
+              console.log('Registro exitoso: Profesional y cuenta creados correctamente.');
+              this.router.navigate(['/login'], { replaceUrl: true });
+            },
+            error: (error) => {
+              console.error('Error al registrar cuenta:', error);
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error al registrar profesional:', error);
+        }
       });
+    }, error => {
+      console.error('Error al obtener profesionales:', error);
     });
   }
 
@@ -177,8 +190,15 @@ export class RegistroActualizacionProfesionalComponent {
       ...this.profesionalOriginal!,
       ...this.form.value
     };
-    this.service.editarInformacionProfesional(updatedServicio).subscribe(() => {
-      this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
+
+    this.service.editarInformacionProfesional(updatedServicio).subscribe({
+      next: () => {
+        console.log('Actualización exitosa: Profesional actualizado correctamente.');
+        this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
+      },
+      error: (error) => {
+        console.error('Error al actualizar profesional:', error);
+      }
     });
   }
 
@@ -283,8 +303,6 @@ export class RegistroActualizacionProfesionalComponent {
   private arraysSonIguales(arr1: any[], arr2: any[]): boolean {
     if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
     if (arr1.length !== arr2.length) return false;
-
-    // Si los elementos son simples (como strings o números)
     const sorted1 = [...arr1].sort();
     const sorted2 = [...arr2].sort();
 
@@ -317,7 +335,6 @@ export class RegistroActualizacionProfesionalComponent {
     const valor = control.value;
     if (!valor) return null;
 
-    // Debe contener al menos una letra (mayúscula o minúscula, con acentos incluidos)
     const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(valor);
     return contieneLetra ? null : { sinLetras: true };
   }
