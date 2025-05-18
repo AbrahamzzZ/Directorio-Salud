@@ -1,3 +1,15 @@
+.example-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.container_search_input {
+  width: 100%;
+  max-width: 500px;
+}
+
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -62,10 +74,22 @@ button[mat-stroked-button]:hover {
 }
 
 .foto-profesional-derecha {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    align-self: flex-end;
-    margin-bottom: 16px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  align-self: flex-end;
+  margin-bottom: 16px;
+}
+
+.mensaje-no-resultados {
+  text-align: center;
+  margin-top: 48px;
+  color: #999;
+  font-size: 18px;
+}
+
+.mensaje-no-resultados mat-icon {
+  font-size: 48px;
+  color: #ccc;
 }

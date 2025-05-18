@@ -113,7 +113,7 @@ export class RegistroActualizacionResenaComponent implements OnInit {
     };
 
     this.servicioResena.addResena(nuevaResena).subscribe(() => {
-      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
+      this.router.navigate(['vista-profesionales'], { replaceUrl: true });
     });
   }
 
@@ -168,7 +168,7 @@ export class RegistroActualizacionResenaComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['mantenimiento-resena']);
+    this.router.navigate(['vista-profesionales']);
   }
 
   // Validador personalizado dentro de la clase
