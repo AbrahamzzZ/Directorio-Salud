@@ -9,11 +9,12 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-pacientes-dashboard',
-  imports: [HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, FormsModule, MatInputModule, MatIcon],
+  imports: [HeaderComponent, FooterComponent, MatCardModule, MatButtonModule, FormsModule, MatInputModule, MatIcon, DatePipe],
   templateUrl: './pacientes-dashboard.component.html',
   styleUrl: './pacientes-dashboard.component.css'
 })
