@@ -243,19 +243,33 @@
       "servicioId": "3e6c",
       "profesionalId": "1",
       "pacienteId": "p2"
+    },
+    {
+      "id": "96f6",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-19T02:24:44.518Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": true,
+      "servicioId": "9cbc",
+      "profesionalId": "1",
+      "pacienteId": "p6"
+    },
+    {
+      "id": "5b34",
+      "direccion": "Av. 9 de Octubre",
+      "prioridad": "Alta",
+      "metodoPago": "efectivo",
+      "fechaHora": "2025-05-19T02:36:05.818Z",
+      "estadoCita": "agendada",
+      "esNuevoPaciente": true,
+      "servicioId": "5db4",
+      "profesionalId": "1",
+      "pacienteId": "p6"
     }
   ],
   "resenas": [
-    {
-      "id": "2ff3",
-      "comentario": "La doctora González fue muy empática y profesional desde el primer momento. Me ayudó a entender mejor mis emociones y a desarrollar estrategias efectivas para manejar el estrés.",
-      "calificacion": 5,
-      "recomienda": true,
-      "motivoVisita": "Ansiedad y estrés laboral",
-      "profesionalId": "1",
-      "pacienteId": "p6",
-      "fechaResena": "2025-05-18"
-    },
     {
       "id": "fba7",
       "comentario": "Muy amable y paciente con los niños. Explica todo con claridad y genera confianza tanto en los padres como en los pequeños.",
@@ -315,6 +329,36 @@
       "profesionalId": "6",
       "pacienteId": "p6",
       "fechaResena": "2025-05-18"
+    },
+    {
+      "id": "3c7a",
+      "comentario": "adsadas",
+      "calificacion": 4,
+      "recomienda": true,
+      "motivoVisita": "asdads",
+      "profesionalId": "2",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-19"
+    },
+    {
+      "id": "1c1a",
+      "comentario": "asdsad",
+      "calificacion": 4,
+      "recomienda": true,
+      "motivoVisita": "adsadsa",
+      "profesionalId": "1",
+      "pacienteId": "p6",
+      "fechaResena": "2025-05-19"
+    },
+    {
+      "id": "70ef",
+      "comentario": "asdsad",
+      "calificacion": 3,
+      "recomienda": false,
+      "motivoVisita": "sadsad",
+      "profesionalId": "1",
+      "pacienteId": "p2",
+      "fechaResena": "2025-05-19"
     }
   ],
   "pacientes": [
