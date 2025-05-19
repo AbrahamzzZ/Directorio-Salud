@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FooterComponent } from '../../../shared/footer/footer.component';
 import { HeaderComponent } from '../../../shared/header/header.component';
-import { ServLoginService } from '../../../../services/serv-login.service'; // Importa el servicio de login
+import { ServLoginService } from '../../../../services/serv-login.service'; 
 
 @Component({
   selector: 'app-mantenimiento-paciente-cita',
@@ -60,17 +60,17 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
     private servicioServicios: ServServiciosjsonService,
     private navegador: Router,
     private dialog: MatDialog,
-    private servicioLogin: ServLoginService // Inyecta el servicio de login
+    private servicioLogin: ServLoginService 
   ) { }
 
   ngOnInit(): void {
-    this.cargarCitasDelPaciente(); // Llama a la nueva función para cargar solo las citas del paciente
+    this.cargarCitasDelPaciente(); 
   }
-
+//cargar las citas del paciente con datos de otros modulos
   cargarCitasDelPaciente(): void {
     const pacienteId = this.servicioLogin.getIdentificador();
     if (pacienteId) {
-      this.servicioCita.getCitas() // Aquí podrías tener un método específico en tu servicio para obtener citas por pacienteId (opción recomendada)
+      this.servicioCita.getCitas() 
         .pipe(
           tap((citas) => (this.listadoCitas = citas.filter(cita => cita.pacienteId === pacienteId))),
           switchMap(() => this.servicioServicios.getAllServices()),
@@ -126,16 +126,16 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
         );
     } else {
       console.warn('No se pudo obtener el ID del paciente.');
-      this.sourceDatos.data = []; // O podrías mostrar un mensaje indicando que no hay citas
+      this.sourceDatos.data = []; 
     }
   }
-
+  //editar cita
   editarCita(cita: any): void {
     this.navegador.navigate(['/registro-actualizacion-cita', cita.id], {
       queryParams: { servicioId: cita.servicioId },
     });
   }
-
+//Metodo de buscar
   search(searchInput: HTMLInputElement) {
     const termino = searchInput.value.trim().toLowerCase();
     const citasFiltradas = this.listadoCitas
@@ -190,7 +190,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
 
     this.sourceDatos.data = citasFiltradas;
   }
-
+  //botones de accion de las citas
   gestionarAccionCita(event: { tipo: string; fila: any }) {
     const { tipo, fila } = event;
     if (tipo === 'editar') {
@@ -225,7 +225,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
         'Eliminación Exitosa',
         'La cita se ha eliminado correctamente.'
       );
-      this.cargarCitasDelPaciente(); // Recarga solo las citas del paciente
+      this.cargarCitasDelPaciente(); 
     }, (error) => {
       console.error('Error al eliminar la cita:', error);
       this.mostrarDialogo(

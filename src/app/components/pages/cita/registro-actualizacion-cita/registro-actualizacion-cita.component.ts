@@ -152,7 +152,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
     prioridad: cita.prioridad,
     metodoPago: cita.metodoPago,
     fechaHora: cita.fechaHora,
-    estadoCita: cita.estadoCita, // Cambiado de 'estado' a 'estadoCita'
+    estadoCita: cita.estadoCita, 
   });
 }
   // Enviar formulario (crear o actualizar)
@@ -196,7 +196,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
       profesionalId: this.detallesServicio!.profesionalId,
       pacienteId: userId || 'Usuario no registrado',
       fechaHora: this.formularioCita.value.fechaHora || new Date().toISOString(),
-      estadoCita: 'agendada', // Cambiado de 'estado' a 'estadoCita'
+      estadoCita: 'agendada', 
     };
 
     this.servicioCita.createCita(citaData).subscribe(

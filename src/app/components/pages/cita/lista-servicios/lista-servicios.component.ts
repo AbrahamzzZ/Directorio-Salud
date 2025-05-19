@@ -23,7 +23,7 @@ import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.se
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../../../models/Dialog-data';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
-import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service'; // Importa el servicio de profesionales
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
 
 @Component({
   selector: 'app-lista-servicios',
@@ -42,7 +42,7 @@ export class ListaServiciosComponent implements OnInit {
 
   constructor(
     private servicioDeServicios: ServServiciosjsonService,
-    private servicioProfesional: ServProfesionalesService, // Inyecta el servicio de profesionales
+    private servicioProfesional: ServProfesionalesService,
     private navegador: Router,
     private servicioCita: ServCitaService,
     private dialog: MatDialog
@@ -98,7 +98,7 @@ export class ListaServiciosComponent implements OnInit {
     this.servicioCita.getCitas().subscribe(
       (citas) => {
         const citaExistente = citas.find(
-          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id // Cambiado a pacienteId
+          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id 
         );
 
         if (citaExistente) {
