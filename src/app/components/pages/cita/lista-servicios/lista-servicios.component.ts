@@ -98,7 +98,7 @@ export class ListaServiciosComponent implements OnInit {
     this.servicioCita.getCitas().subscribe(
       (citas) => {
         const citaExistente = citas.find(
-          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id // Cambiado a pacienteId
+          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id 
         );
 
         if (citaExistente) {
