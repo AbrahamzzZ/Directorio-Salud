@@ -1,36 +1,36 @@
 .example-form-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Una sola columna para apilar los campos */
-    gap: 15px; /* Espacio entre las filas (campos) */
-    max-width: 400px; /* Un ancho máximo razonable para pantallas grandes */
-    width: 90%; /* Ocupa un porcentaje mayor en pantallas pequeñas */
-    margin: 20px auto; /* Centra el formulario HORIZONTALMENTE */
+    grid-template-columns: 1fr; 
+    gap: 15px; 
+    max-width: 400px; 
+    width: 90%; 
+    margin: 20px auto; 
     padding: 20px;
-    border: 1px solid #ccc; /* Opcional: borde */
-    border-radius: 5px; /* Opcional: bordes redondeados */
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
 }
 
 .example-form-grid h1 {
-    text-align: center; /* Centra el título */
+    text-align: center; 
     margin-bottom: 20px;
 }
 
 .example-section {
-    justify-self: start; /* Alinea el checkbox al inicio de la celda */
+    justify-self: start; 
 }
 
 .buttons-container {
     display: flex;
-    justify-content: center; /* Alinea los botones al final (derecha) */
+    justify-content: center; 
     gap: 10px;
-    width: 100%; /* Asegura que los botones estén en la misma línea y ocupen el ancho del formulario */
+    width: 100%; 
 }
 
 .btnCancel{
     background-color: rgb(189, 203, 214);
 }
 
-/* Asegúrate de que los mat-form-field ocupen el ancho completo de su celda en la grid */
+
 .example-form-grid mat-form-field {
     width: 100%;
 }

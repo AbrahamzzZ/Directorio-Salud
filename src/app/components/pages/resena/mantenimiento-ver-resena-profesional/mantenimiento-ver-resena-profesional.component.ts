@@ -40,7 +40,7 @@ export class MantenimientoVerResenaProfesionalComponent {
     { key: 'fechaResena', titulo: 'Fecha' }
   ];
 
-  acciones: any[] = []; // No se muestran acciones para el profesional
+  acciones: any[] = []; 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

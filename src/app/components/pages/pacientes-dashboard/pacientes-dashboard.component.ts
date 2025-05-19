@@ -14,7 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ServServiciosjsonService } from '../../../services/servicio-servicios/serv-serviciosjson.service';
 import { Cita } from '../../../models/Citas';
 import { ServicioMedico } from '../../../models/ServicioMedico';
-import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
+import { MatIconModule } from '@angular/material/icon'; 
 
 interface CitaConDetalles extends Cita {
   fechaHoraServicio: Date;
@@ -30,14 +30,7 @@ interface ProfesionalConPromedio extends Profesional {
 @Component({
   selector: 'app-pacientes-dashboard',
   standalone: true,
-  imports: [
-    HeaderComponent,
-    FooterComponent,
-    CommonModule,
-    MatCardModule,
-    MatTableModule,
-    MatIconModule // Añade MatIconModule a los imports
-  ],
+  imports: [HeaderComponent, FooterComponent, CommonModule, MatCardModule, MatTableModule, MatIconModule ],
   templateUrl: './pacientes-dashboard.component.html',
   styleUrl: './pacientes-dashboard.component.css'
 })

@@ -84,7 +84,6 @@ export class MantenimientoResenaComponent {
 
       // ForkJoin para esperar a que todas las peticiones a los profesionales se completen.
       forkJoin(peticiones).subscribe((resenasConNombre: ResenaConNombre[]) => {
-        // Asigna los datos combinados (reseñas con nombres de profesionales) al dataSource de la tabla.
         this.dataSource.data = resenasConNombre;
       });
     });
