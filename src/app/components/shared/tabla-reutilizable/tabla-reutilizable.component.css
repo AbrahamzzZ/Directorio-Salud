@@ -1,4 +1,19 @@
 table, .paginator{
     background-color: transparent;
-    color: white;
+}
+
+.paginator{
+    color: black;
+}
+
+.tabla-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* Opcional: mejora la visualización en pantallas pequeñas */
+@media (max-width: 600px) {
+    .tabla-responsive table {
+        min-width: 600px; /* o más si tu tabla lo necesita */
+    }
 }

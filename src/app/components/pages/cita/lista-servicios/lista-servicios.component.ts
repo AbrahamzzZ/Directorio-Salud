@@ -23,7 +23,7 @@ import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.se
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../../../models/Dialog-data';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
-import { ServLoginService } from '../../../../services/serv-login.service';
+import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service'; // Importa el servicio de profesionales
 
 @Component({
   selector: 'app-lista-servicios',
@@ -42,28 +42,31 @@ export class ListaServiciosComponent implements OnInit {
 
   constructor(
     private servicioDeServicios: ServServiciosjsonService,
+    private servicioProfesional: ServProfesionalesService, // Inyecta el servicio de profesionales
     private navegador: Router,
     private servicioCita: ServCitaService,
-    private servicioLogin: ServLoginService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.cargarServicios();
+    this.cargarServiciosFiltrados();
   }
+
+  cargarServiciosFiltrados(): void {
+    this.servicioProfesional.getProfesionales().subscribe(profesionales => {
+      const profesionalesActivosIds = new Set(profesionales.map(p => p.id));
+
+      this.servicioDeServicios.getAllServices().subscribe(servicios => {
+        this.listaDeServicios = servicios.filter(servicio => servicio.profesionalId && profesionalesActivosIds.has(servicio.profesionalId));
+        this.listaDeServiciosOriginal = [...this.listaDeServicios];
+        console.log('Servicios cargados (filtrados por profesional):', this.listaDeServicios.map(s => s.id));
+      });
+    });
+  }
+
   trackByServicio(index: number, servicio: ServicioMedico): string {
     // Combina el id del servicio con su índice para garantizar que sea único
     return `${servicio.id}-${index}`;
-  }
-  cargarServicios(): void {
-    this.servicioDeServicios.getAllServices().subscribe((servicios) => {
-      this.listaDeServicios = servicios;
-      this.listaDeServiciosOriginal = [...servicios];
-      console.log(
-        'Servicios cargados:',
-        this.listaDeServicios.map((s) => s.id)
-      );
-    });
   }
 
   buscar(searchInput: HTMLInputElement) {

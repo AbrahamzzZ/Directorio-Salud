@@ -48,8 +48,10 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
         return 'Activo' 
       case 'metodoPago':
         return 'Metodo de Pago'
-      case 'fechaHora':
-        return 'Fecha de Registro'
+       case 'fechaHora':
+        return 'Fecha de Registro' 
+      case 'estadoCita':
+        return 'Estado'
       case 'nombreProfesional':
         return 'Profesional';
       case 'nombrePaciente':

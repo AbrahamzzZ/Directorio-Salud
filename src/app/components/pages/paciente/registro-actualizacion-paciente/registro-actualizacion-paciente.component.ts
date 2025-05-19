@@ -13,8 +13,6 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServPacientesService } from '../../../../services/servicio-paciente/serv-pacientes.service';
 import { Paciente } from '../../../../models/Paciente';
-import { HeaderComponent } from "../../../shared/header/header.component";
-import { FooterComponent } from "../../../shared/footer/footer.component";
 import { MatIconModule } from '@angular/material/icon';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 import { Cuenta } from '../../../../models/Cuenta';
@@ -32,7 +30,6 @@ import { forkJoin } from 'rxjs';
   styleUrl: './registro-actualizacion-paciente.component.css'
 })
 export class RegistroActualizacionPacienteComponent implements OnInit {
-  fechaMin: Date = new Date();
   pacienteForm: FormGroup;
   cuentaForm: FormGroup;
   isEditMode = false;
@@ -59,7 +56,6 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
       Edad: ['', [Validators.required, Validators.min(0), Validators.max(120)]],      
       contacto: ['', Validators.required],
       tipoSangre: ['', Validators.required],
-      fechaRegistro: ['', Validators.required],
       estado: [true]
     });
 
@@ -150,13 +146,11 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
     this.pacientesService.getpacientes().subscribe({
       next: (pacientes) => {
         let nextIdNumber = 1;
-
-        // Extraer los números de IDs con prefijo "p" (como "p1", "p2", etc.)
         if (pacientes && pacientes.length > 0) {
           const idNumbers = pacientes
             .map(p => {
               if (p.id && typeof p.id === 'string' && p.id.startsWith('p')) {
-                const num = parseInt(p.id.slice(1), 10); // elimina la 'p' y convierte a número
+                const num = parseInt(p.id.slice(1), 10); 
                 return isNaN(num) ? null : num;
               }
               return null;
@@ -169,14 +163,15 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
         }
 
         const newId = `p${nextIdNumber}`;
-
+       
         const newPaciente: Paciente = {
           id: newId,
-          ...this.pacienteForm.value
+          ...this.pacienteForm.value,
+          fechaRegistro: new Date().toISOString().split('T')[0] // Formato YYYY-MM-DD
         };
 
         const newCuenta: Cuenta = {
-          id: newId, // usa el mismo ID con prefijo
+          id: newId, 
           email: this.cuentaForm.value.email,
           password: this.cuentaForm.value.password,
           rol: 'paciente',
@@ -232,7 +227,7 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
   updatePaciente(): void {
     const updatedPaciente: Paciente = {
       ...this.pacienteOriginal!,
-      ...this.pacienteForm.value
+      ...this.pacienteForm.value      
     };    
     if (this.cuentaOriginal) {
       const updatedCuenta: Cuenta = {

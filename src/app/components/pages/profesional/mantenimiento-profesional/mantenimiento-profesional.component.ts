@@ -23,7 +23,6 @@ import { DialogData } from '../../../../models/Dialog-data';
 export class MantenimientoProfesionalComponent {
 
   constructor(private servicio:ServProfesionalesService, private router:Router, private dialog: MatDialog){}
-  //displayedColumns: string[] = ['nombre', 'especialidad', 'ubicacion', 'disponibilidad', 'sexo', 'telefono', 'accion'];
   dataSource = new MatTableDataSource<Profesional>();
   columnasKeys: string[] = [];
 
@@ -99,9 +98,15 @@ export class MantenimientoProfesionalComponent {
   }
 
   eliminar(servicio:Profesional): void {
-    this.servicio.eliminarProfesional(servicio).subscribe(() => {
-      this.cargarProfesionales();
-      this.router.navigate(['/profesional-list'], { replaceUrl: true });
+    this.servicio.eliminarProfesional(servicio).subscribe({
+      next: () => {
+        console.log(`Profesional con ID ${servicio.id} eliminado correctamente.`);
+        this.cargarProfesionales();
+        this.router.navigate(['/profesional-list'], { replaceUrl: true });
+      },
+      error: (error) => {
+        console.error(`Error al eliminar profesional con ID ${servicio.id}:`, error);
+      }
     });
   }
 }

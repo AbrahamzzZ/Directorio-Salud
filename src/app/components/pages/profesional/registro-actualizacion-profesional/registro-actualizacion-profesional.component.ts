@@ -40,9 +40,9 @@ export class RegistroActualizacionProfesionalComponent {
 
   constructor( private fb: FormBuilder, private service: ServProfesionalesService, private servicioLogin: ServLoginService, private route: ActivatedRoute, private router: Router, private dialog: MatDialog){
     this.form = this.fb.group({
-      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
+      nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ.\s]+$/), Validators.minLength(5), Validators.maxLength(50)]],
       especialidad: ['', Validators.required],
-      ubicacion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀ-ÿ\s]+$/), Validators.minLength(3), Validators.maxLength(50)]],
+      ubicacion: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), this.ubicacionConLetras]],
       edad: [null, [Validators.required, Validators.min(18), Validators.max(100), this.soloEnteros]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       sexo: ['', Validators.required],
@@ -137,19 +137,32 @@ export class RegistroActualizacionProfesionalComponent {
         foto: this.form.value.foto  
       };
 
-      this.service.agregarProfesional(nuevoProfesional).subscribe(() => {
-        const nuevaCuenta: Cuenta = {
-          id: nuevoId,
-          email: this.form.value.correo,
-          password: this.form.value.clave,
-          rol: 'profesional',
-          profesionalId: nuevoId
-        };
+      this.service.agregarProfesional(nuevoProfesional).subscribe({
+        next: () => {
+          const nuevaCuenta: Cuenta = {
+            id: nuevoId,
+            email: this.form.value.correo,
+            password: this.form.value.clave,
+            rol: 'profesional',
+            profesionalId: nuevoId
+          };
 
-        this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe(() => {
-          this.router.navigate(['/login'], { replaceUrl: true });
-        });
+          this.servicioLogin.registrarCuenta(nuevaCuenta).subscribe({
+            next: () => {
+              console.log('Registro exitoso: Profesional y cuenta creados correctamente.');
+              this.router.navigate(['/login'], { replaceUrl: true });
+            },
+            error: (error) => {
+              console.error('Error al registrar cuenta:', error);
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error al registrar profesional:', error);
+        }
       });
+    }, error => {
+      console.error('Error al obtener profesionales:', error);
     });
   }
 
@@ -177,8 +190,15 @@ export class RegistroActualizacionProfesionalComponent {
       ...this.profesionalOriginal!,
       ...this.form.value
     };
-    this.service.editarInformacionProfesional(updatedServicio).subscribe(() => {
-      this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
+
+    this.service.editarInformacionProfesional(updatedServicio).subscribe({
+      next: () => {
+        console.log('Actualización exitosa: Profesional actualizado correctamente.');
+        this.router.navigate(['/profesional-dashboard'], { replaceUrl: true });
+      },
+      error: (error) => {
+        console.error('Error al actualizar profesional:', error);
+      }
     });
   }
 
@@ -283,8 +303,6 @@ export class RegistroActualizacionProfesionalComponent {
   private arraysSonIguales(arr1: any[], arr2: any[]): boolean {
     if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
     if (arr1.length !== arr2.length) return false;
-
-    // Si los elementos son simples (como strings o números)
     const sorted1 = [...arr1].sort();
     const sorted2 = [...arr2].sort();
 
@@ -311,5 +329,13 @@ export class RegistroActualizacionProfesionalComponent {
     const valor = control.value;
     if (valor == null || valor === '') return null;
     return Number.isInteger(valor) ? null : { noEntero: true };
+  }
+
+  ubicacionConLetras(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value;
+    if (!valor) return null;
+
+    const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(valor);
+    return contieneLetra ? null : { sinLetras: true };
   }
 }

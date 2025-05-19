@@ -29,11 +29,12 @@
           <p><strong>Dirección:</strong> {{ cita.direccion }}</p>
           <p><strong>Método de Pago:</strong> {{ cita.metodoPago }}</p>
           <p><strong>Prioridad:</strong> {{ cita.prioridad }}</p>
+        <!--  <p><strong>Fecha Disponible:</strong> {{ cita.fechaDisponible | date: "short" }}</p> -->
           <p>
             <strong>Fecha y Hora:</strong> {{ cita.fechaHora | date : "short" }}
           </p>
-          <p><strong>Estado:</strong> {{ cita.estado }}</p>
-        </mat-card-content>
+          <p><strong>Estado:</strong> {{ cita.estadoCita }}</p>
+          <p><strong>¿Es Nuevo Paciente?:</strong> {{ cita.esNuevoPaciente ? 'Sí' : 'No' }}</p>        </mat-card-content>
       </mat-card>
       }
     </div>

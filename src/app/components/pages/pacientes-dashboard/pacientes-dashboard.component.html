@@ -1,37 +1,44 @@
 <app-header></app-header>
-<h1>ESTE ES EL DASHBOARD DE PACIENTES</h1>
 
-<form class="example-form">
-    <mat-form-field appearance="outline" class="container__search__input">
-    <mat-label>Buscar:</mat-label>
-    <input matInput placeholder="Especialidad" (keyup)="buscar(searchInput)" #searchInput>
-    </mat-form-field>
-</form>
+<div class="container">
+  <h2>Bienvenido, {{ pacienteActual?.nombre }}</h2>
+  <p>Nos alegra tenerte aquí. Gestiona tu salud desde un solo lugar</p>
+  <p>Explora tus citas y conoce a nuestros profesionales mejor valorados.</p>
 
-<div class="cards-container">
-  @for (profesional of profesionales; track profesional.id) {
-    <mat-card class="profesional-card">
-      <mat-card-header>
-        <div class="card-header-content">
-            <mat-card-title>{{ profesional.nombre }}</mat-card-title>
-            <mat-card-subtitle>{{ profesional.especialidad }}</mat-card-subtitle>
-        </div>
-        <img [src]="profesional.foto" alt="Foto del profesional" class="foto-profesional" onerror="this.src='assets/default-avatar.png'" />
-      </mat-card-header>
+  <section class="proximas-citas">
+    <h3>Próximas citas</h3>
+      <mat-card *ngFor="let cita of citasProximas" class="cita-card">
+        <mat-card-content class="cita-content">
+          <div class="cita-izquierda">
+            <p><strong>Servicio:</strong> {{ cita.nombreServicio }}</p>
+            <p><strong>Profesional:</strong> {{ cita.nombreProfesional }}</p>
+            <p><strong>Dirección:</strong> {{ cita.direccion }}</p>
+          </div>
+          <div class="cita-derecha">
+            <p>{{ cita.fechaHoraServicio | date:'fullDate' }}</p>
+            <p>{{ cita.fechaHoraServicio | date:'shortTime' }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    <p *ngIf="citasProximas.length === 0">No tienes citas próximas.</p>
+  </section>
+
+  <section class="profesionales-destacados">
+    <h3>Profesionales destacados</h3>
+    <mat-card *ngFor="let profesional of profesionalesDestacados" class="profesional-card">
       <mat-card-content>
-        <p><strong>Ubicación:</strong> {{ profesional.ubicacion }}</p>
-        <p><strong>Teléfono:</strong> {{ profesional.telefono }}</p>
-        <p><strong>Disponibilidad:</strong> {{ formatDisponibilidad(profesional.disponibilidad)}}</p>
+        <p><strong>Nombre:</strong> {{ profesional.nombre }}</p>
+        <p><strong>Especialidad:</strong> {{ profesional.especialidad }}</p>
+        <p>
+          <mat-icon>location_on</mat-icon> {{ profesional.ubicacion }}
+        </p>
+        <p>
+          <mat-icon>star</mat-icon> Calificación: {{ obtenerPromedioProfesional(profesional.id) | number:'1.1-1' }}
+        </p>
       </mat-card-content>
-      <div class="botones-resenia">
-        <button mat-stroked-button (click)="irAResena(profesional.id)">    
-          <mat-icon>rate_review</mat-icon> Reseña
-        </button>
-        <button mat-stroked-button (click)="verResenas(profesional.id)">
-          <mat-icon>visibility</mat-icon> Ver reseña
-        </button>
-      </div>
     </mat-card>
-  }
+    <p *ngIf="profesionalesDestacados.length === 0">No hay profesionales destacados aún.</p>
+  </section>
 </div>
+
 <app-footer></app-footer>

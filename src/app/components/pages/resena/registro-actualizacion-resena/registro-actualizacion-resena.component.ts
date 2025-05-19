@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServLoginService } from '../../../../services/serv-login.service';
 import { ServResenasService } from '../../../../services/servicio-resena/serv-resenas.service';
@@ -25,7 +25,7 @@ import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
   templateUrl: './registro-actualizacion-resena.component.html',
   styleUrl: './registro-actualizacion-resena.component.css'
 })
-export class RegistroActualizacionResenaComponent {
+export class RegistroActualizacionResenaComponent implements OnInit {
 
   resenaForm: FormGroup;
   profesionalId: string = '';
@@ -43,10 +43,10 @@ export class RegistroActualizacionResenaComponent {
     private dialog: MatDialog
   ) {
     this.resenaForm = this.fb.group({
-      comentario: ['', Validators.required],
+      comentario: ['', [Validators.required, this.noSoloNumerosEspaciosValidator()]],
       calificacion: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
       recomienda: [false],
-      motivoVisita: ['', Validators.required]
+      motivoVisita: ['', [Validators.required, this.noSoloNumerosEspaciosValidator()]]
     });
   }
 
@@ -113,7 +113,7 @@ export class RegistroActualizacionResenaComponent {
     };
 
     this.servicioResena.addResena(nuevaResena).subscribe(() => {
-      this.router.navigate(['/patients-dashboard'], { replaceUrl: true });
+      this.router.navigate(['vista-profesionales'], { replaceUrl: true });
     });
   }
 
@@ -168,6 +168,23 @@ export class RegistroActualizacionResenaComponent {
   }
 
   onCancel(): void {
-    this.router.navigate(['mantenimiento-resena']);
+    this.router.navigate(['vista-profesionales']);
   }
+
+  // Validador personalizado dentro de la clase
+  private noSoloNumerosEspaciosValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const texto = control.value;
+      if (texto) {
+        const soloNumeros = /^[0-9]+$/.test(texto);
+        const soloEspacios = /^\s+$/.test(texto);
+
+        if (soloNumeros || soloEspacios) {
+          return { 'noSoloNumerosEspacios': true };
+        }
+      }
+      return null;
+    };
+  }
+
 }
