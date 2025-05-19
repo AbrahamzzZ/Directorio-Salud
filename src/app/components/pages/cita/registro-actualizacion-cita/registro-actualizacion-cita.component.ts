@@ -55,8 +55,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
   ) {
       this.formularioCita = this.constructorFormulario.group({
     direccion: ['', Validators.required],
-    prioridad: ['', [Validators.required, Validators.pattern(new RegExp(`^(${this.prioridadesValidas.join('|')})$`, 'i'))]],
-    metodoPago: ['', Validators.required],
+    prioridad: ['', [Validators.required, Validators.pattern(new RegExp(`^(${this.prioridadesValidas.join('|')})$`, 'i'))]],    metodoPago: ['', Validators.required],
     fechaHora: [''],
     estadoCita: ['agendada'],
     esNuevoPaciente: [false],
@@ -152,7 +151,7 @@ export class RegistroActualizacionCitaComponent implements OnInit {
     prioridad: cita.prioridad,
     metodoPago: cita.metodoPago,
     fechaHora: cita.fechaHora,
-    estadoCita: cita.estadoCita, // Cambiado de 'estado' a 'estadoCita'
+    estadoCita: cita.estadoCita, 
   });
 }
   // Enviar formulario (crear o actualizar)
@@ -229,23 +228,35 @@ export class RegistroActualizacionCitaComponent implements OnInit {
   }
 
   // Actualizar la cita
-  updateCita(): void {
-    const citaData = {
-      ...this.formularioCita.value,
-      servicioId: this.detallesServicio!.id,
-      profesionalId: this.detallesServicio!.profesionalId,
-      id: this.idCitaActual!,
-    };
+updateCita(): void {
+  // Obtener el pacienteId actual o mantener el que ya tenía la cita
+  const userId = this.servicioLogin.getIdentificador();
+  
+  this.servicioCita.getCitaById(this.idCitaActual!).subscribe(
+    (citaExistente) => {
+      const citaData = {
+        ...this.formularioCita.value,
+        servicioId: this.detallesServicio!.id,
+        profesionalId: this.detallesServicio!.profesionalId,
+        id: this.idCitaActual!,
+        pacienteId: citaExistente.pacienteId || userId, 
+        fechaHora: this.formularioCita.value.fechaHora || citaExistente.fechaHora
+      };
 
-    this.servicioCita.updateCita(citaData).subscribe(
-      () => {
-        this.enrutador.navigate(['/mantenimiento-paciente-cita'], { replaceUrl: true });
-      },
-      (error) => {
-        console.error('Error al actualizar la cita:', error);
-      }
-    );
-  }
+      this.servicioCita.updateCita(citaData).subscribe(
+        () => {
+          this.enrutador.navigate(['/mantenimiento-paciente-cita'], { replaceUrl: true });
+        },
+        (error) => {
+          console.error('Error al actualizar la cita:', error);
+        }
+      );
+    },
+    (error) => {
+      console.error('Error al obtener la cita existente:', error);
+    }
+  );
+}
   onCancelar(): void {
     this.enrutador.navigate(['/mantenimiento-paciente-cita']);
   }
