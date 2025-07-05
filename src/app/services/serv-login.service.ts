@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Cuenta } from '../models/Cuenta';
+import {jwtDecode} from 'jwt-decode';
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,7 @@ export class ServLoginService {
     }
 
     cerrarSesion() {
+        localStorage.removeItem('token');
         localStorage.removeItem('identificador');
         localStorage.removeItem('rol');
         this.identificador = undefined;
@@ -27,29 +29,32 @@ export class ServLoginService {
         return this.identificador;
     }
 
-    validarCredenciales(email: string, password: string): Observable<Cuenta | null> {
-        return this.http.post<Cuenta>(`${this.apiUrl}/login`, { email, password }).pipe(
-        map((cuenta: Cuenta) => {
-            this.rol = cuenta?.rol;
+    validarCredenciales(email: string, password: string): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+            map((resp) => {
+            const token = resp.token;
+            if (token) {
+                localStorage.setItem('token', token);
 
-            if (cuenta?.rol === 'profesional') {
-            this.identificador = cuenta.profesionalId;
-            } else if (cuenta?.rol === 'paciente') {
-            this.identificador = cuenta.pacienteId;
-            } else if (cuenta?.rol === 'administrador') {
-            this.identificador = cuenta.administradorId;
+                const decoded: any = jwtDecode(token); 
+                this.rol = decoded.rol;
+                this.identificador = decoded.id;
+
+                console.log(this.rol);
+                console.log(this.identificador);
+
+                localStorage.setItem('rol', this.rol);
+                if (this.identificador !== undefined) {
+                localStorage.setItem('identificador', this.identificador);
+                }
+
+                return decoded;
             }
 
-            localStorage.setItem('rol', this.rol);
-            if (this.identificador) {
-            localStorage.setItem('identificador', this.identificador);
-            }
-
-            return cuenta || null;
-        })
+            return null;
+            })
         );
-    } 
-
+    }
     registrarCuenta(cuenta: Cuenta): Observable<Cuenta> {
         return this.http.post<Cuenta>(`${this.apiUrl}/RegistrarCuenta`, cuenta);
     }
