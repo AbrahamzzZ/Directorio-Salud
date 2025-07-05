@@ -48,7 +48,7 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
         return 'Activo' 
       case 'metodoPago':
         return 'Metodo de Pago'
-       case 'fechaHora':
+      case 'fechaHora':
         return 'Fecha de Registro' 
       case 'estadoCita':
         return 'Estado'
@@ -65,7 +65,7 @@ export class TablaReutilizableComponent<T> implements AfterViewInit {
       case 'recomienda':
       return '¿Recomienda?';        
       default: 
-        return col.charAt(0).toUpperCase() + col.slice(1); // Capitaliza
+        return col.charAt(0).toUpperCase() + col.slice(1); 
     }
   }
 }

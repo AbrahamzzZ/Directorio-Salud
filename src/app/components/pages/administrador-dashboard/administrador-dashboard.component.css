@@ -9,9 +9,6 @@
   transition: transform 0.3s ease;
 }
 
-/*.bienvenido:hover {
-  transform: translateY(-4px);
-}*/
 
 .bienvenido h2 {
   font-size: 2rem;
@@ -24,7 +21,6 @@
   color: #555;
 }
 
-/* Fondo general de la página */
 body {
   background: #f4f7fc;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

@@ -1,5 +1,5 @@
 export interface Cuenta {
-    id: string;
+    id?: string;
     email: string;
     password: string;
     rol: string;

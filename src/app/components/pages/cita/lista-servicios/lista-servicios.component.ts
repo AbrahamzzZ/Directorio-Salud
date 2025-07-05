@@ -36,13 +36,13 @@ import { ServProfesionalesService } from '../../../../services/servicio-profesio
   styleUrls: ['./lista-servicios.component.css'],
 })
 export class ListaServiciosComponent implements OnInit {
-  listaDeServicios: ServicioMedico[] = [];
+ listaDeServicios: ServicioMedico[] = [];
   listaDeServiciosOriginal: ServicioMedico[] = [];
   public termSearch: string = '';
 
   constructor(
     private servicioDeServicios: ServServiciosjsonService,
-    private servicioProfesional: ServProfesionalesService, // Inyecta el servicio de profesionales
+    private servicioProfesional: ServProfesionalesService, 
     private navegador: Router,
     private servicioCita: ServCitaService,
     private dialog: MatDialog
@@ -65,7 +65,6 @@ export class ListaServiciosComponent implements OnInit {
   }
 
   trackByServicio(index: number, servicio: ServicioMedico): string {
-    // Combina el id del servicio con su índice para garantizar que sea único
     return `${servicio.id}-${index}`;
   }
 
@@ -83,7 +82,6 @@ export class ListaServiciosComponent implements OnInit {
   }
 
   agendarCita(servicio: ServicioMedico): void {
-    // Obtenemos el identificador actualizado desde localStorage
     const userId = localStorage.getItem('identificador');
     console.log('ID del Usuario:', userId);
 

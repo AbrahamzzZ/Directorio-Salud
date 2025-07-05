@@ -29,39 +29,14 @@ export class VistaProfesionalesComponent {
   cargarTodos(): void {
     this.servicio.getProfesionales().subscribe(data => {
       this.profesionales = data;
+      console.log(data);
     });
-  }
-
-  formatDisponibilidad(fechas: string[]): string {
-    // Si es una sola fecha, la formateamos directamente
-    const fechaUnica = fechas.join(',');
-    if (!fechaUnica.includes(',')) {
-        return new Date(fechaUnica).toLocaleString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    // Si hay múltiples fechas, las procesamos una por una
-    const fechasArray = fechaUnica.split(',');
-    return fechasArray.map(fecha => {
-        return new Date(fecha.trim()).toLocaleString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }).join(', ');
   }
 
   buscar(searchInput: HTMLInputElement) {
     const termino = searchInput.value.trim();
     if (termino) {
-      this.servicio.buscarProfesional(termino).subscribe(data => {
+      this.servicio.buscarProfesionales(termino).subscribe(data => {
         this.profesionales = data;
       });
     } else {

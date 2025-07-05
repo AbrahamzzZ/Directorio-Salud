@@ -163,7 +163,7 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
         }
 
         const newId = `p${nextIdNumber}`;
-       
+
         const newPaciente: Paciente = {
           id: newId,
           ...this.pacienteForm.value,

@@ -24,15 +24,18 @@
         <p><strong>Disponibilidad:</strong></p>
         <ul>
           @for (fecha of profesional.disponibilidad; track fecha) {
-            <li>{{ fecha | date:'dd/MM/yyyy, HH:mm' }}</li>
+            <li>
+              {{ fecha.fecha | date:'dd/MM/yyyy' }}:
+              {{ fecha.horaInicio }} - {{ fecha.horaFin }}
+            </li>
           }
         </ul>
       </mat-card-content>
       <div class="botones-resenia">
-        <button mat-stroked-button (click)="irAResena(profesional.id)">    
+        <button mat-stroked-button (click)="irAResena(profesional.id!)">    
           <mat-icon>rate_review</mat-icon> Reseña
         </button>
-        <button mat-stroked-button (click)="verResenas(profesional.id)">
+        <button mat-stroked-button (click)="verResenas(profesional.id!)">
           <mat-icon>visibility</mat-icon> Ver reseña
         </button>
       </div>

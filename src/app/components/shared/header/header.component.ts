@@ -20,11 +20,11 @@ export class HeaderComponent {
 
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
-    const body = document.body; // Obtén una referencia al body
+    const body = document.body; 
     if (this.menuAbierto) {
-      this.renderer.addClass(body, 'menu-abierto'); // Agrega la clase al body
+      this.renderer.addClass(body, 'menu-abierto'); 
     } else {
-      this.renderer.removeClass(body, 'menu-abierto'); // Remueve la clase del body
+      this.renderer.removeClass(body, 'menu-abierto'); 
     }
   }
 

@@ -34,7 +34,6 @@ export class MantenimientoResenaComponent {
   dataSource = new MatTableDataSource<ResenaConNombre>();
   columnasKeys: string[] = [];
 
-  // Columnas de la tabla, incluyendo la clave para acceder a los datos y el título que se mostrará.
   columnas = [
     { key: 'nombreProfesional', titulo: 'Profesional' },
     { key: 'motivoVisita', titulo: 'Motivo de Visita' },
@@ -44,13 +43,12 @@ export class MantenimientoResenaComponent {
     { key: 'fechaResena', titulo: 'Fecha' }
   ];
 
-  // Acciones que se podrán realizar en cada fila de la tabla (editar y eliminar).
   acciones = [
     { tipo: 'editar', icono: 'edit', tooltip: 'Editar reseña' },
     { tipo: 'eliminar', icono: 'delete', tooltip: 'Eliminar reseña' }
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;   // ViewChild para obtener una referencia al componente MatPaginator.
+  @ViewChild(MatPaginator) paginator!: MatPaginator;   
 
   constructor(
     private servResena: ServResenasService,
@@ -59,7 +57,6 @@ export class MantenimientoResenaComponent {
     private dialog: MatDialog
   ) {}
 
-  // Método que se ejecuta al inicializar el componente.
   ngOnInit(): void {
     this.columnasKeys = this.columnas.map(c => c.key);
     this.displayedColumns = [...this.columnasKeys, 'acciones'];
@@ -70,7 +67,6 @@ export class MantenimientoResenaComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  // Método para cargar las reseñas del paciente actual y el nombre del profesional asociado.
   cargarResenas(): void {
     this.servResena.getResenasByPaciente().subscribe((resenas) => {
       const peticiones = resenas.map(resena =>
@@ -82,15 +78,12 @@ export class MantenimientoResenaComponent {
         )
       );
 
-      // ForkJoin para esperar a que todas las peticiones a los profesionales se completen.
       forkJoin(peticiones).subscribe((resenasConNombre: ResenaConNombre[]) => {
-        // Asigna los datos combinados (reseñas con nombres de profesionales) al dataSource de la tabla.
         this.dataSource.data = resenasConNombre;
       });
     });
   }
 
-  // Método para realizar la búsqueda de reseñas por un término ingresado por el usuario.
   search(input: HTMLInputElement) {
     const termino = input.value.trim();
     if (termino) {
@@ -104,7 +97,6 @@ export class MantenimientoResenaComponent {
           )
         );
 
-        // Espera a que todas las peticiones de nombres de profesionales se completen.
         forkJoin(peticiones).subscribe((resenasConNombre: ResenaConNombre[]) => {
           this.dataSource.data = resenasConNombre;
         });
@@ -114,7 +106,6 @@ export class MantenimientoResenaComponent {
     }
   }
 
-  // Método para gestionar la acción editar o eliminar.
   gestionarAccion(event: { tipo: string, fila: ResenaConNombre }) {
     if (event.tipo === 'editar') {
       this.editar(event.fila);
@@ -123,17 +114,14 @@ export class MantenimientoResenaComponent {
     }
   }
 
-  // Método para navegar a la página de edición de una reseña específica.
   editar(resena: Resena) {
     this.router.navigate(['/resena-edit', resena.id]);
   }
 
-  // Método para iniciar el proceso de eliminación de una reseña.
   eliminar(resena: ResenaConNombre): void {
     this.confirmarEliminacion(resena);
   }
 
-  // Método para mostrar un diálogo de confirmación al usuario antes de eliminar una reseña.
   confirmarEliminacion(resena: ResenaConNombre): void {
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
@@ -159,5 +147,4 @@ export class MantenimientoResenaComponent {
       this.router.navigate(['mantenimiento-resena'], { replaceUrl: true });
     });
   }
-
 }
