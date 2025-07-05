@@ -16,7 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../../../models/Dialog-data';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
-import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-registro-actualizacion-servicio',
@@ -48,7 +47,6 @@ export class RegistroActualizacionServicioComponent {
   }
 
   ngOnInit(): void {
-    // Verificar si estamos en modo edición
     this.servicioId = this.route.snapshot.paramMap.get('id');
     if (this.servicioId) {
       this.isEdit = true;
@@ -62,7 +60,6 @@ export class RegistroActualizacionServicioComponent {
   dateNotInPastValidator(minDate: Date) {
       return (control: AbstractControl) => {
         const selectedDate = new Date(control.value);
-        // Establecer las horas a 0 para comparar solo las fechas
         selectedDate.setHours(0, 0, 0, 0);
         minDate.setHours(0, 0, 0, 0);
         return selectedDate >= minDate ? null : { 'dateInPast': true };
@@ -103,22 +100,23 @@ export class RegistroActualizacionServicioComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.registrarServicio(); // Confirmado
+        this.registrarServicio(); 
       }
-      // Si result es false o undefined, no hacemos nada
     });
   }
 
   registrarServicio(): void {
-    const profesionalId = this.servicioLogin.getIdentificador();
+    // const profesionalId = this.servicioLogin.getIdentificador();
+    const profesionalId = Number(this.servicioLogin.getIdentificador());
     const newServicio: ServicioMedico = {
       ...this.serviceForm.value,
-      profesionalId: profesionalId ?? '', // agrega el ID del profesional
-  };
+      profesionalId: profesionalId, // ya es número
+    };
 
     this.servicioService.addService(newServicio).subscribe(() => {
-      this.router.navigate(['/my-services'], { replaceUrl: true }); // Redirige a la lista
+      this.router.navigate(['/my-services'], { replaceUrl: true }); 
     });
+
   }
 
   confirmarEdicion(): void {
@@ -135,9 +133,8 @@ export class RegistroActualizacionServicioComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.updateServicio(); // Confirmado
+        this.updateServicio(); 
       }
-      // Si result es false o undefined, no hacemos nada
     });
   }
 
@@ -146,14 +143,25 @@ export class RegistroActualizacionServicioComponent {
       ...this.servicioOriginal!,
       ...this.serviceForm.value
     };
-    this.servicioService.editService(updatedServicio).subscribe(() => {
+    this.servicioService.editService(updatedServicio).subscribe({
+    next: () => {
       this.router.navigate(['/my-services'], { replaceUrl: true });
-    });
+    },
+    error: (err) => {
+      console.error('Error en actualización:', err);
+      if (err.error && err.error.errors) {
+        console.log('Errores de validación:', err.error.errors);
+        // Opcional: aquí podrías mostrar los errores en la UI, por ejemplo asignarlos a una variable para mostrarlos en el template
+      } else if (err.error && err.error.message) {
+        console.log('Mensaje de error:', err.error.message);
+      }
+    }
+  });
+
   }
 
   isNoChanges(): boolean {
-    // Verificar si no hubo cambios en el formulario
-   if (!this.servicioOriginal) return false;
+  if (!this.servicioOriginal) return false;
 
     const original = {
       nombre: this.servicioOriginal.nombre,
@@ -165,7 +173,6 @@ export class RegistroActualizacionServicioComponent {
 
     const current = this.serviceForm.value;
 
-    // Normalizar las fechas para comparar solo la parte de la fecha (sin hora)
     const originalDate = new Date(original.fechaDisponible).toISOString().split('T')[0];
     const currentDate = new Date(current.fechaDisponible).toISOString().split('T')[0];
 
@@ -179,6 +186,6 @@ export class RegistroActualizacionServicioComponent {
   }
 
   onCancel(): void {
-    this.router.navigate(['/my-services']); // Redirigir al listado de servicios
+    this.router.navigate(['/my-services']); 
   }
 }

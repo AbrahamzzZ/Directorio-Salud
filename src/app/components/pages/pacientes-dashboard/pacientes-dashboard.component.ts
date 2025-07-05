@@ -13,8 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ServServiciosjsonService } from '../../../services/servicio-servicios/serv-serviciosjson.service';
 import { Cita } from '../../../models/Citas';
-import { ServicioMedico } from '../../../models/ServicioMedico';
-import { MatIconModule } from '@angular/material/icon'; // Importa MatIconModule
+import { MatIconModule } from '@angular/material/icon'; 
 
 interface CitaConDetalles extends Cita {
   fechaHoraServicio: Date;
@@ -136,7 +135,7 @@ export class PacientesDashboardComponent implements OnInit {
       this.servProfesionales.getProfesionales().subscribe(profesionales => {
         this.profesionalesDestacados = profesionales.map(profesional => ({
           ...profesional,
-          promedioCalificacion: this.obtenerPromedioProfesional(profesional.id)
+          promedioCalificacion: this.obtenerPromedioProfesional(profesional.id!)
         }));
         this.profesionalesDestacados.sort((a, b) => (b.promedioCalificacion || 0) - (a.promedioCalificacion || 0));
         this.profesionalesDestacados = this.profesionalesDestacados.slice(0, 3);

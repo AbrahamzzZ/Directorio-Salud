@@ -3,12 +3,10 @@
         @for (col of columnas; track col) {
             <ng-container [matColumnDef]="col">
                 
-                <!-- Esto es para verificar si esta compuesta por +1 palabra-->
                 <th mat-header-cell *matHeaderCellDef>
                 {{ getTituloCabecera(col) }}
                 </th>
 
-            <!-- Celdas para completar la tabla (datos)-->
                 @if (col === 'fechaHora') {
                     <td mat-cell *matCellDef="let row">
                         {{ row[col] | date: 'dd/MM/yyyy HH:mm' }}

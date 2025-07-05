@@ -3,7 +3,6 @@
 }
 <h1>{{ isEdit ? 'Editar Perfil' : 'Registrar Profesional' }}</h1>
 <form class="example-form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <!-- Nombre completo -->
   <mat-form-field>
     <mat-label for="nombreCompleto">Nombre completo:</mat-label>
     <input matInput id="nombreCompleto" formControlName="nombre" maxlength="50" minlength="5">
@@ -16,7 +15,6 @@
       }
   </mat-form-field>
 
-  <!-- Especialidad -->
   <mat-form-field>
     <mat-label for="especialidad">Especialidad:</mat-label>
       <mat-select id="especialidad" formControlName="especialidad">
@@ -30,7 +28,6 @@
     }
   </mat-form-field>
 
-  <!-- Ubicación -->
   <mat-form-field>
     <mat-label for="ubicacion">Ubicación:</mat-label>
     <input matInput id="ubicacion" formControlName="ubicacion" maxlength="50" minlength="3">
@@ -43,22 +40,16 @@
     }
   </mat-form-field>
 
-  <!-- Edad -->
   <mat-form-field>
-    <mat-label for="edad">Edad:</mat-label>
-    <input matInput id="edad" formControlName="edad" type="number" step="1">
-    @if(form.get('edad')?.touched && form.get('edad')?.hasError('required')) {
+    <mat-label for="fechaNacimiento">Fecha de Nacimiento: </mat-label>
+    <input matInput id="fechaNacimiento" [matDatepicker]="pickerInicio" formControlName="fecha_Nacimiento" />
+    <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+    <mat-datepicker #pickerInicio></mat-datepicker>
+    @if(form.get('fecha_Nacimiento')?.touched && form.get('fecha_Nacimiento')?.hasError('required')) {
       <mat-error class="error">Este campo es obligatorio.</mat-error>
-    } @else if(form.get('edad')?.hasError('min')) {
-      <mat-error class="error">Debe tener al menos 18 años.</mat-error>
-    } @else if(form.get('edad')?.hasError('max')) {
-      <mat-error class="error">Edad demasiada alta.</mat-error>
-    }@else if(form.get('edad')?.hasError('noEntero')) {
-      <mat-error class="error">La edad debe ser un número entero.</mat-error>
-    }
+    } 
   </mat-form-field>
 
-  <!-- Teléfono -->
   <mat-form-field>
     <mat-label for="telefono">Teléfono:</mat-label>
     <input matInput id="telefono" formControlName="telefono" required>
@@ -69,7 +60,6 @@
     }
   </mat-form-field>
 
-  <!-- Sexo -->
   <mat-radio-group formControlName="sexo">
     <mat-radio-button value="F">Femenino</mat-radio-button>
     <mat-radio-button value="M">Masculino</mat-radio-button>
@@ -78,27 +68,38 @@
     <mat-error class="error">Debe seleccionar un sexo.</mat-error>
   }
 
-  <!-- Disponibilidad -->
   <div class="custom-form-field">
-    <label for="nuevaFecha">Selecciona los días y horas en los que puedes atender</label>
-    <input type="datetime-local" id="nuevaFecha" [(ngModel)]="nuevaDisponibilidad" name="nuevaFecha" [ngModelOptions]="{standalone: true}">
+    <label for="fecha">Selecciona la fecha</label>
+    <input type="date" id="fecha" [(ngModel)]="nuevaFecha" name="fecha" [ngModelOptions]="{ standalone: true }">
   </div>
-    <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar Fecha</button>
-    @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')){
-      <mat-error>Debe agregar al menos una fecha.</mat-error>
-    }@else if(form.get('disponibilidad')?.hasError('fechaPasada')){
-      <mat-error>La fecha no puede ser anterior al día de hoy.</mat-error>
-    }
 
-  <mat-chip-listbox aria-label="Fechas seleccionadas">
-    @for (fecha of form.get('disponibilidad')?.value; track fecha) {
-      <mat-chip class="fecha-chip" [removable]="true" (removed)="eliminarDisponibilidad(fecha)">{{ fecha | date:'dd/MM/yyyy HH:mm' }}
-        <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    }
-  </mat-chip-listbox>
+  <div class="custom-form-field">
+    <label for="horaInicio">Hora de inicio</label>
+    <input type="time" id="horaInicio" [(ngModel)]="nuevaHoraInicio" name="horaInicio" [ngModelOptions]="{ standalone: true }">
+  </div>
 
-  <!-- Foto profesional -->
+  <div class="custom-form-field">
+    <label for="horaFin">Hora de fin</label>
+    <input type="time" id="horaFin" [(ngModel)]="nuevaHoraFin" name="horaFin" [ngModelOptions]="{ standalone: true }">
+  </div>
+
+  <button mat-stroked-button type="button" (click)="agregarDisponibilidad()">Agregar disponibilidad</button>
+
+  @if(form.get('disponibilidad')?.touched && form.get('disponibilidad')?.hasError('required')) {
+    <mat-error>Debe agregar al menos una fecha.</mat-error>
+  } @else if(form.get('disponibilidad')?.hasError('fechaPasada')) {
+    <mat-error>La fecha no puede ser anterior al día de hoy.</mat-error>
+  }
+
+    <mat-chip-listbox aria-label="Fechas seleccionadas">
+      @for (dispo of form.get('disponibilidad')?.value; track dispo) {
+        <mat-chip class="fecha-chip" [removable]="true" (removed)="eliminarDisponibilidad(dispo)">
+          {{ dispo.fecha | date:'dd/MM/yyyy' }} {{ dispo.horaInicio.slice(0,5) }} - {{ dispo.horaFin.slice(0,5) }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      }
+    </mat-chip-listbox>
+
   <div class="file-upload-group">
     <div class="label-and-button">
       <div class="custom-form-field-photo">
@@ -113,7 +114,6 @@
     </div>
   </div>
 
-    <!-- Solo visible cuando NO se está editando -->
     @if(!isEdit){
       <h2>Información de Cuenta</h2>
       <!-- Correo -->
@@ -127,7 +127,6 @@
         }
       </mat-form-field>
 
-      <!-- Clave -->
       <mat-form-field>
         <mat-label for="clave">Clave: </mat-label>
         <input matInput id="clave" formControlName="clave" type="password">
@@ -140,7 +139,6 @@
       </mat-form-field>
     }
 
-  <!-- Botones -->
   <section class="buttons-container">
     <div class="example-button-container">
       <button mat-stroked-button type="submit" [disabled]="form.invalid || isNoChanges()">

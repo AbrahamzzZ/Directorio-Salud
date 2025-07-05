@@ -3,12 +3,12 @@ import { FooterComponent } from "../../../shared/footer/footer.component";
 import { ServServiciosjsonService } from "../../../../services/servicio-servicios/serv-serviciosjson.service";
 import { ServicioMedico } from "../../../../models/ServicioMedico";
 
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatButtonModule} from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { Route, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { TablaReutilizableComponent } from "../../../shared/tabla-reutilizable/tabla-reutilizable.component";
 import { DialogoComponent } from "../../../shared/dialogo/dialogo.component";
 import { DialogData } from "../../../../models/Dialog-data";
@@ -24,7 +24,6 @@ export class MantenimientoServicioComponent {
 
   constructor(private serviceServiciosMedicos:ServServiciosjsonService, private router:Router, private dialog: MatDialog){}
 
-  // displayedColumns: string[] = ['nombre', 'descripcion', 'precio', 'fechaDisponible', 'requiereChequeo', 'Acciones'];
   dataSource = new MatTableDataSource<ServicioMedico>();
   columnasKeys: string[] = [];
 
@@ -77,7 +76,7 @@ export class MantenimientoServicioComponent {
         this.dataSource.data = datos;
       });
     } else {
-      this.cargarServicios(); // recarga todos los datos si no hay texto
+      this.cargarServicios(); 
     }
   }
 
@@ -103,9 +102,8 @@ export class MantenimientoServicioComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === true) {
-          this.deleteServicio(servicio); // Confirmado
+          this.deleteServicio(servicio); 
         }
-        // Si result es false o undefined, no hacemos nada
       });
   }
 

@@ -11,23 +11,23 @@ import { Profesional } from '../../models/Profesional';
 export class ServServiciosjsonService {
 
   profesional!: Profesional;
-  private jsonUrl:string = "http://localhost:3000/servicios"; 
+  private apiUrl:string = "http://localhost:5195/api/ServicioMedico"; 
 
   constructor(private http:HttpClient, private servicioLogin:ServLoginService) { }
 
   getServices(): Observable<ServicioMedico[]> { 
-    const id = String(this.servicioLogin.getIdentificador()); // forzamos a string
+    const id = String(this.servicioLogin.getIdentificador()); 
     console.log("ID Profesional:", id);
-    return this.http.get<ServicioMedico[]>(`${this.jsonUrl}?profesionalId=${id}`);
+    return this.http.get<ServicioMedico[]>(`${this.apiUrl}?profesionalId=${id}`);
   }
 
-   getAllServices(): Observable<ServicioMedico[]> {//getAllServices para obtener todos los servi
-    return this.http.get<ServicioMedico[]>(this.jsonUrl);
+  getAllServices(): Observable<ServicioMedico[]> {
+    return this.http.get<ServicioMedico[]>(this.apiUrl);
   }
 
   getServicesSearch(termino: string): Observable<ServicioMedico[]> {
-    const id = String(this.servicioLogin.getIdentificador()); // mismo filtro que en getServices()
-    return this.http.get<ServicioMedico[]>(`${this.jsonUrl}?profesionalId=${id}`).pipe(
+    const id = String(this.servicioLogin.getIdentificador()); 
+    return this.http.get<ServicioMedico[]>(`${this.apiUrl}?profesionalId=${id}`).pipe(
       map((servicios) =>
         servicios.filter((serv) =>
           serv.nombre.toLowerCase().includes(termino.toLowerCase()) ||
@@ -38,18 +38,18 @@ export class ServServiciosjsonService {
   }
   
   getServiceById(id: string): Observable<ServicioMedico> {
-    return this.http.get<ServicioMedico>(`${this.jsonUrl}/${id}`);
+    return this.http.get<ServicioMedico>(`${this.apiUrl}/${id}`);
   }
 
   addService(servicio:ServicioMedico):Observable<ServicioMedico>{
-    return this.http.post<ServicioMedico>(this.jsonUrl, servicio);
+    return this.http.post<ServicioMedico>(this.apiUrl, servicio);
   }
 
   editService(servicio:ServicioMedico):Observable<ServicioMedico>{
-    return this.http.put<ServicioMedico>(`${this.jsonUrl}/${servicio.id}`, servicio);
+    return this.http.put<ServicioMedico>(`${this.apiUrl}/${servicio.id}`, servicio);
   }
 
   deleteService(servicio:ServicioMedico):Observable<void>{
-    return this.http.delete<void>(`${this.jsonUrl}/${servicio.id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${servicio.id}`);
   }
 }

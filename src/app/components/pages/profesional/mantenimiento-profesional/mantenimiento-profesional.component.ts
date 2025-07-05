@@ -65,8 +65,9 @@ export class MantenimientoProfesionalComponent {
 
   buscar(searchInput: HTMLInputElement) {
     const termino = searchInput.value.trim();
+
     if (termino) {
-      this.servicio.buscarProfesional(termino).subscribe((datos: Profesional[]) => {
+      this.servicio.buscarProfesionales(termino, termino, termino).subscribe((datos: Profesional[]) => {
         this.dataSource.data = datos;
       });
     } else {
@@ -92,7 +93,7 @@ export class MantenimientoProfesionalComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === true) {
-          this.eliminar(servicio); // Confirmado
+          this.eliminar(servicio); 
         }
       });
   }

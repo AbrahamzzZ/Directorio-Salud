@@ -2,8 +2,8 @@
 
 <div class="container">
   <h2>Bienvenido, {{ pacienteActual?.nombre }}</h2>
-  <p>Nos alegra tenerte aquí. Gestiona tu salud desde un solo lugar</p>
-  <p>Explora tus citas y conoce a nuestros profesionales mejor valorados.</p>
+  <p>Nos alegra tenerte aquí.</p>
+  <p>Gestiona tu salud desde un solo lugar.</p>
 
   <section class="proximas-citas">
     <h3>Próximas citas</h3>
@@ -33,7 +33,7 @@
           <mat-icon>location_on</mat-icon> {{ profesional.ubicacion }}
         </p>
         <p>
-          <mat-icon>star</mat-icon> Calificación: {{ obtenerPromedioProfesional(profesional.id) | number:'1.1-1' }}
+          <mat-icon>star</mat-icon> Calificación: {{ obtenerPromedioProfesional(profesional.id!) | number:'1.1-1' }}
         </p>
       </mat-card-content>
     </mat-card>

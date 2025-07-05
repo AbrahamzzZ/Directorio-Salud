@@ -78,8 +78,6 @@ h1 {
     background-color: #e3f2fd; 
 }
 
-
-
 @media (max-width: 768px) {
     .card-listaServ {
         width: calc(50% - 20px);

@@ -1,11 +1,16 @@
+import { DisponibilidadProfesional } from "./disponibilidad-profesional";
+
 export interface Profesional {
-    id: string;
+    id?: string;
     nombre: string;
     especialidad: string;
     ubicacion: string;
-    disponibilidad: string[];
-    edad: number;
+    fecha_Nacimiento: string;
     sexo: string;
     telefono: string;
-    foto: string;
+    fotoBase64?: string;
+    foto?: string;
+    disponibilidad: DisponibilidadProfesional[];
+    email?: string;
+    password?: string;
 }

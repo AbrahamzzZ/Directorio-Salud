@@ -1,31 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DisponibilidadProfesional } from '../models/disponibilidad-profesional';
 
 @Pipe({
   name: 'formatearFechaDisponibilidad'
 })
 export class FormatearFechaDisponibilidadPipe implements PipeTransform {
   
-  transform(value: string[] | string): string {
-    if (!value) return '';
+  transform(disponibilidad: DisponibilidadProfesional[]): string {
+    if (!disponibilidad || disponibilidad.length === 0) return 'Sin disponibilidad';
 
-    const formatear = (fechaStr: string): string => {
-      const fecha = new Date(fechaStr);
+    return disponibilidad.map(d => {
+      const fecha = new Date(`${d.fecha}T${d.horaInicio}`);
+      const fin = new Date(`${d.fecha}T${d.horaFin}`);
+      const fechaStr = fecha.toLocaleDateString('es-EC');
+      const horaInicioStr = fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const horaFinStr = fin.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const pad = (n: number) => n.toString().padStart(2, '0');
-
-      const año = fecha.getFullYear();
-      const mes = pad(fecha.getMonth() + 1);
-      const dia = pad(fecha.getDate());
-      const hora = pad(fecha.getHours());
-      const minuto = pad(fecha.getMinutes());
-
-      return `${año}/${mes}/${dia} ${hora}:${minuto}`;
-    };
-
-    if (Array.isArray(value)) {
-      return value.map(formatear).join('\n');
-    } else {
-      return formatear(value);
-    }
+      return `${fechaStr} ${horaInicioStr} - ${horaFinStr}`;
+    }).join(', ');
   }
 }
