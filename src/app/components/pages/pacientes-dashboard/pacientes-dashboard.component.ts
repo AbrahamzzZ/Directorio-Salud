@@ -35,7 +35,7 @@ interface ProfesionalConPromedio extends Profesional {
     CommonModule,
     MatCardModule,
     MatTableModule,
-    MatIconModule // Añade MatIconModule a los imports
+    MatIconModule 
   ],
   templateUrl: './pacientes-dashboard.component.html',
   styleUrl: './pacientes-dashboard.component.css'
