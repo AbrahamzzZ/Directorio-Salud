@@ -1,12 +1,12 @@
 export interface Paciente {    
-      id: string,
-      nombre: string,
-      correo: string,
+      id?: string,
+      nombre: string,      
       telefono: string,
-      Edad: number,
-      diagnostico: string,
+      edad: number,      
       contacto: string,
       tipoSangre: string,
       fechaRegistro: string,    
-      estado: Boolean
+      estado: boolean
+      email?: string;
+      password?: string;
 }
