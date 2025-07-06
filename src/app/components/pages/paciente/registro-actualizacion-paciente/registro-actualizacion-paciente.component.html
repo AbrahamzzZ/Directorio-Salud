@@ -1,17 +1,16 @@
-<h1>{{ isEditMode ? 'Editar Paciente'  : 'Registrar Nuevo Paciente'}}</h1>
+<h1>{{ isEditMode ? 'Editar Paciente' : 'Registrar Nuevo Paciente' }}</h1>
 
-<form class="example-form-grid" [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
-
+<form class="example-form-grid" [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">  
   <mat-form-field>
     <mat-label>Nombre Completo</mat-label>
     <input matInput formControlName="nombre" placeholder="Nombre y apellidos">
-    @if(pacienteForm.get('nombre')?.errors?.['required']) {
+    @if (pacienteForm.get('nombre')?.errors?.['required'] && pacienteForm.get('nombre')?.touched) {
       <mat-error>El nombre es requerido</mat-error>
     }
-    @if(pacienteForm.get('nombre')?.errors?.['pattern']) {
+    @if (pacienteForm.get('nombre')?.errors?.['pattern'] && pacienteForm.get('nombre')?.touched) {
       <mat-error>El nombre no debe contener números</mat-error>
     }
-    @if(pacienteForm.get('nombre')?.errors?.['minlength']) {
+    @if (pacienteForm.get('nombre')?.errors?.['minlength'] && pacienteForm.get('nombre')?.touched) {
       <mat-error>El nombre debe tener al menos 3 caracteres</mat-error>
     }
   </mat-form-field>
@@ -19,24 +18,24 @@
   <mat-form-field>
     <mat-label>Teléfono</mat-label>
     <input matInput formControlName="telefono" placeholder="0987654321">
-    @if(pacienteForm.get('telefono')?.errors?.['required']) {
+    @if (pacienteForm.get('telefono')?.errors?.['required'] && pacienteForm.get('telefono')?.touched) {
       <mat-error>El teléfono es requerido</mat-error>
     }
-    @if(pacienteForm.get('telefono')?.errors?.['pattern']) {
+    @if (pacienteForm.get('telefono')?.errors?.['pattern'] && pacienteForm.get('telefono')?.touched) {
       <mat-error>Debe ingresar un número de 10 dígitos</mat-error>
     }
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Edad</mat-label>
-    <input matInput type="number" placeholder="Ingrese la edad" formControlName="Edad">
-    @if(pacienteForm.get('Edad')?.errors?.['required']) {
+    <input matInput type="number" placeholder="Ingrese la edad" formControlName="edad">
+    @if (pacienteForm.get('edad')?.errors?.['required'] && pacienteForm.get('edad')?.touched) {
       <mat-error>La edad es requerida</mat-error>
     }
-    @if(pacienteForm.get('Edad')?.errors?.['min']) {
+    @if (pacienteForm.get('edad')?.errors?.['min'] && pacienteForm.get('edad')?.touched) {
       <mat-error>La edad no puede ser negativa</mat-error>
     }
-    @if(pacienteForm.get('Edad')?.errors?.['max']) {
+    @if (pacienteForm.get('edad')?.errors?.['max'] && pacienteForm.get('edad')?.touched) {
       <mat-error>La edad no puede ser mayor a 120 años</mat-error>
     }
   </mat-form-field>
@@ -44,9 +43,9 @@
   <mat-form-field>
     <mat-label>Tipo de Sangre</mat-label>
     <mat-select formControlName="tipoSangre">
-      <mat-option *ngFor="let tipo of tiposDeSangre" [value]="tipo">{{tipo}}</mat-option>
+      <mat-option *ngFor="let tipo of tiposDeSangre" [value]="tipo">{{ tipo }}</mat-option>
     </mat-select>
-    @if(pacienteForm.get('tipoSangre')?.errors?.['required']) {
+    @if (pacienteForm.get('tipoSangre')?.errors?.['required'] && pacienteForm.get('tipoSangre')?.touched) {
       <mat-error>El tipo de sangre es requerido</mat-error>
     }
   </mat-form-field>
@@ -54,53 +53,81 @@
   <mat-form-field>
     <mat-label>Método de Contacto Preferido</mat-label>
     <mat-select formControlName="contacto">
-      <mat-option *ngFor="let metodo of metodosContacto" [value]="metodo">{{metodo}}</mat-option>
+      <mat-option *ngFor="let metodo of metodosContacto" [value]="metodo">{{ metodo }}</mat-option>
     </mat-select>
-    @if(pacienteForm.get('contacto')?.errors?.['required']) {
+    @if (pacienteForm.get('contacto')?.errors?.['required'] && pacienteForm.get('contacto')?.touched) {
       <mat-error>El método de contacto es requerido</mat-error>
     }
-  </mat-form-field>  
+  </mat-form-field>
 
   <section class="example-section">
     <mat-checkbox formControlName="estado">¿El paciente se encuentra activo?</mat-checkbox>
   </section>
-
+ 
   <h2>Información de Cuenta</h2>
 
   <div [formGroup]="cuentaForm">
-    <mat-form-field>
+   
+    <section class="example-section" *ngIf="isEditMode">
+      <mat-checkbox (change)="toggleChangeEmail($event.checked)">Cambiar correo electrónico</mat-checkbox>
+    </section>
+
+    <mat-form-field *ngIf="!isEditMode || (isEditMode && changeEmail)">
       <mat-label>Correo Electrónico</mat-label>
       <input matInput formControlName="email" placeholder="correo@ejemplo.com" type="email">
-      @if(cuentaForm.get('email')?.errors?.['required']) {
+      @if (cuentaForm.get('email')?.errors?.['required'] && cuentaForm.get('email')?.touched) {
         <mat-error>El correo electrónico es requerido</mat-error>
       }
-      @if(cuentaForm.get('email')?.errors?.['email']) {
+      @if (cuentaForm.get('email')?.errors?.['email'] && cuentaForm.get('email')?.touched) {
         <mat-error>Debe ingresar un correo electrónico válido</mat-error>
       }
     </mat-form-field>
+   
+    <div *ngIf="isEditMode && !changeEmail && cuentaOriginal" class="current-email-display">
+      <p><strong>Correo actual:</strong> {{ cuentaOriginal.email }}</p>
+    </div>
+   
+    <section class="example-section" *ngIf="isEditMode">
+      <mat-checkbox (change)="toggleChangePassword($event.checked)">Cambiar contraseña</mat-checkbox>
+    </section>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="!isEditMode || (isEditMode && changePassword)">
       <mat-label>Contraseña</mat-label>
       <input matInput formControlName="password" placeholder="Contraseña" type="password">
-      @if(cuentaForm.get('password')?.errors?.['required']) {
+      @if (cuentaForm.get('password')?.errors?.['required'] && cuentaForm.get('password')?.touched) {
         <mat-error>La contraseña es requerida</mat-error>
       }
-      @if(cuentaForm.get('password')?.errors?.['minlength']) {
+      @if (cuentaForm.get('password')?.errors?.['minlength'] && cuentaForm.get('password')?.touched) {
         <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isEditMode || (isEditMode && changePassword)">
+      <mat-label>Confirmar Contraseña</mat-label>
+      <input matInput formControlName="confirmPassword" placeholder="Confirmar contraseña" type="password">
+      @if (cuentaForm.get('confirmPassword')?.errors?.['required'] && cuentaForm.get('confirmPassword')?.touched) {
+        <mat-error>La confirmación de la contraseña es requerida</mat-error>
+      }
+      @if (cuentaForm.get('confirmPassword')?.errors?.['mismatch'] && cuentaForm.get('confirmPassword')?.touched) {
+        <mat-error>Las contraseñas no coinciden</mat-error>
       }
     </mat-form-field>
   </div>
 
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
   <section class="buttons-container">
     <div class="example-button-container">
-      <button mat-fab extended type="submit" [disabled]="pacienteForm.invalid || cuentaForm.invalid">
+      <button mat-fab extended type="submit" [disabled]="pacienteForm.invalid || cuentaForm.invalid || isLoading">
         <mat-icon>{{ isEditMode ? 'edit' : 'person_add' }}</mat-icon>
         {{ isEditMode ? 'Actualizar' : 'Guardar' }}
       </button>
     </div>
 
     <div class="example-button-container">
-      <button mat-fab extended color="warn" type="button" (click)="onCancel()" class="btnCancel">
+      <button mat-fab extended color="warn" type="button" (click)="onCancel()" [disabled]="isLoading" class="btnCancel">
         <mat-icon>cancel</mat-icon>
         Cancelar
       </button>

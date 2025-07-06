@@ -11,6 +11,7 @@ export class ServLoginService {
     private apiUrl = 'http://localhost:5195/api/Cuenta';
     rol: any = '';
     private identificador: string | undefined;
+    
 
     constructor(private http: HttpClient) {
         this.identificador = localStorage.getItem('identificador') || undefined;
@@ -38,10 +39,15 @@ export class ServLoginService {
 
                 const decoded: any = jwtDecode(token); 
                 this.rol = decoded.rol;
-                this.identificador = decoded.id;
-
-                console.log(this.rol);
-                console.log(this.identificador);
+                if (decoded.rol === 'paciente' && decoded.pacienteId) {
+                    this.identificador = decoded.pacienteId;
+                } else if (decoded.rol === 'profesional' && decoded.profesionalId) {
+                    this.identificador = decoded.profesionalId;
+                } else if (decoded.rol === 'administrador' && decoded.administradorId) {
+                    this.identificador = decoded.administradorId;
+                } else {
+                    this.identificador = decoded.id;
+                }
 
                 localStorage.setItem('rol', this.rol);
                 if (this.identificador !== undefined) {
@@ -55,6 +61,7 @@ export class ServLoginService {
             })
         );
     }
+
     registrarCuenta(cuenta: Cuenta): Observable<Cuenta> {
         return this.http.post<Cuenta>(`${this.apiUrl}/RegistrarCuenta`, cuenta);
     }

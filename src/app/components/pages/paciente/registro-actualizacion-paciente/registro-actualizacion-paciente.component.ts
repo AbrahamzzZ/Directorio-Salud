@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,15 +17,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 import { Cuenta } from '../../../../models/Cuenta';
 import { ServLoginService } from '../../../../services/serv-login.service';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-registro-actualizacion-paciente',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule,
-  MatButtonModule, MatRadioModule, MatCheckboxModule, MatCardModule, MatIconModule],
+  MatButtonModule, MatRadioModule, MatCheckboxModule, MatCardModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './registro-actualizacion-paciente.component.html',
   styleUrl: './registro-actualizacion-paciente.component.css'
 })
@@ -37,15 +37,15 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
   pacienteOriginal: Paciente | null = null;
   cuentaOriginal: Cuenta | null = null;
   tiposDeSangre: string[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-  metodosContacto: string[] = ['email', 'llamada telefónica', 'SMS'];  
-  
-  private jsonUrlCuentas = 'http://localhost:3000/cuentas';
+  metodosContacto: string[] = ['email', 'llamada telefónica', 'SMS'];
+  isLoading = false;
+  changePassword = false;
+  changeEmail = false;
 
   constructor(
     private fb: FormBuilder,
     private pacientesService: ServPacientesService,
     private loginService: ServLoginService,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog
@@ -53,7 +53,7 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
     this.pacienteForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$')]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      Edad: ['', [Validators.required, Validators.min(0), Validators.max(120)]],      
+      edad: ['', [Validators.required, Validators.min(0), Validators.max(120)]],
       contacto: ['', Validators.required],
       tipoSangre: ['', Validators.required],
       estado: [true]
@@ -61,52 +61,110 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
 
     this.cuentaForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validators: this.passwordMatchValidator });
   }
 
-  ngOnInit(): void {    
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    return password && confirmPassword && password !== confirmPassword ? { mismatch: true } : null;
+  }
+  
+  toggleChangeEmail(checked: boolean): void {
+    this.changeEmail = checked;
+    const emailControl = this.cuentaForm.get('email');
+
+    if (checked) {
+      emailControl?.setValidators([Validators.required, Validators.email]);
+    } else {
+      emailControl?.clearValidators();     
+      if (this.cuentaOriginal) {
+        emailControl?.setValue(this.cuentaOriginal.email);
+      }
+    }
+    emailControl?.updateValueAndValidity();
+  }
+  
+  toggleChangePassword(checked: boolean): void {
+    this.changePassword = checked;
+    const passwordControl = this.cuentaForm.get('password');
+    const confirmPasswordControl = this.cuentaForm.get('confirmPassword');
+
+    if (checked) {
+      passwordControl?.setValidators([Validators.required, Validators.minLength(6)]);
+      confirmPasswordControl?.setValidators([Validators.required]);
+    } else {
+      passwordControl?.clearValidators();
+      confirmPasswordControl?.clearValidators();
+      passwordControl?.setValue('');
+      confirmPasswordControl?.setValue('');
+    }
+    passwordControl?.updateValueAndValidity();
+    confirmPasswordControl?.updateValueAndValidity();
+  }
+
+  ngOnInit(): void {
     this.pacienteId = this.route.snapshot.paramMap.get('id');
     if (this.pacienteId) {
       this.isEditMode = true;
-      this.pacientesService.getpacientes().subscribe(pacientes => {
-        const paciente = pacientes.find(p => p.id === this.pacienteId);
-        if (paciente) {
-          this.pacienteOriginal = paciente;
-          this.populateForm(paciente);          
-          this.http.get<Cuenta[]>(this.jsonUrlCuentas).subscribe(cuentas => {
-            const cuenta = cuentas.find(c => c.pacienteId === this.pacienteId);
-            if (cuenta) {
-              this.cuentaOriginal = cuenta;
-              this.populateCuentaForm(cuenta);
-            }
-          });
-        } else {
-          const dialogRef = this.dialog.open(DialogoComponent, {
-            width: '400px',
-            data: {
-              title: 'Error',
-              message: 'El paciente no se encuentra registrado',
-              isConfirmation: false
-            },
-            disableClose: true
-          });
-          dialogRef.afterClosed().subscribe(() => {
-            this.router.navigate(['/admin-dashboard']);
-          });
-        }
-      });
+      this.setupEditModeValidation();
+      this.loadPacienteData();
     }
+  }
+
+  private setupEditModeValidation(): void {   
+    const emailControl = this.cuentaForm.get('email');
+    const passwordControl = this.cuentaForm.get('password');
+    const confirmPasswordControl = this.cuentaForm.get('confirmPassword');
+
+    emailControl?.clearValidators();
+    passwordControl?.clearValidators();
+    confirmPasswordControl?.clearValidators();
+
+    emailControl?.updateValueAndValidity();
+    passwordControl?.updateValueAndValidity();
+    confirmPasswordControl?.updateValueAndValidity();
+  }
+
+  private loadPacienteData(): void {
+    this.pacientesService.getPacientePorId(this.pacienteId!).subscribe({
+      next: (paciente) => {
+        this.pacienteOriginal = paciente;
+        this.populateForm(paciente);
+        this.loadCuentaData();
+      },
+      error: (error) => {
+        console.error('Error loading patient:', error);
+        this.showErrorDialog('El paciente no se encuentra registrado.');
+        this.router.navigate(['/admin-dashboard']);
+      }
+    });
+  }
+
+  private loadCuentaData(): void {
+    this.loginService.obtenerCuentaPorPacienteId(this.pacienteId!).subscribe({
+      next: (cuenta) => {
+        if (cuenta) {
+          this.cuentaOriginal = cuenta;
+          this.populateCuentaForm(cuenta);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading account:', error);
+        this.showErrorDialog('No se encontró una cuenta asociada al paciente.');
+      }
+    });
   }
 
   populateForm(paciente: Paciente): void {
     this.pacienteForm.patchValue({
-      nombre: paciente.nombre,      
+      nombre: paciente.nombre,
       telefono: paciente.telefono,
-      Edad: paciente.Edad,
+      edad: paciente.edad,
       contacto: paciente.contacto,
       tipoSangre: paciente.tipoSangre,
-      fechaRegistro: paciente.fechaRegistro,
       estado: paciente.estado
     });
   }
@@ -114,112 +172,76 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
   populateCuentaForm(cuenta: Cuenta): void {
     this.cuentaForm.patchValue({
       email: cuenta.email,
-      password: cuenta.password
+      password: '', 
+      confirmPassword: ''
     });
   }
 
   onSubmit(): void {    
+    if (!this.pacienteForm.valid || !this.cuentaForm.valid) {
+      this.markFormGroupTouched(this.pacienteForm);
+      this.markFormGroupTouched(this.cuentaForm);
+      this.showErrorDialog('Por favor, complete todos los campos requeridos correctamente.');
+      return;
+    }
+
+    this.isLoading = true;
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
       data: {
         title: 'Confirmación',
-        message: this.isEditMode ? 
-          '¿Está seguro de actualizar los datos de este paciente?' : 
-          '¿Está seguro de registrarse?',
+        message: this.isEditMode ? '¿Está seguro de actualizar los datos de este paciente?' : '¿Está seguro de registrarse?',
         isConfirmation: true
       },
       disableClose: true
     });
-    
+
     dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {        
+      if (result === true) {
         if (this.isEditMode) {
           this.updatePaciente();
         } else {
           this.addPaciente();
         }
-      }    
+      } else {
+        this.isLoading = false;
+      }
     });
   }
 
   addPaciente(): void {
-    this.pacientesService.getpacientes().subscribe({
-      next: (pacientes) => {
-        let nextIdNumber = 1;
-        if (pacientes && pacientes.length > 0) {
-          const idNumbers = pacientes
-            .map(p => {
-              if (p.id && typeof p.id === 'string' && p.id.startsWith('p')) {
-                const num = parseInt(p.id.slice(1), 10); 
-                return isNaN(num) ? null : num;
-              }
-              return null;
-            })
-            .filter((num): num is number => num !== null);
+    const newPaciente: Paciente = {
+      ...this.pacienteForm.value,
+      fechaRegistro: new Date().toISOString().split('T')[0]
+    };
 
-          if (idNumbers.length > 0) {
-            nextIdNumber = Math.max(...idNumbers) + 1;
-          }
-        }
+    const newCuenta: Cuenta = {
+      email: this.cuentaForm.value.email,
+      password: this.cuentaForm.value.password,
+      rol: 'paciente'
+    };
 
-        const newId = `p${nextIdNumber}`;
-
-        const newPaciente: Paciente = {
-          id: newId,
-          ...this.pacienteForm.value,
-          fechaRegistro: new Date().toISOString().split('T')[0] // Formato YYYY-MM-DD
-        };
-
-        const newCuenta: Cuenta = {
-          id: newId, 
-          email: this.cuentaForm.value.email,
-          password: this.cuentaForm.value.password,
-          rol: 'paciente',
-          pacienteId: newId
-        };
-
-        this.pacientesService.addPatient(newPaciente).subscribe({
-          next: () => {
-            this.loginService.registrarCuenta(newCuenta).subscribe({
-              next: () => {
-                this.router.navigate(['/login'], { replaceUrl: true });
-              },
-              error: (error) => {
-                this.dialog.open(DialogoComponent, {
-                  width: '400px',
-                  data: {
-                    title: 'Error',
-                    message: `Error al crear la cuenta: ${error.message}`,
-                    isConfirmation: false
-                  },
-                  disableClose: true
-                });
-              }
-            });
-          },
-          error: (error) => {
-            this.dialog.open(DialogoComponent, {
-              width: '400px',
-              data: {
-                title: 'Error',
-                message: `Error al registrar paciente: ${error.message}`,
-                isConfirmation: false
-              },
-              disableClose: true
-            });
-          }
+    this.pacientesService.addPatient(newPaciente, newCuenta).subscribe({
+      next: (paciente) => {
+        this.isLoading = false;
+        this.showSuccessDialog('Paciente registrado exitosamente', () => {
+          this.router.navigate(['/login'], { replaceUrl: true });
         });
       },
       error: (error) => {
-        this.dialog.open(DialogoComponent, {
-          width: '400px',
-          data: {
-            title: 'Error',
-            message: `Error al obtener pacientes: ${error.message}`,
-            isConfirmation: false
-          },
-          disableClose: true
-        });
+        this.isLoading = false;
+        console.error('Error registering patient:', error);        
+        
+        let errorMessage = 'Error desconocido al registrar paciente';
+        if (error.error?.mensaje) {
+          errorMessage = error.error.mensaje;
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        this.showErrorDialog(errorMessage);
       }
     });
   }
@@ -227,48 +249,45 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
   updatePaciente(): void {
     const updatedPaciente: Paciente = {
       ...this.pacienteOriginal!,
-      ...this.pacienteForm.value      
-    };    
-    if (this.cuentaOriginal) {
+      ...this.pacienteForm.value,
+      id: this.pacienteOriginal!.id
+    };
+
+    if (this.cuentaOriginal && (this.changePassword || this.changeEmail)) {
       const updatedCuenta: Cuenta = {
         ...this.cuentaOriginal,
-        email: this.cuentaForm.value.email,
-        password: this.cuentaForm.value.password
+        email: this.changeEmail ? this.cuentaForm.value.email : this.cuentaOriginal.email,
+        password: this.changePassword ? this.cuentaForm.value.password : this.cuentaOriginal.password
       };
+
       forkJoin({
         paciente: this.pacientesService.editPatient(updatedPaciente),
-        cuenta: this.http.put<Cuenta>(`${this.jsonUrlCuentas}/${updatedCuenta.id}`, updatedCuenta)
+        cuenta: this.loginService.registrarCuenta(updatedCuenta)
       }).subscribe({
-        next: () => {       
-          this.router.navigate(['/mis-pacientes'], { replaceUrl: true });
+        next: () => {
+          this.isLoading = false;
+          this.showSuccessDialog('Paciente actualizado exitosamente', () => {
+            this.router.navigate(['/mis-pacientes'], { replaceUrl: true });
+          });
         },
         error: (error) => {
-          this.dialog.open(DialogoComponent, {
-            width: '400px',
-            data: {
-              title: 'Error',
-              message: `Error al actualizar: ${error.message}`,
-              isConfirmation: false
-            },
-            disableClose: true
-          });
+          this.isLoading = false;
+          console.error('Error updating patient:', error);
+          this.showErrorDialog(`Error al actualizar: ${error.message}`);
         }
       });
-    } else {     
+    } else {      
       this.pacientesService.editPatient(updatedPaciente).subscribe({
-        next: () => {          
-          this.router.navigate(['/mis-pacientes'], { replaceUrl: true });
+        next: () => {
+          this.isLoading = false;
+          this.showSuccessDialog('Paciente actualizado exitosamente', () => {
+            this.router.navigate(['/mis-pacientes'], { replaceUrl: true });
+          });
         },
         error: (error) => {
-          this.dialog.open(DialogoComponent, {
-            width: '400px',
-            data: {
-              title: 'Error',
-              message: `Error al actualizar paciente: ${error.message}`,
-              isConfirmation: false
-            },
-            disableClose: true
-          });
+          this.isLoading = false;
+          console.error('Error updating patient:', error);
+          this.showErrorDialog(`Error al actualizar paciente: ${error.message}`);
         }
       });
     }
@@ -276,9 +295,46 @@ export class RegistroActualizacionPacienteComponent implements OnInit {
 
   onCancel(): void {
     if (this.isEditMode) {
-      this.router.navigate(['/mis-pacientes']); 
+      this.router.navigate(['/mis-pacientes']);
     } else {
-      this.router.navigate(['/registrar']); 
+      this.router.navigate(['/registrar']);
     }
+  }
+
+  // Métodos auxiliares para mostrar diálogos
+  private showSuccessDialog(message: string, callback?: () => void): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        title: 'Éxito',
+        message: message,
+        isConfirmation: false
+      },
+      disableClose: true
+    });
+
+    if (callback) {
+      dialogRef.afterClosed().subscribe(() => callback());
+    }
+  }
+
+  private showErrorDialog(message: string): void {
+    this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        title: 'Error',
+        message: message,
+        isConfirmation: false
+      },
+      disableClose: true
+    });
+  }
+
+  // Método para marcar todos los campos como tocados
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+    });
   }
 }

@@ -1,4 +1,5 @@
-import { DisponibilidadProfesional } from "./disponibilidad-profesional";
+import { DisponibilidadProfesional } from "./Disponibilidad-profesional";
+
 
 export interface Profesional {
     id?: string;
