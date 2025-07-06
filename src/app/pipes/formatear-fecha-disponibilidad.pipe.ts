@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DisponibilidadProfesional } from '../models/disponibilidad-profesional';
+import { DisponibilidadProfesional } from '../models/Disponibilidad-profesional';
 
 @Pipe({
   name: 'formatearFechaDisponibilidad'
