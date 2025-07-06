@@ -21,24 +21,20 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './mantenimiento-paciente.component.css'
 })
 export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
-  constructor(
-    private servicePacientes: ServPacientesService, 
-    private router: Router,
-    private dialog: MatDialog
-  ) {}
-
   dataSource = new MatTableDataSource<Paciente>();
   col: string[] = [];
+  isLoading = false;
+  errorMessage = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   columns = [
-    { key: 'nombre', titulo: 'Nombre' },  
+    { key: 'nombre', titulo: 'Nombre' },
     { key: 'telefono', titulo: 'Telefono' },
-    { key: 'Edad', titulo: 'Edad' },    
+    { key: 'edad', titulo: 'Edad' },
     { key: 'tipoSangre', titulo: 'Tipo de Sangre' },
-    { key: 'fechaRegistro', titulo: 'Fecha de Registro' }, 
-    { key: 'estado', titulo: 'Estado'}       
+    { key: 'fechaRegistro', titulo: 'Fecha de Registro' },
+    { key: 'estado', titulo: 'Estado' }
   ];
 
   displayedColumns: string[] = [...this.columns.map(cm => cm.key), 'Acciones'];
@@ -47,6 +43,12 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
     { tipo: 'editar', icono: 'edit', tooltip: 'Editar paciente' },
     { tipo: 'eliminar', icono: 'delete', tooltip: 'Eliminar paciente' }
   ];
+
+  constructor(
+    private servicePacientes: ServPacientesService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.col = this.columns.map(cm => cm.key);
@@ -59,16 +61,38 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
   }
 
   cargarPacientes(): void {
-    this.servicePacientes.getpacientes().subscribe((datos: Paciente[]) => {
-      this.dataSource.data = datos;
+    this.isLoading = true;
+    this.errorMessage = '';
+    
+    this.servicePacientes.getpacientes().subscribe({
+      next: (datos: Paciente[]) => {
+        this.dataSource.data = datos;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error cargando pacientes:', error);
+        this.errorMessage = 'Error al cargar los pacientes';
+        this.isLoading = false;
+        this.showErrorDialog('Error al cargar los pacientes. Inténtelo nuevamente.');
+      }
     });
   }
 
   search(searchInput: HTMLInputElement) {
     const texto = searchInput.value.trim();
+    
     if (texto) {
-      this.servicePacientes.getpacientesSearch(texto).subscribe((datos: Paciente[]) => {
-        this.dataSource.data = datos;
+      this.isLoading = true;
+      this.servicePacientes.getpacientesSearch(texto).subscribe({
+        next: (datos: Paciente[]) => {
+          this.dataSource.data = datos;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error en búsqueda:', error);
+          this.isLoading = false;
+          this.showErrorDialog('Error al buscar pacientes.');
+        }
       });
     } else {
       this.cargarPacientes();
@@ -95,7 +119,7 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
       width: '400px',
       data: {
         title: 'Confirmar eliminación',
-        message: `¿Estás seguro de eliminar al paciente ${paciente.nombre}?`,
+        message: `¿Estás seguro de eliminar al paciente ${paciente.nombre}?`, // Corregido: Template string
         confirmText: 'Eliminar',
         cancelText: 'Cancelar',
         isConfirmation: true
@@ -104,20 +128,44 @@ export class MantenimientoPacienteComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.servicePacientes.deletePatient(paciente).subscribe(() => {
-          const alertDialog = this.dialog.open(DialogoComponent, {
-            width: '400px',
-            data: {
-              title: 'Éxito',
-              message: 'Paciente eliminado exitosamente',
-              isConfirmation: false
-            }
-          });
-          
-          alertDialog.afterClosed().subscribe(() => {
-            this.cargarPacientes();
-          });
+        this.servicePacientes.deletePatient(paciente).subscribe({
+          next: () => {
+            this.showSuccessDialog('Paciente eliminado exitosamente', () => {
+              this.cargarPacientes();
+            });
+          },
+          error: (error) => {
+            console.error('Error eliminando paciente:', error);
+            this.showErrorDialog(`Error al eliminar paciente: ${error.message}`);
+          }
         });
+      }
+    });
+  }
+
+  // Métodos auxiliares para mostrar diálogos
+  private showSuccessDialog(message: string, callback?: () => void): void {
+    const dialogRef = this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        title: 'Éxito',
+        message: message,
+        isConfirmation: false
+      }
+    });
+
+    if (callback) {
+      dialogRef.afterClosed().subscribe(() => callback());
+    }
+  }
+
+  private showErrorDialog(message: string): void {
+    this.dialog.open(DialogoComponent, {
+      width: '400px',
+      data: {
+        title: 'Error',
+        message: message,
+        isConfirmation: false
       }
     });
   }
