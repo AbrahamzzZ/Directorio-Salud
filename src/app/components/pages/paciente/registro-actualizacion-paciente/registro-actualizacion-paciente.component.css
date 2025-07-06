@@ -45,3 +45,9 @@
 .example-form-grid mat-form-field {
   width: 100%;
 }
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
