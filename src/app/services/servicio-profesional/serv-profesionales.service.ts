@@ -54,7 +54,7 @@ export class ServProfesionalesService {
   eliminarProfesional(profesional: Profesional): Observable<void> {
     const serviciosUrl = 'http://localhost:5195/api/ServicioMedico';
     const citasUrl = 'http://localhost:3000/citas';
-    const resenasUrl = 'http://localhost:3000/resenas';
+    const resenasUrl = 'http://localhost:5195/api/Resena';
 
     // Paso 1: Obtener servicios, citas y reseñas asociadas al profesional
     const servicios$ = this.http.get<any[]>(serviciosUrl).pipe(
