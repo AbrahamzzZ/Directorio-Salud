@@ -1,0 +1,33 @@
+.contenedor {
+  text-align: center;
+  margin-top: 100px;
+  font-family: Arial, sans-serif;
+}
+
+.titulo{
+  color: black;
+}
+
+.mensaje{
+  color: black;
+}
+
+.retroceder {
+  display: inline-flex;
+  align-items: center;
+  color: #1565c0;
+  font-weight: bold;
+  margin: 0 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.retroceder mat-icon {
+  margin-right: 5px; 
+  vertical-align: middle;
+}
+
+.titulo mat-icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
