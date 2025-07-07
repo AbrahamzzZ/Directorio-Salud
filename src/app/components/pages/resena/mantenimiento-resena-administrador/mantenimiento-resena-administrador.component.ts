@@ -97,8 +97,8 @@ export class MantenimientoResenaAdministradorComponent {
     if (termino) {
       this.servResena.searchResenas(termino).subscribe((resenas) => {
         const peticiones = resenas.map(resena => {
-          const profesional$ = this.servProfesional.getProfesionalPorId(resena.profesionalId!);
-          const paciente$ = this.servPaciente.getPacientePorId(resena.pacienteId!);
+        const profesional$ = this.servProfesional.getProfesionalPorId(resena.profesionalId!);
+        const paciente$ = this.servPaciente.getPacientePorId(resena.pacienteId!);
 
           return forkJoin([profesional$, paciente$]).pipe(
             map(([profesional, paciente]) => ({
