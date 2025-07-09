@@ -30,7 +30,7 @@ import { combineLatest } from 'rxjs';
   styleUrl: './profesional-dashboard.component.css'
 })
 export class ProfesionalDashboardComponent implements OnInit {
-  citasProfesional: any[] = [];
+   citasProfesional: any[] = [];
   terminoBusqueda = '';
   citasFiltradas: any[] = [];
   profesionalId = '';
@@ -43,8 +43,8 @@ export class ProfesionalDashboardComponent implements OnInit {
     private servicioLogin: ServLoginService,
     private servicioProfesional: ServProfesionalesService,
     private servicioServicios: ServServiciosjsonService,
-    private servicioPacientes: ServPacientesService 
-  ) { }
+    private servicioPacientes: ServPacientesService
+  ) {}
 
   ngOnInit(): void {
     this.profesionalId = this.servicioLogin.getIdentificador() ?? '';
@@ -55,47 +55,49 @@ export class ProfesionalDashboardComponent implements OnInit {
     }
   }
 
-cargarDatosProfesionalYCitas(): void {
-  this.servicioProfesional.obtenerprofesionalID(this.profesionalId)
-    .pipe(
-      tap(profesional => this.profesionalInfo = profesional),
-      switchMap(() => this.servicioCita.getCitas()),
-      map(citas => citas.filter(cita => cita.profesionalId === this.profesionalId)),
-      switchMap(citasFiltradas =>
-        combineLatest([
-          this.servicioServicios.getAllServices(),
-          this.servicioPacientes.getpacientes()
-        ]).pipe(
-          map(([servicios, pacientes]) =>
-            citasFiltradas.map(cita => ({
-              ...cita,
-              nombreServicio: servicios.find(s => s.id === cita.servicioId)?.nombre || 'Sin nombre',
-              especialidad: this.profesionalInfo?.especialidad || 'Especialidad',
-              nombrePaciente: pacientes.find(p => p.id === cita.pacienteId)?.nombre || 'Sin nombre'
-            }))
-          )
-        )
-      )
-    )
-    .subscribe(
-      citasConServicio => {
-        this.citasProfesional = citasConServicio;
-        this.citasFiltradas = [...this.citasProfesional];
-      },
-      error => console.error('Error al cargar citas, servicios o pacientes:', error)
-    );
-}
+  cargarDatosProfesionalYCitas(): void {
+    this.servicioProfesional
+      .obtenerprofesionalID(this.profesionalId)
+      .subscribe((profesional) => (this.profesionalInfo = profesional));
+    this.servicioCita
+      .getCitasDetalladasPorProfesional(this.profesionalId)
+      .subscribe({
+        next: (citasConDetalles) => {
+          console.log('🕵️ DATOS CRUDOS DEL BACKEND:', citasConDetalles);
+          this.citasProfesional = citasConDetalles.map((cita) => ({
+            id: cita.id,
+            fechaHora: cita.fechaHora,
+            estadoCita: cita.estadoCita,
+            direccion: cita.direccion,
+            metodoPago: cita.metodoPago,
+            prioridad: cita.prioridad,
+            esNuevoPaciente: cita.esNuevoPaciente,
+            nombrePaciente: cita.pacienteNombre,
+            nombreServicio: cita.servicioNombre,
+          }));
+          this.citasFiltradas = [...this.citasProfesional];
+        },
+        error: (err) => {
+          console.error(
+            'Error al cargar las citas detalladas del profesional:',
+            err
+          );
+        },
+      });
+  }
 
   buscar(input: HTMLInputElement): void {
     const termino = input.value.trim().toLowerCase();
-    this.citasFiltradas = this.citasProfesional.filter(cita =>
-      cita.nombreServicio?.toLowerCase().includes(termino) ||
-      cita.especialidad?.toLowerCase().includes(termino) ||
-      cita.direccion?.toLowerCase().includes(termino) ||
-      cita.metodoPago?.toLowerCase().includes(termino) ||
-      cita.prioridad?.toLowerCase().includes(termino) ||
-      cita.estadoCita?.toLowerCase().includes(termino) ||
-      (cita.fechaHora && new Date(cita.fechaHora).toLocaleDateString().includes(termino))
+    this.citasFiltradas = this.citasProfesional.filter(
+      (cita) =>
+        cita.nombreServicio?.toLowerCase().includes(termino) ||
+        cita.especialidad?.toLowerCase().includes(termino) ||
+        cita.direccion?.toLowerCase().includes(termino) ||
+        cita.metodoPago?.toLowerCase().includes(termino) ||
+        cita.prioridad?.toLowerCase().includes(termino) ||
+        cita.estadoCita?.toLowerCase().includes(termino) ||
+        (cita.fechaHora &&
+          new Date(cita.fechaHora).toLocaleDateString().includes(termino))
     );
   }
 }
