@@ -11,7 +11,7 @@ import { ServServiciosjsonService } from '../servicio-servicios/serv-serviciosjs
   providedIn: 'root',
 })
 export class ServCitaService {
-  private jsonUrl: string = 'http://localhost:3000/citas';
+  private apiUrl: string = 'http://localhost:5195/api/Cita'; 
 
   constructor(
     private http: HttpClient,
@@ -19,28 +19,43 @@ export class ServCitaService {
     private servProf: ServProfesionalesService
   ) {}
 
-  // Obtener todas las citas
+ 
   getCitas(): Observable<Cita[]> {
-    return this.http.get<Cita[]>(this.jsonUrl);
+    return this.http.get<Cita[]>(this.apiUrl);
   }
 
-  // Obtener una cita por ID
-  getCitaById(id: string): Observable<Cita> {
-    return this.http.get<Cita>(`${this.jsonUrl}/${id}`);
+
+  getCitaById(id: number): Observable<Cita> {
+    return this.http.get<Cita>(`${this.apiUrl}/${id}`);
   }
 
-  // Crear una nueva cita
+ 
   createCita(cita: Cita): Observable<Cita> {
-    return this.http.post<Cita>(this.jsonUrl, cita);
+    return this.http.post<Cita>(this.apiUrl, cita);
   }
 
-  // Actualizar una cita existente
+
   updateCita(cita: Cita): Observable<Cita> {
-    return this.http.put<Cita>(`${this.jsonUrl}/${cita.id}`, cita);
+    return this.http.put<Cita>(`${this.apiUrl}/${cita.id}`, cita);
   }
 
-  // Eliminar una cita por el id
-  deleteCita(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.jsonUrl}/${id}`);
+
+  deleteCita(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getCitasDetalladasPorPaciente(pacienteId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/paciente/${pacienteId}`);
+  }
+
+
+  getCitasDetalladasPorProfesional(profesionalId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/profesional/${profesionalId}`);
+  }
+
+  verificarCitaExistente(pacienteId: string, servicioId: string): Observable<{ existe: boolean }> {
+    return this.http.get<{ existe: boolean }>(
+      `${this.apiUrl}/verificar-existente?pacienteId=${pacienteId}&servicioId=${servicioId}`
+  );
   }
 }
