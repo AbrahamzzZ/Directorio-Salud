@@ -3,8 +3,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ServCitaService } from '../../../../services/servicio-cita/serv-cita.service';
 import { Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs';
-import { Cita } from '../../../../models/Citas';
 import { Profesional } from '../../../../models/Profesional';
 import { ServicioMedico } from '../../../../models/ServicioMedico';
 import { ServProfesionalesService } from '../../../../services/servicio-profesional/serv-profesionales.service';
@@ -28,24 +26,24 @@ import { ServLoginService } from '../../../../services/serv-login.service';
   styleUrl: './mantenimiento-paciente-cita.component.css',
 })
 export class MantenimientoPacienteCitaComponent implements OnInit {
-  sourceDatos = new MatTableDataSource<any>([]);
-  listadoCitas: Cita[] = [];
+ sourceDatos = new MatTableDataSource<any>([]);
+  listadoCitas: any[] = [];
   mapaProfesionales: Map<string, Profesional> = new Map();
   mapaServicios: Map<string, ServicioMedico> = new Map();
   columnasCitas = [
-  { key: 'profesional', titulo: 'Profesional' },
-  { key: 'especialidad', titulo: 'Especialidad' },
-  { key: 'direccion', titulo: 'Dirección' },
-  { key: 'metodoPago', titulo: 'Metodo de Pago' },
-  { key: 'prioridad', titulo: 'Prioridad' },
-  {
-    key: 'fechaHora',
-    titulo: 'Fecha y Hora',
-    pipe: 'date',
-    pipeArgs: 'dd/MM/yyyy HH:mm',
-  },
-  { key: 'estadoCita', titulo: 'Estado' }, 
-];
+    { key: 'profesional', titulo: 'Profesional' },
+    { key: 'especialidad', titulo: 'Especialidad' },
+    { key: 'direccion', titulo: 'Dirección' },
+    { key: 'metodoPago', titulo: 'Metodo de Pago' },
+    { key: 'prioridad', titulo: 'Prioridad' },
+    {
+      key: 'fechaHora',
+      titulo: 'Fecha y Hora',
+      pipe: 'date',
+      pipeArgs: 'dd/MM/yyyy HH:mm',
+    },
+    { key: 'estadoCita', titulo: 'Estado' },
+  ];
   columnasKeysCitas: string[] = this.columnasCitas.map((col) => col.key);
   accionesCitas = [
     { tipo: 'editar', icono: 'edit', tooltip: 'Editar cita' },
@@ -60,8 +58,8 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
     private servicioServicios: ServServiciosjsonService,
     private navegador: Router,
     private dialog: MatDialog,
-    private servicioLogin: ServLoginService 
-  ) { }
+    private servicioLogin: ServLoginService
+  ) {}
 
   ngOnInit(): void {
     this.cargarCitasDelPaciente();
@@ -69,64 +67,33 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
 
   cargarCitasDelPaciente(): void {
     const pacienteId = this.servicioLogin.getIdentificador();
+    console.log('ID del paciente:', pacienteId);
+
     if (pacienteId) {
-      this.servicioCita.getCitas() 
-        .pipe(
-          tap((citas) => (this.listadoCitas = citas.filter(cita => cita.pacienteId === pacienteId))),
-          switchMap(() => this.servicioServicios.getAllServices()),
-          tap((servicios) => {
-            servicios.forEach((servicio) => {
-              if (servicio.id) this.mapaServicios.set(servicio.id, servicio);
-            });
-          }),
-          switchMap(() => this.servicioProfesional.getProfesionales()),
-          tap((profesionales) => {
-            profesionales.forEach((profesional) => {
-              if (profesional.id)
-                this.mapaProfesionales.set(profesional.id, profesional);
-            });
-          }),
-          map(() =>
-            this.listadoCitas.map((cita) => {
-              let especialidad = 'No disponible';
-              let profesionalNombre = 'No asignado';
-              let direccionProfesional = 'No disponible';
-
-              const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
-              let profesionalData: Profesional | undefined;
-
-              if (servicioDeCita && servicioDeCita.profesionalId) {
-                profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
-              }
-
-              if (profesionalData) {
-                especialidad = profesionalData.especialidad || 'No disponible';
-                profesionalNombre = profesionalData.nombre;
-                direccionProfesional = profesionalData.ubicacion || 'No disponible';
-              }
-
-              return {
-                ...cita,
-                especialidad,
-                profesional: profesionalNombre,
-                direccion: direccionProfesional,
-              };
-            })
-          )
-        )
-        .subscribe(
-          (data) => {
-            this.sourceDatos.data = data;
-          },
-          (error) =>
-            console.error(
-              'Error al cargar citas con especialidades y profesionales:',
-              error
-            )
-        );
+      this.servicioCita.getCitasDetalladasPorPaciente(pacienteId).subscribe({
+        next: (data) => {
+          console.log('Datos recibidos del backend:', data);
+          this.listadoCitas = data.map((item) => ({
+            ...item,
+            profesional: item.profesionalNombre,
+            especialidad: item.especialidad,
+            direccion: item.direccionProfesional,
+          }));
+          this.sourceDatos.data = this.listadoCitas;
+          if (this.paginador) {
+            this.sourceDatos.paginator = this.paginador;
+          }
+        },
+        error: (err) => {
+          console.error('Error al cargar citas detalladas:', err);
+          this.sourceDatos.data = [];
+          this.listadoCitas = [];
+        },
+      });
     } else {
       console.warn('No se pudo obtener el ID del paciente.');
-      this.sourceDatos.data = []; 
+      this.sourceDatos.data = [];
+      this.listadoCitas = [];
     }
   }
 
@@ -138,57 +105,22 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
 
   search(searchInput: HTMLInputElement) {
     const termino = searchInput.value.trim().toLowerCase();
-    const citasFiltradas = this.listadoCitas
-      .filter((cita) => {
-        let nombreProfesional = '';
-        let direccionProfesional = '';
-        const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
-        let profesionalData: Profesional | undefined;
-
-        if (servicioDeCita && servicioDeCita.profesionalId) {
-          profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
-        }
-
-        nombreProfesional = profesionalData ? profesionalData.nombre : '';
-        direccionProfesional = profesionalData ? profesionalData.ubicacion : '';
-
-        return (
-          cita.direccion.toLowerCase().includes(termino) ||
-          cita.metodoPago.toLowerCase().includes(termino) ||
-          cita.prioridad.toLowerCase().includes(termino) ||
-          cita.estadoCita.toLowerCase().includes(termino) ||
-          (profesionalData?.especialidad?.toLowerCase().includes(termino) ??
-            false) ||
-          nombreProfesional.toLowerCase().includes(termino) ||
-          direccionProfesional.toLowerCase().includes(termino)
-        );
-      })
-      .map((cita) => {
-        let especialidad = 'No disponible';
-        let nombreProfesional = 'No asignado';
-        let direccionProfesional = 'No disponible';
-        const servicioDeCita = this.mapaServicios.get(cita.servicioId!);
-        let profesionalData: Profesional | undefined;
-
-        if (servicioDeCita && servicioDeCita.profesionalId) {
-          profesionalData = this.mapaProfesionales.get(servicioDeCita.profesionalId);
-        }
-
-        if (profesionalData) {
-          especialidad = profesionalData.especialidad || 'No disponible';
-          nombreProfesional = profesionalData.nombre;
-          direccionProfesional = profesionalData.ubicacion || 'No disponible';
-        }
-
-        return {
-          ...cita,
-          especialidad,
-          profesional: nombreProfesional,
-          direccion: direccionProfesional,
-        };
-      });
+    const citasFiltradas = this.listadoCitas.filter((cita) => {
+      return (
+        (cita.profesional?.toLowerCase().includes(termino) ?? false) ||
+        (cita.especialidad?.toLowerCase().includes(termino) ?? false) ||
+        (cita.direccion?.toLowerCase().includes(termino) ?? false) ||
+        (cita.metodoPago?.toLowerCase().includes(termino) ?? false) ||
+        (cita.prioridad?.toLowerCase().includes(termino) ?? false) ||
+        (cita.estadoCita?.toLowerCase().includes(termino) ?? false)
+      );
+    });
 
     this.sourceDatos.data = citasFiltradas;
+    if (this.paginador) {
+      this.sourceDatos.paginator = this.paginador;
+      this.paginador.firstPage();
+    }
   }
 
   gestionarAccionCita(event: { tipo: string; fila: any }) {
@@ -201,6 +133,15 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
   }
 
   eliminarCitaConfirmacion(citaId: string): void {
+    if (!citaId || isNaN(Number(citaId))) {
+      console.error('ID de cita inválido');
+      this.mostrarDialogo(
+        'Error',
+        'ID de cita inválido. No se puede eliminar la cita.'
+      );
+      return;
+    }
+
     const dialogRef = this.dialog.open(DialogoComponent, {
       width: '400px',
       data: {
@@ -220,19 +161,22 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
   }
 
   eliminarCita(citaId: string): void {
-    this.servicioCita.deleteCita(citaId).subscribe(() => {
-      this.mostrarDialogo(
-        'Eliminación Exitosa',
-        'La cita se ha eliminado correctamente.'
-      );
-      this.cargarCitasDelPaciente(); 
-    }, (error) => {
-      console.error('Error al eliminar la cita:', error);
-      this.mostrarDialogo(
-        'Error',
-        'Hubo un problema al eliminar la cita. Por favor, inténtalo de nuevo.'
-      );
-    });
+    this.servicioCita.deleteCita(Number(citaId)).subscribe(
+      () => {
+        this.mostrarDialogo(
+          'Eliminación Exitosa',
+          'La cita se ha eliminado correctamente.'
+        );
+        this.cargarCitasDelPaciente();
+      },
+      (error) => {
+        console.error('Error al eliminar la cita:', error);
+        this.mostrarDialogo(
+          'Error',
+          'Hubo un problema al eliminar la cita. Por favor, inténtalo de nuevo.'
+        );
+      }
+    );
   }
 
   mostrarDialogo(title: string, message: string): void {
