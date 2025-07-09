@@ -6,12 +6,14 @@ GO
 
 -- TABLAS
 
+-- Tabla: Administrador
 CREATE TABLE Administrador (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Nombre NVARCHAR(150) NOT NULL
 );
 GO
 
+-- Tabla: Profesional
 CREATE TABLE Profesional (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Nombre NVARCHAR(150) NOT NULL,
@@ -24,6 +26,7 @@ CREATE TABLE Profesional (
 );
 GO
 
+-- Tabla: DisponibilidadProfesional
 CREATE TABLE DisponibilidadProfesional (
     Id INT PRIMARY KEY IDENTITY(1,1),
     ProfesionalId INT NOT NULL,
@@ -34,6 +37,7 @@ CREATE TABLE DisponibilidadProfesional (
 );
 GO
 
+-- Tabla: Paciente
 CREATE TABLE Paciente (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Nombre NVARCHAR(150) NOT NULL,
@@ -46,6 +50,7 @@ CREATE TABLE Paciente (
 );
 GO
 
+-- Tabla: Cuenta (elimina la cuenta al eliminar al profesional o paciente)
 CREATE TABLE Cuenta (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Email NVARCHAR(150) NOT NULL UNIQUE,
@@ -54,12 +59,13 @@ CREATE TABLE Cuenta (
     ProfesionalId INT NULL,
     PacienteId INT NULL,
     AdministradorId INT NULL,
-    CONSTRAINT FK_Cuenta_Profesional FOREIGN KEY (ProfesionalId) REFERENCES Profesional(Id) ON DELETE SET NULL,
-    CONSTRAINT FK_Cuenta_Paciente FOREIGN KEY (PacienteId) REFERENCES Paciente(Id) ON DELETE SET NULL,
+    CONSTRAINT FK_Cuenta_Profesional FOREIGN KEY (ProfesionalId) REFERENCES Profesional(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_Cuenta_Paciente FOREIGN KEY (PacienteId) REFERENCES Paciente(Id) ON DELETE CASCADE,
     CONSTRAINT FK_Cuenta_Administrador FOREIGN KEY (AdministradorId) REFERENCES Administrador(Id) ON DELETE SET NULL
 );
 GO
 
+-- Tabla: ServicioMedico (se elimina automáticamente al eliminar profesional)
 CREATE TABLE ServicioMedico (
     Id INT PRIMARY KEY IDENTITY(1,1),
     ProfesionalId INT NOT NULL,
@@ -72,6 +78,7 @@ CREATE TABLE ServicioMedico (
 );
 GO
 
+-- Tabla: Cita (se elimina solo si se elimina el servicio o el paciente)
 CREATE TABLE Cita (
     Id INT PRIMARY KEY IDENTITY(1,1),
     ProfesionalId INT NOT NULL,
@@ -83,12 +90,13 @@ CREATE TABLE Cita (
     FechaHora DATETIME2 NOT NULL,
     EstadoCita NVARCHAR(20) NOT NULL CHECK (EstadoCita IN ('agendada', 'confirmada')),
     EsNuevoPaciente BIT NOT NULL,
-    CONSTRAINT FK_Cita_Profesional FOREIGN KEY (ProfesionalId) REFERENCES Profesional(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_Cita_Profesional FOREIGN KEY (ProfesionalId) REFERENCES Profesional(Id) ON DELETE NO ACTION,
     CONSTRAINT FK_Cita_Paciente FOREIGN KEY (PacienteId) REFERENCES Paciente(Id) ON DELETE CASCADE,
-    CONSTRAINT FK_Cita_Servicio FOREIGN KEY (ServicioId) REFERENCES ServicioMedico(Id) ON DELETE NO ACTION
+    CONSTRAINT FK_Cita_Servicio FOREIGN KEY (ServicioId) REFERENCES ServicioMedico(Id) ON DELETE CASCADE
 );
 GO
 
+-- Tabla: Resena (mantener registro pero con IDs nulos si se elimina profesional o paciente)
 CREATE TABLE Resena (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Comentario NVARCHAR(1000) NULL,

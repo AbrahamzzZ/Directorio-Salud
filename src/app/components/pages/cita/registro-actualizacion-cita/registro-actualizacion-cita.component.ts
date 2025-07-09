@@ -35,7 +35,7 @@ import { MatIcon } from '@angular/material/icon';
   styleUrls: ['./registro-actualizacion-cita.component.css'],
 })
 export class RegistroActualizacionCitaComponent implements OnInit {
-  formularioCita: FormGroup;
+   formularioCita: FormGroup;
   detallesServicio: ServicioMedico | null = null;
   esEdicion: boolean = false;
   idCitaActual: string | null = null;
@@ -77,14 +77,14 @@ export class RegistroActualizacionCitaComponent implements OnInit {
 
   // Cargar cita por ID para edición
   cargarCitaParaEdicion(citaId: string): void {
-    this.servicioCita.getCitaById(citaId).subscribe((cita) => {
-      if (!this.direccionesUnicas.includes(cita.direccion)) {
-        this.direccionesUnicas = [...this.direccionesUnicas, cita.direccion];
-      }
-      this.prellenarFormulario(cita);
-      this.cargarDetallesServicioPorId(cita.servicioId!);
-    });
-  }
+  this.servicioCita.getCitaById(Number(citaId)).subscribe((cita) => {
+    if (!this.direccionesUnicas.includes(cita.direccion)) {
+      this.direccionesUnicas = [...this.direccionesUnicas, cita.direccion];
+    }
+    this.prellenarFormulario(cita);
+    this.cargarDetallesServicioPorId(cita.servicioId!);
+  });
+}
 
   // Cargar direcciones únicas de citas existentes
   cargarDireccionesUnicas(): void {
@@ -232,7 +232,7 @@ updateCita(): void {
   // Obtener el pacienteId actual o mantener el que ya tenía la cita
   const userId = this.servicioLogin.getIdentificador();
   
-  this.servicioCita.getCitaById(this.idCitaActual!).subscribe(
+  this.servicioCita.getCitaById(Number(this.idCitaActual!)).subscribe(
     (citaExistente) => {
       const citaData = {
         ...this.formularioCita.value,

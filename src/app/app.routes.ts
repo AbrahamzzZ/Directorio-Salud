@@ -22,49 +22,50 @@ import { VistaProfesionalesComponent } from './components/pages/profesional/vist
 import { AuthGuard } from './guards/auth.guard';
 import { RolGuard } from './guards/rol.guard';
 import { AccesoDenegadoComponent } from './components/pages/acceso-denegado/acceso-denegado.component';
+import { InactivityGuard } from './guards/inactivity.guard';
 
 
 
 export const routes: Routes = [
 
-    //Rutas de Inicio de sesión
+    //Rutas públicas
     { path: 'login', component: LoginComponent, title: 'Login' },
     { path: 'registrar', component: RegistrarseComponent, title: 'Formulario de registro'},
 
     //Rutas principales de la aplicacion
-    { path: 'profesional-dashboard', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: ProfesionalDashboardComponent, title: 'Menú Profesional' },
-    { path: 'patients-dashboard', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: PacientesDashboardComponent, title: 'Menú Paciente' },
-    { path: 'admin-dashboard', canActivate: [AuthGuard, RolGuard], data: { roles: ['administrador'] }, component: AdministradorDashboardComponent, title: 'Menú Administrador'},
+    { path: 'profesional-dashboard', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: ProfesionalDashboardComponent, title: 'Menú Profesional' },
+    { path: 'patients-dashboard', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: PacientesDashboardComponent, title: 'Menú Paciente' },
+    { path: 'admin-dashboard', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['administrador'] }, component: AdministradorDashboardComponent, title: 'Menú Administrador'},
 
     //Rutas del modulo Profesional--Abraham Farfan
     { path: 'profesional-register', component:  RegistroActualizacionProfesionalComponent, title: 'Formulario de registro'},
-    { path: 'profesional-edit/:id', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
-    { path: 'profesional-list', canActivate: [AuthGuard, RolGuard], data: { roles: ['administrador'] }, component: MantenimientoProfesionalComponent, title: 'Listado de profesionales'},
-    { path: 'vista-profesionales', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: VistaProfesionalesComponent, title: 'Profesionales' },
+    { path: 'profesional-edit/:id', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionProfesionalComponent, title: 'Formulario de edición'},
+    { path: 'profesional-list', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['administrador'] }, component: MantenimientoProfesionalComponent, title: 'Listado de profesionales'},
+    { path: 'vista-profesionales', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: VistaProfesionalesComponent, title: 'Profesionales' },
 
     //Rutas del modulo Paciente--Alejandreo Larrea
-    { path: 'mis-pacientes', canActivate: [AuthGuard, RolGuard], data: { roles: ['administrador'] }, component: MantenimientoPacienteComponent},
+    { path: 'mis-pacientes', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['administrador'] }, component: MantenimientoPacienteComponent},
     { path: 'pacientes-registro', component: RegistroActualizacionPacienteComponent},
-    { path: 'editar-pacientes/:id', canActivate: [AuthGuard, RolGuard], data: { roles: ['administrador'] }, component: RegistroActualizacionPacienteComponent},
+    { path: 'editar-pacientes/:id', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['administrador'] }, component: RegistroActualizacionPacienteComponent},
 
     //Rutas del modulo Servicio--Jose Agurto
-    { path: 'my-services', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: MantenimientoServicioComponent},
-    { path: 'service-register', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionServicioComponent},
-    { path: 'service-edit/:id', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionServicioComponent},
+    { path: 'my-services', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: MantenimientoServicioComponent},
+    { path: 'service-register', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionServicioComponent},
+    { path: 'service-edit/:id', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: RegistroActualizacionServicioComponent},
 
     //Rutas del modulo Reseña--Angel Vivanco
-    { path: 'resena-register/:profesionalId', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
-    { path: 'mantenimiento-resena', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
-    { path: 'resena-edit/:id', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
-    { path: 'ver-resenas/:profesionalId', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: MantenimientoResenaProfesionalComponent, title: 'Reseñas del Profesional'},
-    { path: 'admin-resenas', canActivate: [AuthGuard, RolGuard], data: { roles: ['administrador'] }, component: MantenimientoResenaAdministradorComponent, title: 'Reseñas del Administrador'},
-    { path: 'mis-resenas-profesional', canActivate: [AuthGuard, RolGuard], data: { roles: ['profesional'] }, component: MantenimientoVerResenaProfesionalComponent, title: 'Mis Reseñas Profesionales' },
+    { path: 'resena-register/:profesionalId', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: RegistroActualizacionResenaComponent, title: 'Registrar Reseña' },
+    { path: 'mantenimiento-resena', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: MantenimientoResenaComponent, title: 'Mis Reseñas' },
+    { path: 'resena-edit/:id', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: RegistroActualizacionResenaComponent, title: 'Editar Reseña' },
+    { path: 'ver-resenas/:profesionalId', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: MantenimientoResenaProfesionalComponent, title: 'Reseñas del Profesional'},
+    { path: 'admin-resenas', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['administrador'] }, component: MantenimientoResenaAdministradorComponent, title: 'Reseñas del Administrador'},
+    { path: 'mis-resenas-profesional', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['profesional'] }, component: MantenimientoVerResenaProfesionalComponent, title: 'Mis Reseñas Profesionales' },
 
     //Rutas del modulo Cita--Gabriel Vera
-    { path: 'mantenimiento-paciente-cita', canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: MantenimientoPacienteCitaComponent, title: 'Paciente'},
-    { path: 'registro-actualizacion-cita', canActivate: [AuthGuard], component: RegistroActualizacionCitaComponent,title: 'Paciente'},
-    { path: 'registro-actualizacion-cita/:id', canActivate: [AuthGuard], component: RegistroActualizacionCitaComponent,  title: 'Paciente' },
-    { path: 'lista-servicios',canActivate: [AuthGuard, RolGuard], data: { roles: ['paciente'] }, component: ListaServiciosComponent, title: 'Paciente'},
+    { path: 'mantenimiento-paciente-cita', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: MantenimientoPacienteCitaComponent, title: 'Paciente'},
+    { path: 'registro-actualizacion-cita', canActivate: [AuthGuard, RolGuard, InactivityGuard],  data: { roles: ['paciente'] }, component: RegistroActualizacionCitaComponent,title: 'Paciente'},
+    { path: 'registro-actualizacion-cita/:id', canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: RegistroActualizacionCitaComponent,  title: 'Paciente' },
+    { path: 'lista-servicios',canActivate: [AuthGuard, RolGuard, InactivityGuard], data: { roles: ['paciente'] }, component: ListaServiciosComponent, title: 'Paciente'},
 
     //Ruta sin permisos
     { path: 'acceso-denegado', component: AccesoDenegadoComponent, title: 'Acceso denegado' },

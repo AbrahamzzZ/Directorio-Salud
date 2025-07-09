@@ -30,6 +30,39 @@ export class ServLoginService {
         return this.identificador;
     }
 
+    isAuthenticated(): boolean {
+        const token = localStorage.getItem('token');
+        if (!token) return false;
+        
+        try {
+        const decoded: any = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        return decoded.exp > currentTime;
+        } catch (error) {
+        return false;
+        }
+    }
+    
+    getTokenExpiration(): number | null {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        
+        try {
+        const decoded: any = jwtDecode(token);
+        return decoded.exp * 1000; 
+        } catch (error) {
+        return null;
+        }
+    }
+
+    isTokenExpiringSoon(minutesBefore: number = 5): boolean {
+        const expiration = this.getTokenExpiration();
+        if (!expiration) return true;
+        
+        const timeBeforeExpiration = minutesBefore * 30 * 1000;
+        return Date.now() > (expiration - timeBeforeExpiration);
+    }
+
     validarCredenciales(email: string, password: string): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
             map((resp) => {

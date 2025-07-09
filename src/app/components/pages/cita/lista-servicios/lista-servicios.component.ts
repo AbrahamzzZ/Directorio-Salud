@@ -36,30 +36,37 @@ import { ServProfesionalesService } from '../../../../services/servicio-profesio
   styleUrls: ['./lista-servicios.component.css'],
 })
 export class ListaServiciosComponent implements OnInit {
- listaDeServicios: ServicioMedico[] = [];
+  listaDeServicios: ServicioMedico[] = [];
   listaDeServiciosOriginal: ServicioMedico[] = [];
   public termSearch: string = '';
 
   constructor(
     private servicioDeServicios: ServServiciosjsonService,
-    private servicioProfesional: ServProfesionalesService, 
+    private servicioProfesional: ServProfesionalesService,
     private navegador: Router,
     private servicioCita: ServCitaService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarServiciosFiltrados();
   }
 
   cargarServiciosFiltrados(): void {
-    this.servicioProfesional.getProfesionales().subscribe(profesionales => {
-      const profesionalesActivosIds = new Set(profesionales.map(p => p.id));
+    this.servicioProfesional.getProfesionales().subscribe((profesionales) => {
+      const profesionalesActivosIds = new Set(profesionales.map((p) => p.id));
 
-      this.servicioDeServicios.getAllServices().subscribe(servicios => {
-        this.listaDeServicios = servicios.filter(servicio => servicio.profesionalId && profesionalesActivosIds.has(servicio.profesionalId));
+      this.servicioDeServicios.getAllServices().subscribe((servicios) => {
+        this.listaDeServicios = servicios.filter(
+          (servicio) =>
+            servicio.profesionalId &&
+            profesionalesActivosIds.has(servicio.profesionalId)
+        );
         this.listaDeServiciosOriginal = [...this.listaDeServicios];
-        console.log('Servicios cargados (filtrados por profesional):', this.listaDeServicios.map(s => s.id));
+        console.log(
+          'Servicios cargados (filtrados por profesional):',
+          this.listaDeServicios.map((s) => s.id)
+        );
       });
     });
   }
@@ -83,7 +90,6 @@ export class ListaServiciosComponent implements OnInit {
 
   agendarCita(servicio: ServicioMedico): void {
     const userId = localStorage.getItem('identificador');
-    console.log('ID del Usuario:', userId);
 
     if (!userId) {
       this.mostrarDialogo(
@@ -93,40 +99,31 @@ export class ListaServiciosComponent implements OnInit {
       return;
     }
 
-    this.servicioCita.getCitas().subscribe(
-      (citas) => {
-        const citaExistente = citas.find(
-          (cita) => cita.pacienteId === userId && cita.servicioId === servicio.id 
-        );
-
-        if (citaExistente) {
+    this.servicioCita.verificarCitaExistente(userId, servicio.id!).subscribe({
+      next: (respuesta) => {
+        if (respuesta.existe) {
           this.mostrarDialogo(
             'Error',
-            'Ya tienes una cita agendada para este servicio.'
+            'Ya tienes una cita activa agendada para este servicio.'
           );
         } else {
           this.navegador.navigate(['/registro-actualizacion-cita'], {
             queryParams: {
               id: servicio.id,
-              nombre: servicio.nombre,
-              descripcion: servicio.descripcion,
-              fechaDisponible: servicio.fechaDisponible,
-              precio: servicio.precio,
               profesionalId: servicio.profesionalId,
             },
           });
         }
       },
-      (error) => {
-        console.error('Error al obtener las citas:', error);
+      error: (err) => {
+        console.error('Error al verificar la cita:', err);
         this.mostrarDialogo(
           'Error',
-          'Hubo un error al verificar la cita. Por favor, inténtalo de nuevo.'
+          'Hubo un problema al verificar la cita. Por favor, inténtalo de nuevo.'
         );
-      }
-    );
+      },
+    });
   }
-
   mostrarDialogo(title: string, message: string): void {
     this.dialog.open(DialogoComponent, {
       width: '400px',
