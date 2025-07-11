@@ -15,8 +15,7 @@
             <p><strong>Dirección:</strong> {{ cita.direccion }}</p>
           </div>
           <div class="cita-derecha">
-            <p>{{ cita.fechaHoraServicio | date:'fullDate' }}</p>
-            <p>{{ cita.fechaHoraServicio | date:'shortTime' }}</p>
+            <p>{{ cita.fechaHoraServicio| date:'fullDate'}}</p>
           </div>
         </mat-card-content>
       </mat-card>
@@ -33,7 +32,7 @@
           <mat-icon>location_on</mat-icon> {{ profesional.ubicacion }}
         </p>
         <p>
-          <mat-icon>star</mat-icon> Calificación: {{ obtenerPromedioProfesional(profesional.id!) | number:'1.1-1' }}
+          <mat-icon>star</mat-icon> Calificación: {{ profesional.promedioCalificacion | number:'1.1-1' }}
         </p>
       </mat-card-content>
     </mat-card>

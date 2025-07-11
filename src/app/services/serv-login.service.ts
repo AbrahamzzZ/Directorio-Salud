@@ -59,7 +59,7 @@ export class ServLoginService {
         const expiration = this.getTokenExpiration();
         if (!expiration) return true;
         
-        const timeBeforeExpiration = minutesBefore * 30 * 1000;
+        const timeBeforeExpiration = minutesBefore * 60 * 1000;
         return Date.now() > (expiration - timeBeforeExpiration);
     }
 

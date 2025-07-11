@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-mantenimiento-resena-profesional',
@@ -33,15 +34,21 @@ export class MantenimientoResenaProfesionalComponent {
   }
 
   cargarResenas(): void {
-    this.resenasService.getResenasByProfesional(this.profesionalId).subscribe({
-      next: (data) => {
+    if (!this.profesionalId || this.profesionalId === 'null' || this.profesionalId === 'undefined' || this.profesionalId.trim() === '') {
+      console.warn('ID de profesional no encontrado o inválido en la ruta. No se pueden cargar reseñas.');
+      this.resenas = []; 
+      return;
+    }
+
+    this.resenasService.searchResenas('', this.profesionalId, undefined).subscribe({
+      next: (data: Resena[]) => { 
         this.resenas = data;
       },
-      error: (err) => {
-        console.error('Error cargando reseñas del profesional', err);
+      error: (err: HttpErrorResponse) => { 
+        console.error('Error cargando reseñas del profesional:', err);
+        this.resenas = []; 
       }
     });
   }
-
 }
 

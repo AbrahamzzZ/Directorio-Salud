@@ -36,7 +36,7 @@ import { ServProfesionalesService } from '../../../../services/servicio-profesio
   styleUrls: ['./lista-servicios.component.css'],
 })
 export class ListaServiciosComponent implements OnInit {
-  listaDeServicios: ServicioMedico[] = [];
+ listaDeServicios: ServicioMedico[] = [];
   listaDeServiciosOriginal: ServicioMedico[] = [];
   public termSearch: string = '';
 
@@ -89,41 +89,40 @@ export class ListaServiciosComponent implements OnInit {
   }
 
   agendarCita(servicio: ServicioMedico): void {
-    const userId = localStorage.getItem('identificador');
+  const userId = localStorage.getItem('identificador');
 
-    if (!userId) {
-      this.mostrarDialogo(
-        'Error',
-        'Debes iniciar sesión para agendar una cita.'
-      );
-      return;
-    }
-
-    this.servicioCita.verificarCitaExistente(userId, servicio.id!).subscribe({
-      next: (respuesta) => {
-        if (respuesta.existe) {
-          this.mostrarDialogo(
-            'Error',
-            'Ya tienes una cita activa agendada para este servicio.'
-          );
-        } else {
-          this.navegador.navigate(['/registro-actualizacion-cita'], {
-            queryParams: {
-              id: servicio.id,
-              profesionalId: servicio.profesionalId,
-            },
-          });
-        }
-      },
-      error: (err) => {
-        console.error('Error al verificar la cita:', err);
-        this.mostrarDialogo(
-          'Error',
-          'Hubo un problema al verificar la cita. Por favor, inténtalo de nuevo.'
-        );
-      },
-    });
+  if (!userId) {
+    this.mostrarDialogo('Error', 'Debes iniciar sesión para agendar una cita.');
+    return;
   }
+  if (!servicio.id) {
+    this.mostrarDialogo('Error', 'El servicio seleccionado no tiene un ID válido.');
+    return;
+  }
+
+  this.servicioCita.verificarCitaExistente(userId, servicio.id).subscribe({
+    next: (respuesta) => {
+      if (respuesta.existe) {
+        this.mostrarDialogo('Error', 'Ya tienes una cita activa agendada para este servicio.');
+      } else {
+        this.navegador.navigate(['/registro-actualizacion-cita'], {
+          queryParams: {
+            id: servicio.id,
+            nombre: servicio.nombre,
+            descripcion: servicio.descripcion,
+            fechaDisponible: servicio.fechaDisponible,
+            precio: servicio.precio,
+            profesionalId: servicio.profesionalId,
+          },
+        });
+      }
+    },
+    error: (err) => {
+      console.error('Error al verificar la cita:', err);
+      this.mostrarDialogo('Error', 'Hubo un problema al verificar la cita. Por favor, inténtalo de nuevo.');
+    }
+  });
+}
   mostrarDialogo(title: string, message: string): void {
     this.dialog.open(DialogoComponent, {
       width: '400px',

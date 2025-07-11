@@ -33,7 +33,7 @@ interface ResenaConDetalles extends Resena {
 })
 export class MantenimientoResenaAdministradorComponent {
 
-  displayedColumns: string[] = [];
+ displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<ResenaConDetalles>();
   columnasKeys: string[] = [];
 
@@ -72,50 +72,40 @@ export class MantenimientoResenaAdministradorComponent {
   }
 
   cargarResenas(): void {
-    this.servResena.getResenas().subscribe((resenas) => {
-      const peticiones = resenas.map(resena => {
-        const profesional$ = this.servProfesional.getProfesionalPorId(resena.profesionalId!);
-        const paciente$ = this.servPaciente.getPacientePorId(resena.pacienteId!);
+    this.servResena.searchResenas('').subscribe((resenas) => {
+      this.procesarAsignarNombres(resenas);
+    });
+  }
 
-        return forkJoin([profesional$, paciente$]).pipe(
-          map(([profesional, paciente]) => ({
-            ...resena,
-            nombreProfesional: profesional?.nombre || 'Desconocido',
-            nombrePaciente: paciente?.nombre || 'Desconocido'
-          }))
-        );
-      });
+  private procesarAsignarNombres(resenas: Resena[]): void {
+    if (resenas.length === 0) {
+      this.dataSource.data = [];
+      return;
+    }
 
-      forkJoin(peticiones).subscribe((resenasConDetalles: ResenaConDetalles[]) => {
-        this.dataSource.data = resenasConDetalles;
-      });
+    const peticiones = resenas.map(resena => {
+      const profesional$ = this.servProfesional.getProfesionalPorId(resena.profesionalId!);
+      const paciente$ = this.servPaciente.getPacientePorId(resena.pacienteId!);
+
+      return forkJoin([profesional$, paciente$]).pipe(
+        map(([profesional, paciente]) => ({
+          ...resena,
+          nombreProfesional: profesional?.nombre || 'Desconocido',
+          nombrePaciente: paciente?.nombre || 'Desconocido'
+        }))
+      );
+    });
+
+    forkJoin(peticiones).subscribe((resenasConDetalles: ResenaConDetalles[]) => {
+      this.dataSource.data = resenasConDetalles;
     });
   }
 
   search(input: HTMLInputElement) {
     const termino = input.value.trim();
-    if (termino) {
-      this.servResena.searchResenas(termino).subscribe((resenas) => {
-        const peticiones = resenas.map(resena => {
-        const profesional$ = this.servProfesional.getProfesionalPorId(resena.profesionalId!);
-        const paciente$ = this.servPaciente.getPacientePorId(resena.pacienteId!);
-
-          return forkJoin([profesional$, paciente$]).pipe(
-            map(([profesional, paciente]) => ({
-              ...resena,
-              nombreProfesional: profesional?.nombre || 'Desconocido',
-              nombrePaciente: paciente?.nombre || 'Desconocido'
-            }))
-          );
-        });
-
-        forkJoin(peticiones).subscribe((resenasConDetalles: ResenaConDetalles[]) => {
-          this.dataSource.data = resenasConDetalles;
-        });
-      });
-    } else {
-      this.cargarResenas();
-    }
+    this.servResena.searchResenas(termino).subscribe((resenas) => {
+      this.procesarAsignarNombres(resenas);
+    });
   }
 
   gestionarAccion(event: { tipo: string, fila: ResenaConDetalles }) {
