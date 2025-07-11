@@ -40,7 +40,7 @@ export class MantenimientoPacienteCitaComponent implements OnInit {
       key: 'fechaHora',
       titulo: 'Fecha y Hora',
       pipe: 'date',
-      pipeArgs: 'dd/MM/yyyy HH:mm',
+      /*pipeArgs: 'dd/MM/yyyy HH:mm',*/
     },
     { key: 'estadoCita', titulo: 'Estado' },
   ];

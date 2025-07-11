@@ -30,7 +30,7 @@ import { combineLatest } from 'rxjs';
   styleUrl: './profesional-dashboard.component.css'
 })
 export class ProfesionalDashboardComponent implements OnInit {
-   citasProfesional: any[] = [];
+  citasProfesional: any[] = [];
   terminoBusqueda = '';
   citasFiltradas: any[] = [];
   profesionalId = '';

@@ -41,10 +41,9 @@ interface ProfesionalConPromedio extends Profesional {
   styleUrl: './pacientes-dashboard.component.css'
 })
 export class PacientesDashboardComponent implements OnInit {
-  pacienteActual: Paciente | undefined;
+ pacienteActual: Paciente | undefined;
   citasProximas: CitaConDetalles[] = [];
   profesionalesDestacados: ProfesionalConPromedio[] = [];
-  private promediosCalificacion: { [profesionalId: string]: number } = {};
 
   constructor(
     private login: ServLoginService,
@@ -57,60 +56,131 @@ export class PacientesDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarPacienteYDatos();
+    this.cargarProfesionalesDestacados(); // Puedes cargar esto independientemente, si no depende del pacienteActual
   }
 
   private cargarPacienteYDatos() {
     const idPaciente = String(this.login.getIdentificador());
+    // --- DEBUG 1 ---
+    console.log('DEBUG: PacientesDashboard - ID del paciente logueado obtenido:', idPaciente);
 
-    if (!idPaciente) {
-      console.warn('ID de paciente no encontrado');
+    if (!idPaciente || idPaciente === 'null' || idPaciente === 'undefined' || idPaciente.trim() === '') {
+      console.warn('DEBUG: PacientesDashboard - ID de paciente no encontrado o inválido. No se cargarán datos del paciente ni citas.');
+      this.pacienteActual = undefined; // Asegura que no haya paciente si el ID es inválido
+      this.citasProximas = []; // Limpia las citas también
       return;
     }
 
     this.servPacientes.getPacientePorId(idPaciente).subscribe(p => {
       this.pacienteActual = p;
+      // --- DEBUG 2 ---
+      console.log('DEBUG: PacientesDashboard - Datos del paciente actual cargados:', this.pacienteActual);
       this.cargarProximasCitas(idPaciente);
+    }, error => {
+      console.error('DEBUG: PacientesDashboard - Error al cargar datos del paciente:', error);
+      this.pacienteActual = undefined;
+      this.citasProximas = [];
     });
-
-    this.cargarProfesionalesDestacados();
   }
 
   private cargarProximasCitas(idPaciente: string) {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
+    // --- DEBUG 3 ---
+    console.log('DEBUG: PacientesDashboard - Fecha de hoy (medianoche):', hoy);
 
+    // --- DEBUG 4: Observar la cadena de suscripciones anidadas ---
     this.servCitas.getCitas().subscribe(citas => {
+      console.log('DEBUG: PacientesDashboard - Citas recibidas del backend (todas):', citas);
+
       this.servServicios.getAllServices().subscribe(servicios => {
+        console.log('DEBUG: PacientesDashboard - Servicios recibidos del backend (todos):', servicios);
+
         this.servProfesionales.getProfesionales().subscribe(profesionales => {
-          this.citasProximas = citas
-            .filter(cita => cita.pacienteId === idPaciente)
+          console.log('DEBUG: PacientesDashboard - Profesionales recibidos del backend (todos):', profesionales);
+
+          const citasFiltradasInicial = citas.filter(cita => {
+            // --- DEBUG 5: Verificación del ID del paciente en el filtro ---
+            const match = String(cita.pacienteId) === String(idPaciente); // Convertir a String para asegurar la comparación
+            if (!match) {
+              console.log(`DEBUG: Cita descartada - ID de paciente no coincide: Cita.pacienteId='${cita.pacienteId}' vs LoggedInId='${idPaciente}'`);
+            }
+            return match;
+          });
+          console.log('DEBUG: Citas filtradas por ID del paciente:', citasFiltradasInicial);
+
+          this.citasProximas = citasFiltradasInicial
             .map(cita => {
               const servicio = servicios.find(s => s.id === cita.servicioId);
-              const profesional = profesionales.find(p => p.id === servicio?.profesionalId);
+              // Asumiendo que cita.profesionalId es más fiable que servicio?.profesionalId
+              const profesional = profesionales.find(p => p.id === cita.profesionalId); 
 
-              if (servicio && profesional && servicio.fechaDisponible) {
+              // --- DEBUG 6: Verificación de servicio y profesional encontrados ---
+              if (!servicio) {
+                console.log('DEBUG: Cita descartada en map - Servicio no encontrado para cita.servicioId:', cita.servicioId, 'Cita:', cita);
+                return null;
+              }
+              if (!profesional) {
+                console.log('DEBUG: Cita descartada en map - Profesional no encontrado para cita.profesionalId:', cita.profesionalId, 'Cita:', cita);
+                return null;
+              }
+
+              // --- DEBUG 7: Verificación de fechaDisponible del servicio ---
+              let fechaHoraServicio: Date | null = null;
+              if (servicio.fechaDisponible) {
+                fechaHoraServicio = new Date(servicio.fechaDisponible);
+                if (isNaN(fechaHoraServicio.getTime())) { // Comprobar si es una fecha inválida
+                  console.warn('DEBUG: Fecha de servicio inválida para cita:', cita.id, 'Servicio ID:', servicio.id, 'Fecha:', servicio.fechaDisponible);
+                  return null;
+                }
+              } else {
+                console.log('DEBUG: Cita descartada en map - Servicio no tiene fechaDisponible:', servicio.id, 'Cita:', cita);
+                return null;
+              }
+
+              // Solo si todo es válido, mapear
+              if (servicio && profesional && fechaHoraServicio) {
                 return {
                   ...cita,
-                  fechaHoraServicio: new Date(servicio.fechaDisponible),
+                  fechaHoraServicio: fechaHoraServicio,
                   nombreServicio: servicio.nombre,
                   nombreProfesional: profesional.nombre,
-                  fechaDisponibleServicio: servicio.fechaDisponible
+                  fechaDisponibleServicio: servicio.fechaDisponible // Mantener si aún lo usas en el HTML
                 } as CitaConDetalles;
               }
-              return null;
+              console.log(this.citasProximas);
+              
+              return null; // Si alguna condición falla, devuelve null para filtrar después
             })
-            .filter((cita): cita is CitaConDetalles => cita !== null && cita.fechaHoraServicio >= hoy)
+            .filter((cita): cita is CitaConDetalles => {
+              // --- DEBUG 8: Último filtro por fecha ---
+              const isUpcoming = cita !== null && cita.fechaHoraServicio >= hoy;
+              if (cita && !isUpcoming) {
+                console.log(`DEBUG: Cita descartada por fecha - Cita.fechaHoraServicio='${cita.fechaHoraServicio?.toISOString()}' vs Hoy='${hoy.toISOString()}'`);
+              }
+              return isUpcoming;
+            })
             .sort((a, b) => a.fechaHoraServicio.getTime() - b.fechaHoraServicio.getTime());
-
-          console.log('Citas próximas con detalles:', this.citasProximas);
+          // --- DEBUG 9: Resultado final ---
+          console.log('DEBUG: Citas próximas CON DETALLES (final):', this.citasProximas);
+        }, error => {
+          console.error('DEBUG: PacientesDashboard - Error al obtener profesionales:', error);
+          this.citasProximas = [];
         });
+      }, error => {
+        console.error('DEBUG: PacientesDashboard - Error al obtener servicios:', error);
+        this.citasProximas = [];
       });
+    }, error => {
+      console.error('DEBUG: PacientesDashboard - Error al obtener citas:', error);
+      this.citasProximas = [];
     });
   }
 
-
+  // El resto de tu código, incluyendo cargarProfesionalesDestacados y isValidId
   private cargarProfesionalesDestacados() {
-    this.servResenas.getResenas().subscribe(resenas => {
+// 1. Obtener TODAS las reseñas usando el método searchResenas
+    this.servResenas.searchResenas('').subscribe(resenas => { // <-- ¡Aquí el cambio principal!
       const calificacionesPorProfesional: { [id: string]: number[] } = {};
 
       resenas.forEach(r => {
@@ -122,28 +192,31 @@ export class PacientesDashboardComponent implements OnInit {
         }
       });
 
-      const promedioPorProfesional = Object.entries(calificacionesPorProfesional).map(([id, calificaciones]) => {
+      // Calcular los promedios
+      const promediosCalificacion: { [profesionalId: string]: number } = {};
+      Object.entries(calificacionesPorProfesional).forEach(([id, calificaciones]) => {
         const suma = calificaciones.reduce((a, b) => a + b, 0);
-        this.promediosCalificacion[id] = calificaciones.length > 0 ? suma / calificaciones.length : 0;
-        return { id, promedio: this.promediosCalificacion[id] };
+        promediosCalificacion[id] = calificaciones.length > 0 ? suma / calificaciones.length : 0;
       });
 
-      promedioPorProfesional.sort((a, b) => b.promedio - a.promedio);
-
-      const topProfesionalesIds = promedioPorProfesional.slice(0, 3).map(p => p.id);
-
+      // 2. Obtener todos los profesionales
       this.servProfesionales.getProfesionales().subscribe(profesionales => {
-        this.profesionalesDestacados = profesionales.map(profesional => ({
+        // 3. Mapear profesionales y asignar su promedio de calificación
+        const profesionalesConPromedio = profesionales.map(profesional => ({
           ...profesional,
-          promedioCalificacion: this.obtenerPromedioProfesional(profesional.id!)
+          promedioCalificacion: promediosCalificacion[profesional.id!] || 0 // Usar el promedio calculado
         }));
-        this.profesionalesDestacados.sort((a, b) => (b.promedioCalificacion || 0) - (a.promedioCalificacion || 0));
-        this.profesionalesDestacados = this.profesionalesDestacados.slice(0, 3);
+
+        // 4. Ordenar y seleccionar los 3 mejores
+        this.profesionalesDestacados = profesionalesConPromedio
+          .sort((a, b) => (b.promedioCalificacion || 0) - (a.promedioCalificacion || 0))
+          .slice(0, 3);
       });
     });
   }
 
-  obtenerPromedioProfesional(profesionalId: string): number {
-    return this.promediosCalificacion[profesionalId] || 0;
+  // --- Función auxiliar para validar IDs (puede ser que ya la tengas) ---
+  private isValidId(id: string): boolean {
+    return id !== null && id !== 'null' && id !== 'undefined' && id.trim() !== '';
   }
 }

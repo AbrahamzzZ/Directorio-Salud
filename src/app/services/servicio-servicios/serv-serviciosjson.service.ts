@@ -18,7 +18,8 @@ export class ServServiciosjsonService {
   getServices(): Observable<ServicioMedico[]> { 
     const id = String(this.servicioLogin.getIdentificador()); 
     console.log("ID Profesional:", id);
-    return this.http.get<ServicioMedico[]>(`${this.apiUrl}?profesionalId=${id}`);
+    //return this.http.get<ServicioMedico[]>(`${this.apiUrl}?profesionalId=${id}`);
+    return this.http.get<ServicioMedico[]>(`${this.apiUrl}/por-profesional?profesionalId=${id}`);
   }
 
   getAllServices(): Observable<ServicioMedico[]> {
@@ -27,7 +28,7 @@ export class ServServiciosjsonService {
 
   getServicesSearch(termino: string): Observable<ServicioMedico[]> {
     const id = String(this.servicioLogin.getIdentificador()); 
-    return this.http.get<ServicioMedico[]>(`${this.apiUrl}?profesionalId=${id}`).pipe(
+    return this.http.get<ServicioMedico[]>(`${this.apiUrl}/por-profesional?profesionalId=${id}`).pipe(
       map((servicios) =>
         servicios.filter((serv) =>
           serv.nombre.toLowerCase().includes(termino.toLowerCase()) ||

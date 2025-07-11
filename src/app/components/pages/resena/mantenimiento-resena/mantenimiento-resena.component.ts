@@ -15,6 +15,7 @@ import { TablaReutilizableComponent } from '../../../shared/tabla-reutilizable/t
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 import { DialogData } from '../../../../models/Dialog-data';
+import { ServLoginService } from '../../../../services/serv-login.service';
 
 interface ResenaConNombre extends Resena {
   nombreProfesional?: string;
@@ -30,7 +31,7 @@ interface ResenaConNombre extends Resena {
 })
 export class MantenimientoResenaComponent {
 
-  displayedColumns: string[] = [];
+ displayedColumns: string[] = [];
   dataSource = new MatTableDataSource<ResenaConNombre>();
   columnasKeys: string[] = [];
 
@@ -48,13 +49,14 @@ export class MantenimientoResenaComponent {
     { tipo: 'eliminar', icono: 'delete', tooltip: 'Eliminar reseña' }
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;   
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private servResena: ServResenasService,
     private servProfesional: ServProfesionalesService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private loginService: ServLoginService
   ) {}
 
   ngOnInit(): void {
@@ -68,42 +70,70 @@ export class MantenimientoResenaComponent {
   }
 
   cargarResenas(): void {
-    this.servResena.getResenasByPaciente().subscribe((resenas) => {
-      const peticiones = resenas.map(resena =>
-        this.servProfesional.getProfesionalPorId(resena.profesionalId!).pipe(
-          map((profesional) => ({
-            ...resena,
-            nombreProfesional: profesional?.nombre || 'Desconocido'
-          }))
-        )
-      );
+    const pacienteId = String(this.loginService.getIdentificador());
 
-      forkJoin(peticiones).subscribe((resenasConNombre: ResenaConNombre[]) => {
+    if (!this.isValidId(pacienteId)) {
+      console.warn('ID de paciente no encontrado o inválido. No se pueden cargar reseñas.');
+      this.dataSource.data = [];
+      return;
+    }
+
+    this.servResena.searchResenas('', undefined, pacienteId).subscribe({
+      next: (resenas) => {
+        this.procesarResenasYAsignarNombresProfesionales(resenas);
+      },
+      error: (error) => {
+        console.error('Error al cargar reseñas del paciente:', error);
+        this.dataSource.data = [];
+      }
+    });
+  }
+
+  private procesarResenasYAsignarNombresProfesionales(resenas: Resena[]): void {
+    if (resenas.length === 0) {
+      this.dataSource.data = [];
+      return;
+    }
+
+    const peticiones = resenas.map(resena =>
+      this.servProfesional.getProfesionalPorId(resena.profesionalId!).pipe(
+        map((profesional) => ({
+          ...resena,
+          nombreProfesional: profesional?.nombre || 'Desconocido'
+        }))
+      )
+    );
+
+    forkJoin(peticiones).subscribe({
+      next: (resenasConNombre: ResenaConNombre[]) => {
         this.dataSource.data = resenasConNombre;
-      });
+      },
+      error: (error) => {
+        console.error('Error al obtener nombres de profesionales para reseñas:', error);
+        this.dataSource.data = [];
+      }
     });
   }
 
   search(input: HTMLInputElement) {
     const termino = input.value.trim();
-    if (termino) {
-      this.servResena.searchResenasByPaciente(termino).subscribe((resenas) => {
-        const peticiones = resenas.map(resena =>
-          this.servProfesional.getProfesionalPorId(resena.profesionalId!).pipe(
-            map((profesional) => ({
-              ...resena,
-              nombreProfesional: profesional?.nombre || 'Desconocido'
-            }))
-          )
-        );
+    const pacienteId = String(this.loginService.getIdentificador());
 
-        forkJoin(peticiones).subscribe((resenasConNombre: ResenaConNombre[]) => {
-          this.dataSource.data = resenasConNombre;
-        });
-      });
-    } else {
-      this.cargarResenas();
+    if (!this.isValidId(pacienteId)) { 
+      console.warn('ID de paciente no encontrado o inválido. No se puede realizar la búsqueda de reseñas.');
+      this.dataSource.data = [];
+      return;
     }
+
+    this.servResena.searchResenas(termino, undefined, pacienteId).subscribe({
+      next: (resenas) => {
+        this.procesarResenasYAsignarNombresProfesionales(resenas);
+      },
+      error: (error) => {
+        console.error('Error al realizar la búsqueda de reseñas:', error);
+        this.dataSource.data = [];
+      }
+    });
   }
 
   gestionarAccion(event: { tipo: string, fila: ResenaConNombre }) {
@@ -133,18 +163,27 @@ export class MantenimientoResenaComponent {
         isConfirmation: true
       }
     });
-    dialogRef.afterClosed().subscribe((confirmado: boolean) => {
-      if (confirmado === true) {
-        this.deleteResena(resena);
+    dialogRef.afterClosed().subscribe({
+      next: (confirmado: boolean) => {
+        if (confirmado === true) {
+          this.deleteResena(resena);
+        }
       }
     });
   }
 
-  // Método para eliminar una reseña específica.
   deleteResena(resena: Resena): void {
-    this.servResena.deleteResena(resena).subscribe(() => {
-      this.cargarResenas();
-      this.router.navigate(['mantenimiento-resena'], { replaceUrl: true });
+    this.servResena.deleteResena(resena).subscribe({
+      next: () => {
+        this.cargarResenas();
+      },
+      error: (error) => {
+        console.error('Error al eliminar reseña:', error);
+      }
     });
+  }
+
+  private isValidId(id: string): boolean {
+    return id !== null && id !== 'null' && id !== 'undefined' && id.trim() !== '';
   }
 }

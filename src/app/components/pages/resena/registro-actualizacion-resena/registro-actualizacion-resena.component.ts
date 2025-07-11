@@ -27,7 +27,7 @@ import { DialogoComponent } from '../../../shared/dialogo/dialogo.component';
 })
 export class RegistroActualizacionResenaComponent implements OnInit {
 
-  resenaForm: FormGroup;
+ resenaForm: FormGroup;
   profesionalId: string = '';
   pacienteId: string = '';
   resenaId: string | null = null;
@@ -171,7 +171,6 @@ export class RegistroActualizacionResenaComponent implements OnInit {
     this.router.navigate(['vista-profesionales']);
   }
 
-  // Validador personalizado dentro de la clase
   private noSoloNumerosEspaciosValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const texto = control.value;
@@ -186,5 +185,4 @@ export class RegistroActualizacionResenaComponent implements OnInit {
       return null;
     };
   }
-
 }
